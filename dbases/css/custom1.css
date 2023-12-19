@@ -1,0 +1,490 @@
+
+
+/***
+** Author: Sai Nagamalla
+** Date : 24/03/2017
+** Email : s.nagamalla@latrobe.edu.au
+** Updates: Jason Odering 30/08/2021 added LibChat
+** Lynette Brown 21/6/17, 25/7/17, 12/12/2017, 9/1/2019, JO 24/3/21
+** Rachel Salby 25/10/21 fixed hover color for facets
+** Louise Young 09/02/2023 - Changes to the login screen colours 
+** Louise Young 9/3/2023 - Made some changes to borders and colours
+** Louise Young 4/4/2023 - Amended for new version of primo, login screen and some icon changes
+*/
+
+html,body{
+  font-family:Arial,verdana;
+  background-color:#ffffff;
+}
+/*focus on first button remove border*/
+md-dialog-content .disable-hover button:focus{
+box-shadow: none !important;
+
+}
+/*error text*/
+.login-dialog .error-color, md-dialog.light-on-dark-dialog .error-color{
+color:white;
+}
+
+/*hover arrow for login screen*/
+.md-button.md-icon-button:hover{
+  background-color:rgb(255, 255, 255);
+}
+
+/* Change the reset password link to white */
+.layout-padding._md.md-primoExplore-theme.layout-column div a {
+  color: #fff;
+}
+
+.login-dialog md-list md-list-item .md-secondary-container prm-icon.login-brighter-dialog{
+color:#fff;
+}
+
+.login-dialog a:hover{
+box-shadow: inset 0 -2px 0 0 #fff;
+}
+.md-button.md-icon-button.icon-button-large prm-icon{
+color: #fff;
+}
+.md-button.md-icon-button.icon-button-large prm-icon:hover {
+color: #53738c;
+}
+
+.md-button.md-icon-button.icon-button-large:hover{
+background-color:#fff;
+}
+.md-button.button-large {
+  color: #fff !important;
+  background-color: f5f2e4 !important;
+
+}
+.md-button.button-large:hover{
+
+color: #53738c !important;
+background-color: #fff !important;
+}
+
+
+md-input-container:not(.md-input-has-value):not(.md-input-has-placeholder) input:not(:focus){
+border-color: hsla(0,0%,100%,.5);
+} 
+.md-button.button-large{
+  background-color: rgba(0,0,0,0.5);
+}
+md-list-item.md-2-line.md-long-text{
+padding-left:20px;
+padding-right: 20px;
+}
+.login-dialog md-list md-list-item:hover .md-secondary-container prm-icon.login-brighter-dialog, .login-dialog md-list md-list-item > .md-no-style:hover ._md-secondary-container prm-icon.login-brighter-dialog, .login-dialog md-list md-list-item > .md-no-style:hover .md-secondary-container prm-icon.login-brighter-dialog{
+color:#fff;
+}
+.login-card md-list-item.login-brighter-dialog .md-button:hover{
+background-color: transparent !important;
+}
+.padded-container.md-primoExplore-theme {
+border-style: none;
+}
+
+md-dialog.login-dialog, md-card.login-card {
+background-color: #e42312;
+}
+.light-on-dark-dialog a:hover{
+  box-shadow: inset 0 -2px 0 0 #fff;
+}
+[external-link] {
+color: #fff;
+
+}
+.login-dialog md-list md-list-item:hover > .md-no-style [external-link]{
+opacity: 1;
+}
+md-dialog.light-on-dark-dialog a, .login-dialog, .login-dialog md-list md-list-item .md-list-item-text .list-item-title, .login-dialog md-list md-list-item .md-list-item-text h3, .login-dialog md-list md-list-item > .md-no-style .md-list-item-text .list-item-title, .login-dialog md-list md-list-item > .md-no-style .md-list-item-text h3, .login-dialog md-list md-list-item .md-list-item-text p, .login-dialog md-list md-list-item > .md-no-style .md-list-item-text p
+{
+  color: #fff !important;
+}
+
+md-dialog.light-on-dark-dialog .md-list[class$=-line] md-list-item.list-login .md-button, md-dialog.light-on-dark-dialog .md-list md-list-item.list-login .md-button, md-dialog.light-on-dark-dialog md-list md-list-item.list-login .md-button {
+  color: rgb(255, 255, 255);
+}
+md-dialog.light-on-dark-dialog md-list md-list-item.list-login .md-button:hover:not([disabled]) {
+    background-color: transparent;
+    color: #fff;
+}
+md-input-container label, md-input-container label:not(.md-no-float):not(._md-container-ignore) {
+  color: rgb(255 255 255) !important; /*this overwrites line 129 */
+}
+.light-on-dark-dialog .md-button.button-confirm{
+  color: #fff;
+}
+md-dialog-content md-input-container:after{
+  background-color: #b0afaf
+}
+/******/
+
+/*********/
+prm-logo .product-logo{
+  padding:0.3em;
+}
+/**Header bar***/
+.prm-primary-bg.prm-hue1, prm-search-bar.prm-hue1, prm-spinner.prm-hue1.overlay-cover.light-on-dark::after, prm-topbar .top-nav-bar {
+background-color: #d34426;
+/*background-color: #26d382;*/
+}
+/**Header bar on hover***/
+/***add-class md-is-open to md-fab-toolbar to see this*****/
+md-toolbar md-fab-actions{
+  background-color:#d34426;
+}
+md-toolbar .md-button.button-with-icon > prm-icon + span{
+  color:#ffffff;
+}
+md-toolbar .md-button md-icon, md-toolbar.md-primoExplore-theme .md-button md-icon, md-toolbar:not(.md-menu-toolbar) .md-button md-icon{
+  color:#ffffff !important;
+}
+/*****Clickable LTUL logo****  max-width:240px;*/
+prm-topbar prm-logo{
+  max-width:500px;
+}
+prm-logo div.product-logo {
+    display:none;
+    padding:0.3em;
+    padding-top:0.56em;
+}
+prm-logo div.product-logo-local {
+    display: flex;
+}
+prm-logo .logo-image, prm-logo img {
+    max-height: 100%;
+    max-width: 230px;
+}
+/*****Hide Language*********/
+prm-library-card-menu md-icon{
+  color:#ffffff !important;
+}
+/**********Username background*********/
+prm-user-area md-fab-toolbar.md-is-open md-fab-trigger ._md-fab-toolbar-background,
+prm-user-area md-fab-trigger.show-user-info:after{
+  background-color:#d34426 !important;
+}
+md-toolbar .md-fab-action-item:nth-child(2){
+  display:none;
+}
+prm-user-area .user-menu-button .user-language{
+  display:none;
+}
+prm-change-lang {
+  display: none;
+}
+/**********Menu*********/
+prm-main-menu[menu-type="menu"] .md-button{
+  color:#ffffff;
+}
+/***keep this item - top bar*********/
+.md-button.md-icon-button{
+  background-color:transparent;
+}
+/* .md-button.md-icon-button:hover{
+  background-color:rgba(51, 51, 51, 0.12);
+}*/
+prm-icon.rotate-25 md-icon{
+  color:#d34426 !important;
+}
+.md-button.md-icon-button:hover prm-icon.rotate-25 md-icon{
+  color:inherit !important;
+}
+/**************Keep the shelf active KEEP THIS WHITE RS 15/10/21****************************/
+prm-search-bookmark-filter prm-icon md-icon.md-primoExplore-theme{
+  color:white !important;
+}
+prm-search-bookmark-filter .md-icon-button:hover prm-icon md-icon.md-primoExplore-theme{
+  color:inherit !important;
+}
+/********Favourites toolbar*******/
+prm-favorites-tool-bar md-toolbar{
+  background-color:#63513d !important;
+}
+prm-favorites-tool-bar .toolbar-title{
+  color:#ffffff;
+}
+prm-favorites-tool-bar md-toolbar .md-button md-icon,
+prm-favorites-tool-bar md-toolbar.md-primoExplore-theme .md-button md-icon,
+prm-favorites-tool-bar md-toolbar:not(.md-menu-toolbar) .md-button md-icon{
+  color:#d34426 !important;
+}
+/***Search bar background**/
+.prm-primary-bg, prm-spinner.overlay-cover.light-on-dark::after, prm-search-bar, prm-journals-search-bar, prm-browse-search-bar{
+  background-color:#f5f2e4;
+}
+/***********Search Icon****************/
+.md-button.button-confirm {
+
+}
+
+.md-button.button-confirm:hover:not([disabled]), .md-button.button-confirm:focus:not([disabled]), .md-button.button-confirm.hovered:not([disabled]), .md-button.button-confirm.md-focused:not([disabled]), .md-button.button-confirm._md-focused:not([disabled]){
+  color:#fff;
+  background-color:rgba(228,105,79,0.1);
+}
+/******Advanced search background************/
+md-input-container label, md-input-container label:not(.md-no-float):not(._md-container-ignore){
+  color:rgba(102,102,102,1);
+}
+prm-search-bar .advanced-search-backdrop{
+  background-color:#f5f2e4;
+}
+/**Advanced search button***/
+prm-search-bar .search-switch-buttons .md-button.switch-to-advanced{
+  color:#333;
+  border:1px solid #999;
+}
+prm-search-bar .search-switch-buttons .md-button.switch-to-simple{
+  border:1px solid #999;
+}
+/**********************Journal Searchbar*********************/
+prm-alphabet-toolbar .md-button{
+  color:#d34426 !important;
+  font-weight:bold;
+}
+prm-alphabet-toolbar .md-button:hover{
+  color:#000000 !important;
+  box-shadow: none;
+  background-color: hsla(0,0%,100%,1) !important;
+}
+
+/*RS 01/05/2020 Update background to taupe*/
+.prm-primary-bg, prm-atoz-search-bar, prm-browse-search-bar, prm-collection-gallery-header .collection-header-inner, prm-search-bar, prm-spinner.overlay-cover.light-on-dark::after, prm-tags-search-bar {
+    background-color: #f5f2e4;
+}
+/***************Ellipsis from the top menu**************/
+.custom-links-container md-card {
+  background-color: #fff;
+}
+.custom-links-container md-card span.md-subhead{
+  display:none !important;
+}
+.custom-links-container md-card span.md-headline{
+  color:#d34426 !important;
+}
+.md-dialog-container .close-button {
+    color: #d34426 !important;
+}
+/************Hiding tags section in full display*************/
+.md-dialog-container button[aria-label="Tags"]{
+  display:none !important;
+}
+.md-dialog-container div#tags{
+  display:none !important;
+}
+/**search results count***/
+prm-search-result-list .results-title {
+  background-color: #d6d2c2;
+  border: 1px solid #999;
+  border-radius: 5px 5px 0 0;
+  font-weight: 400;
+}
+/**search results****/
+md-list{
+  border-style:solid;
+  border-color:#ccc;
+  border-width:0 1px 1px;
+}
+/**search results list item***/
+prm-search-result-list md-list-item{
+  border-bottom: 1px solid #cccccc;
+  background-color:#ffffff;
+}
+prm-search-result-list md-list-item:hover{
+  background-color:#e9e9e9 !important;
+}
+/******Items bookmarked**************/
+.prm-highlight.prm-hue1, prm-brief-result-container.item-bookmarked, prm-brief-result-container.item-bookmarked:hover{
+  background-color:#ffffd9;
+}
+.tiny-uppercase-text, prm-brief-result-container .media-content-type, md-menu-content .menu-title{
+  color:#666;
+}
+/*****************Options******************************/
+/******Selected option*****************/
+md-tab-item.md-active prm-icon md-icon.md-primoExplore-theme{
+  color:#2d251a !important;
+}
+md-tabs md-tabs-wrapper md-tabs-canvas md-pagination-wrapper md-tab-item.md-active:not([disabled]), md-tabs md-tabs-wrapper md-tabs-canvas md-pagination-wrapper md-tab-item.md-focused:not([disabled]){
+  color:#2d251a;
+}
+/***********Ink bar************************/
+.prm-secondary-bg.prm-hue1, md-tabs md-ink-bar, md-input-container::after, md-radio-button.md-checked .md-on, md-radio-button.md-checked ._md-on{
+  background-color:#2d251a;
+}
+/**Guest***/
+prm-user-area .user-menu-button .user-name{
+  color:#ffffff;
+}
+/**results count***/
+.text-italic.text-in-brackets {
+  color: #d14124;
+}
+/******Side bar**********/
+.sidebar{
+  margin-right:10px;
+}
+/******Tweak my results**************/
+.sidebar-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+}
+/************Checkbox***********************/
+md-checkbox.md-checked .md-icon, md-checkbox.md-checked ._md-icon {
+  background-color: #d34426;
+  opacity: 1;
+}
+/**facets title***/
+.section-title.layout-fill {
+  background-color: #2d251a;
+  border-radius: 5px 5px 0 0;
+  margin-bottom: 0;
+}
+.section-title.layout-fill:focus, .section-title.layout-fill:hover{
+  background-color: #b96f09 !important;
+}
+
+.section-title.layout-fill .section-title-header{
+  color:#ffffff;
+}
+/**********************RS 01/05/2020 A-Z Journal Searchbar*********************/
+prm-alphabet-toolbar .md-button{
+  color:#a03b3b !important;
+  font-weight:bold;
+}
+prm-alphabet-toolbar .md-button:hover{
+  color:#d34426 !important;
+  box-shadow: none;
+  background-color: hsla(0,0%,100%,1) !important;
+}
+
+/********Facet content**************/
+.section-content.animate-max-height-variable{
+  border-radius:0 0 5px 5px;
+  border-width:0 1px 1px;
+  border-color:#ccc;
+  border-style:solid;
+  margin-top:-5px;
+  padding:6px 0;
+}
+prm-facet-group .section-content .md-chips .md-chip .md-chip-content:hover:not([disabled]), .section-content .md-chips .md-chip .md-chip-content:focus:not([disabled]), .section-content .md-chips .md-chip .md-chip-content.hovered:not([disabled]), .section-content .md-chips .md-chip .md-chip-content.md-focused:not([disabled]), .section-content .md-chips .md-chip .md-chip-content._md-focused:not([disabled]){
+  background-color:rgba(204,204,204,1);
+}
+
+.prm-warn.hovered{
+  color:#000000 !important;
+}
+.available-facets .section-content .md-chips .md-chip .button-exclude:hover:not([disabled]), .available-facets .section-content .md-chips .md-chip .button-exclude:focus:not([disabled]), .available-facets .section-content .md-chips .md-chip .button-exclude.hovered:not([disabled]), .available-facets .section-content .md-chips .md-chip .button-exclude.md-focused:not([disabled]), .available-facets .section-content .md-chips .md-chip .button-exclude._md-focused:not([disabled]){
+  background-color:#ffffff;
+  border: 1px solid rgba(255, 99, 71, 0.1);
+}
+/**facets arrow***/
+.layout-fill .link-alt-color, .section-title prm-icon{
+  color:#d34426;
+}
+/**************Show more link***************/
+.md-button.button-as-link.link-alt-color, .bar prm-authentication .md-button.link-alt-color, .bar prm-authentication .section-title prm-icon.md-button, .section-title .bar prm-authentication prm-icon.md-button, .section-title prm-icon.md-button.button-as-link{
+  color:#d34426;
+}
+.md-button.button-as-link.link-alt-color:hover:not([disabled]), .bar prm-authentication .md-button.link-alt-color:hover:not([disabled]), .bar prm-authentication .section-title prm-icon.md-button:hover:not([disabled]), .section-title .bar prm-authentication prm-icon.md-button:hover:not([disabled]), .section-title prm-icon.md-button.button-as-link:hover:not([disabled]), .md-button.button-as-link.link-alt-color:focus:not([disabled]), .bar prm-authentication .md-button.link-alt-color:focus:not([disabled]), .bar prm-authentication .section-title prm-icon.md-button:focus:not([disabled]), .section-title .bar prm-authentication prm-icon.md-button:focus:not([disabled]), .section-title prm-icon.md-button.button-as-link:focus:not([disabled]), .md-button.button-as-link.link-alt-color.hovered:not([disabled]), .bar prm-authentication .md-button.link-alt-color.hovered:not([disabled]), .bar prm-authentication .section-title prm-icon.md-button.hovered:not([disabled]), .section-title .bar prm-authentication prm-icon.md-button.hovered:not([disabled]), .section-title prm-icon.md-button.button-as-link.hovered:not([disabled]), .md-button.button-as-link.link-alt-color.md-focused:not([disabled]), .bar prm-authentication .md-button.link-alt-color.md-focused:not([disabled]), .bar prm-authentication .section-title prm-icon.md-button.md-focused:not([disabled]), .section-title .bar prm-authentication prm-icon.md-button.md-focused:not([disabled]), .section-title prm-icon.md-button.button-as-link.md-focused:not([disabled]), .md-button.button-as-link.link-alt-color._md-focused:not([disabled]), .bar prm-authentication .md-button.link-alt-color._md-focused:not([disabled]), .bar prm-authentication .section-title prm-icon.md-button._md-focused:not([disabled]), .section-title .bar prm-authentication prm-icon.md-button._md-focused:not([disabled]), .section-title prm-icon.md-button.button-as-link._md-focused:not([disabled]){
+  background-color:rgba(224, 105, 79, 0.1);
+  color:#d34426;
+}
+/****************Active filters**********************/
+.filtered-facets-section .sidebar-title {
+    background-color: #d34426;
+    border-radius: 5px 5px 0 0;
+    color: #fff;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-bottom: 0;
+    padding: 6px;
+}
+.filtered-facets-section .md-chips{
+    border:1px solid #ccc;
+    border-width:0 1px 1px;
+    padding:6px 0;
+}
+.filtered-facets-section div:nth-child(3) {
+    padding: 6px;
+}
+/***Diamonds****/
+prm-spinner.light-on-dark .diamond {
+    background-color: white;
+}
+prm-spinner.dark-on-light .diamond {
+    background-color: #d34426;
+}
+prm-spinner.half-transparent .diamond {
+    background-color: #E4694F;
+}
+/**************e-shelf icon******************/
+.prm-secondary-color.prm-hue1, .result-item-actions .custom-button.pin-button, prm-search-bookmark-filter .prm-hue1.md-button, prm-topbar .prm-hue1.top-nav-bar, prm-recomendation-item .media-on-hover .pin-button{
+  color:#d14124;
+}
+/******Hover***********/
+.prm-primary-color, .result-item-actions .custom-button, .result-item-actions .more-options-button, .md-autocomplete-suggestions .suggestion-scope, md-tab-content .tab-content-header md-input-container md-select-value .md-text{
+  color:#b43a20;
+}
+/*****Active***********/
+.md-button:hover:not([disabled]), .md-button:focus:not([disabled]), .md-button.hovered:not([disabled]), .md-button.md-focused:not([disabled]), .md-button._md-focused:not([disabled]){
+  /*! color:#d34426; */
+}
+/**********'>' (Full text available)********************************/
+.prm-links, .md-button.arrow-link-button [link-arrow], md-grid-tile .tile-header .header-link .arrow-icon, .tiles-grid-tile .tile-header .header-link .arrow-icon, md-grid-tile .tile-header .header-link:hover, .tiles-grid-tile .tile-header .header-link:hover, md-grid-tile .tile-header .md-button, .tiles-grid-tile .tile-header .md-button{
+  color:#e4694f;
+}
+/*******************Icons***********************/
+md-tabs md-tabs-wrapper md-tabs-canvas md-pagination-wrapper md-tab-item:not([disabled]){
+  color:#d34426;
+}
+/*********************Saved searches*****************************/
+md-toolbar prm-saved-searches-group-actions .md-button md-icon, md-toolbar.md-primoExplore-theme prm-saved-searches-group-actions .md-button md-icon, md-toolbar:not(.md-menu-toolbar) prm-saved-searches-group-actions .md-button md-icon{
+  color:#d34426 !important;
+}
+.saved-query-list > md-nav-bar .md-nav-item, prm-action-list > md-nav-bar .md-nav-item{
+  max-width:170px;
+}
+/***************Close dialog icon****************/
+.prm-full-view-dialog ~ .close-button.md-icon-button prm-icon{
+  color:#d34426;
+}
+/**************Modal******************************/
+.md-dialog-is-showing{
+  overflow-x:visible !important;
+}
+/*************alert-bar******************************/
+prm-search-bar .layout-fill{
+  min-height:auto !important;
+  height:auto !important;
+}
+.alert-info {
+  color: #333333 !important;
+  background-color: #FFC90E !important;
+  border-color: #FFC90E !important;
+  font-size: 18px;
+  width: auto;
+  text-align: center;
+  line-height: 22px;
+  height: 22px;
+}
+.md-margin-top{
+  margin-top:20px;
+}
+/* Styles for BrowZine-Primo integration links */
+.browzine-icon  {
+  margin-right: 2px;
+}
+
+.browzine-external-link {
+  width: 15px;
+  height: 15px;
+  min-width: 15px;
+  min-height: 15px;
+}
+/* Styles for LibChat-Primo integration widget JO 210824*/
+.s-lch-widget-float {
+    right:2px !important;
+}
