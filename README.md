@@ -28,32 +28,31 @@ When we're happy with the **sandbox** branch...
 
 ### Detailed instructions
 1. Preparation
-  1. Create your own GitHub account to access repositories
-  2. Install GitHub Desktop
+    1. Create your own GitHub account to access repositories
+    2. Install GitHub Desktop
 
 2. Create your work-in-pogress branch:
-
-  1. Create a new branch
-  2. Clone a repository to your desktop: File > Clone Respository...
-  3. Create a branch of the repository: Branch > New Branch...
-  4. Give this new branch a descriptive name (e.g. Fixing_Talis_Integration or Updating_Embedded_Video)
+    1. Create a new branch
+    2. Clone a repository to your desktop: File > Clone Respository...
+    3. Create a branch of the repository: Branch > New Branch...
+    4. Give this new branch a descriptive name (e.g. Fixing_Talis_Integration or Updating_Embedded_Video)
 
 3. Make all your changes there. 
-  1. Upload to Primo. Test them. 
-  2. When they work...
+    1. Upload to Primo. Test them. 
+    2. When they work...
 
 4. Save your changes
-  1. Save and commit any changes to your local branch: Changes side tab > Commit to <branchname>
-  2. Push your local commits to the remote repository: Push origin
-  3. Publish your current branch to GitHub.
+    1. Save and commit any changes to your local branch: Changes side tab > Commit to <branchname>
+    2. Push your local commits to the remote repository: Push origin
+    3. Publish your current branch to GitHub.
 
-Merge your changes into the 
-  1. Create a pull request
-  2. Invite reviewers
-  3. Address their review comments
-  4. Merge your pull request
+5. Merge your changes into the original branch
+    1. Create a pull request
+    2. Invite reviewers
+    3. Address their review comments
+    4. Merge your pull request
 
-Delete your branch from both GitHub and your local machine
+6. Delete your branch from both GitHub and your local machine
 
 
 ## Misc
