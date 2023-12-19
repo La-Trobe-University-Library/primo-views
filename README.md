@@ -31,15 +31,17 @@ When we're happy with the **sandbox** branch...
     1. Create your own GitHub account to access repositories
     2. Install GitHub Desktop
 
-2. Create your work-in-pogress branch:
-    1. Create a new branch
-    2. Clone a repository to your desktop: File > Clone Respository...
-    3. Create a branch of the repository: Branch > New Branch...
+2. Create your work-in-progress branch:
+    1. If needed, clone the **primo-views** repository to your desktop: *File > Clone Respository... > La-Trobe-University-Library/primo-views*
+    3. Create your WIP branch: *Branch > New Branch...*
     4. Give this new branch a descriptive name (e.g. Fixing_Talis_Integration or Updating_Embedded_Video)
+    5. Choose the existing branch you want to copy (usually **sandbox**)
 
-3. Make all your changes there. 
-    1. Upload to Primo. Test them. 
-    2. When they work...
+3. Make your changes 
+    1.  Set **Current branch** to your WIP branch
+    2. Click **Show in Explorer** to see your files.
+    3. Edit your files. Zip them. Deploy to Primo. Test them. 
+    4. When they work...
 
 4. Save your changes
     1. Save and commit any changes to your local branch: Changes side tab > Commit to <branchname>
