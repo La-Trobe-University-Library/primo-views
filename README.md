@@ -3,6 +3,7 @@
 ## Description 
 This repository holds the [Primo Customization Packages](https://knowledge.exlibrisgroup.com/Primo/Product_Documentation/Primo/Back_Office_Guide/090Primo_Utilities/The_UI_Customization_Package_Manager) for La Trobe University Library's Production and Sandbox systems.
 
+
 ## Structure
 The repository contains two permanent branches:
 - **production** holds the current files for the Primo Production system
@@ -11,6 +12,7 @@ The repository contains two permanent branches:
 Both branches store the extracted files (rather than the zipped-up packages) so we can use version comparison tools on them.
 
 If you want to make changes, make a "work in progress" branch rather than editing the sandbox or production branches directly.
+
 
 ## Updating Files
 1. Make a WIP branch from the **sandbox** branch
@@ -24,8 +26,7 @@ When we're happy with the **sandbox** branch...
 5. Merge the sandbox branch into the **production** branch
 
 
-
-
+## Misc
 ### Copyright
 
 Other than any prior works of which it is a derivative, the copyright in this work is owned by La Trobe University.
