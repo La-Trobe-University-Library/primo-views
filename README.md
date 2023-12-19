@@ -22,8 +22,8 @@ If you want to make changes, make a "work in progress" branch rather than editin
 We may be making multiple changes to Sandbox before we're ready to deploy them to Production.
 
 When we're happy with the **sandbox** branch...
-4. Deploy your changes to Primo Production
-5. Merge the sandbox branch into the **production** branch
+1. Deploy your changes to Primo Production
+2. Merge the sandbox branch into the **production** branch
 
 
 ## Misc
