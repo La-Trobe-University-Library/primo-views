@@ -31,7 +31,8 @@ When we're happy with the **sandbox** branch...
     1. Create your own GitHub account to access repositories
     2. Install GitHub Desktop
 
-2. Create your work-in-progress branch:
+2. NOTE: We should fork the repository, not create a new branch - see [Forking](https://git-for-librarians.netlify.app/forking) in Git for Librarians
+ Create your work-in-progress branch:
     1. If needed, clone the **primo-views** repository to your desktop: *File > Clone Respository... > La-Trobe-University-Library/primo-views*
     3. Create your WIP branch: *Branch > New Branch...*
     4. Give this new branch a descriptive name (e.g. Fixing_Talis_Integration or Updating_Embedded_Video)
