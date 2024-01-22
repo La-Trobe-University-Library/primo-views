@@ -31,7 +31,7 @@ When we're happy with the **sandbox** branch...
     1. Create your own GitHub account to access repositories
     2. Install GitHub Desktop
 
-2. Create your work-in-progress fork:
+2. Create your work-in-progress fork - a.k.a. [origin repository](https://git-for-librarians.netlify.app/forking#origin-and-upstream-repository):
     1. You need to be logged into your github account to create a fork
     2. Click on the fork button on on the main page of the repository
     3. Leave name and description and untick 'Production' branch only
@@ -51,17 +51,18 @@ When we're happy with the **sandbox** branch...
     4. When they work...
 
 5. Save your changes
-    1. Save and commit any changes to your local fork: Changes side tab > Commit to <branchname>
-    2. Push your local commits to the remote repository: Push origin
-    3. Publish your current branch to GitHub.
-
-6. Merge your changes into the original branch
-    1. Create a pull request
-    2. Invite reviewers
-    3. Address their review comments
-    4. Merge your pull request
-
-7. Delete your branch from both GitHub and your local machine
+    1. Save and commit any changes to your local fork: Changes side tab
+	2. Add description of changes
+	3. Commit to <branchname>
+    4. Push commits to the origin remote: Click **Push origin**
+    
+6. Create a pull request to the upstream repository
+    1. Go to the main page of your origin repository in GitHub website
+	2. Click **Contribute** > **Open pull request**
+    3. Click **Create pull request**
+	4. Add a title briefly describing the change
+	5. Add a description with more detail if needed
+	6. Click **Create pull request** to send to upstream repository owner to authorise
 
 
 ## Misc
