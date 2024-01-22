@@ -63,7 +63,7 @@ This means you need to
 
 7. The La-Trobe-University-Library owner will then merge your pull request into the upstream repository
 
-8. Once you've deployed your changes to Primo Sandbox to Primo Production, create a pull request to merge the ** La-Trobe-University-Library:sandbox** branch into the ** La-Trobe-University-Library:production** branch
+8. Once you've deployed your changes to Primo Sandbox to Primo Production, create a pull request to merge the **La-Trobe-University-Library:sandbox** branch into the **La-Trobe-University-Library:production** branch
 	1. Go to https://github.com/La-Trobe-University-Library/primo-views
 	2. Click **Branches**
 	3. Under sandbox, click the three dots ... and choose **New pull request**
