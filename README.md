@@ -58,11 +58,12 @@ When we're happy with the **sandbox** branch...
     
 6. Create a pull request to the upstream repository
     1. Go to the main page of your origin repository in GitHub website
-	2. Click **Contribute** > **Open pull request**
-    3. Click **Create pull request**
-	4. Add a title briefly describing the change
-	5. Add a description with more detail if needed
-	6. Click **Create pull request** to send to upstream repository owner to authorise
+	2. Click **Sync fork**
+	3. Click **Contribute** > **Open pull request**
+    4. Click **Create pull request**
+	5. Add a title briefly describing the change
+	6. Add a description with more detail if needed
+	7. Click **Create pull request** to send to upstream repository owner to authorise
 
 
 ## Misc
