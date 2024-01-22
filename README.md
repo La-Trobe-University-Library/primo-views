@@ -51,7 +51,7 @@ When we're happy with the **sandbox** branch...
     4. When they work...
 
 5. Save your changes
-    1. Save and commit any changes to your local branch: Changes side tab > Commit to <branchname>
+    1. Save and commit any changes to your local fork: Changes side tab > Commit to <branchname>
     2. Push your local commits to the remote repository: Push origin
     3. Publish your current branch to GitHub.
 
