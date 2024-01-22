@@ -13,18 +13,14 @@ Both branches store the extracted files (rather than the zipped-up packages) so 
 
 ## Updating Files
 
-If you want to make changes, make a "work in progress" branch rather than editing the sandbox or production branches directly.
+All changes to Primo configuration filess need to be testing in the Primo Sandbox before they are deployed to Production.
 
-1. Make a WIP branch from the **sandbox** branch
-2. Make your changes. Test them in Sandbox. When they work...
-3. Merge your WIP branch into the **sandbox** branch
-
-We may be making multiple changes to Sandbox before we're ready to deploy them to Production.
-
-When we're happy with the **sandbox** branch...
-1. Deploy your changes to Primo Production
-2. Merge the sandbox branch into the **production** branch. DO NOT DELETE THE SANBOX BRANCH!
-
+This means you need to 
+- make a fork of the **primo-views** repository, 
+- make and test all your changes in the *sandbox* branch, 
+- merge the changes from your fork into the upstream repository, 
+- deploy and test the changes to Primo Production
+- then make a pull request to copy the changes from the sandbox branch to the production branch 
 
 ### Detailed instructions
 1. Preparation
@@ -45,7 +41,7 @@ When we're happy with the **sandbox** branch...
     5. Click **Fetch origin**
 
 4. Make your changes 
-    1. Set **Current branch** to your WIP branch
+    1. Set **Current branch** to **sandbox**
     2. Click **Show in Explorer** to see your files.
     3. Edit your files. Zip them. Deploy to Primo. Test them. 
     4. When they work...
@@ -53,7 +49,7 @@ When we're happy with the **sandbox** branch...
 5. Save your changes
     1. Save and commit any changes to your local fork: Changes side tab
 	2. Add description of changes
-	3. Commit to <branchname>
+	3. Commit to sandbox
     4. Push commits to the origin remote: Click **Push origin**
     
 6. Create a pull request to the upstream repository
@@ -65,6 +61,15 @@ When we're happy with the **sandbox** branch...
 	6. Add a description with more detail if needed
 	7. Click **Create pull request** to send to upstream repository owner to authorise
 
+7. The La-Trobe-University-Library owner will then merge your pull request into the upstream repository
+
+8. Once you've deployed your changes to Primo Sandbox to Primo Production, create a pull request to merge the **La-Trobe-University-Library:sandbox** branch into the **La-Trobe-University-Library:production** branch
+	1. Go to https://github.com/La-Trobe-University-Library/primo-views
+	2. Click **Branches**
+	3. Under sandbox, click the three dots ... and choose **New pull request**
+	4. Add a title and description
+	5. Click **Create pull request**
+	6. The owner of this repository can then merge these changes
 
 ## Misc
 
