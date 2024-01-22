@@ -16,7 +16,7 @@ Both branches store the extracted files (rather than the zipped-up packages) so 
 All changes to Primo configuration filess need to be testing in the Primo Sandbox before they are deployed to Production.
 
 This means you need to 
-- make a fork of the **primo-views* repository, 
+- make a fork of the **primo-views** repository, 
 - make and test all your changes in the *sandbox* branch, 
 - merge the changes from your fork into the upstream repository, 
 - deploy and test the changes to Primo Production
