@@ -49,7 +49,7 @@ This means you need to
 5. Save your changes
     1. Save and commit any changes to your local fork: Changes side tab
 	2. Add description of changes
-	3. Commit to <branchname>
+	3. Commit to sandbox
     4. Push commits to the origin remote: Click **Push origin**
     
 6. Create a pull request to the upstream repository
