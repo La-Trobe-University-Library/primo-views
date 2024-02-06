@@ -22,6 +22,9 @@ html,body{
   font-family:Arial,verdana;
   background-color:#ffffff;
 }
+iframe {
+  max-width: 100%;
+}
 /*remove white background on login button*/
 .login-card md-list-item.login-brighter-dialog .md-button:focus, .login-card md-list-item.login-brighter-dialog .md-button:hover {
   background-color: transparent !important;
@@ -263,7 +266,7 @@ prm-alphabet-toolbar .md-button:hover{
 }
 
 /*RS 01/05/2020 Update background to taupe*/
-.prm-primary-bg, prm-atoz-search-bar, prm-browse-search-bar, prm-collection-gallery-header .collection-header-inner, prm-search-bar, prm-spinner.overlay-cover.light-on-dark::after, prm-tags-search-bar {
+.prm-primary-bg, prm-atoz-search-bar, prm-browse-search-bar, prm-collection-gallery-header .collection-header-inner, prm-search-bar, prm-spinner.overlay-cover.light-on-dark::after, prm-tags-search-bar, prm-newspapers-search-bar {
     background-color: #f5f2e4;
 }
 /***************Ellipsis from the top menu**************/
