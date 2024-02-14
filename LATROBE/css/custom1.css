@@ -17,8 +17,17 @@
 html, body {
   background: var(--ltu-light-grey);
 }
-iframe, img {
+iframe {
   max-width: 100%;
+}
+a:focus, 
+button:focus,
+input:focus,
+select:focus,
+md-select:focus,
+md-radio-group:focus {
+  outline: 3px solid #75b6fc !important;
+  outline-offset: 1px;
 }
 md-card-content a {
   color: var(--ltu-red);
@@ -28,28 +37,40 @@ md-card-content a:hover, md-card-content a:focus {
   text-decoration: none;
   box-shadow: none;
 }
+md-card.default-card, prm-featured-result-item md-card {
+  font-weight: 400;
+}
 
 /* cards */
-md-card.default-card {
+md-card.default-card, #stickyDB {
   background: var(--ltu-white);
 }
 
 /* skip buttons (appear on focus only) */
-prm-skip-to a:focus, prm-skip-to .md-button:focus
-{
+prm-skip-to a:focus, prm-skip-to .md-button:focus {
   position: absolute;
-  top: 2px;
-  left: 2px;
-  z-index: 99;
+  top: 12px;
+  left: 12px;
+  z-index: 1000;
   height: auto !important;
   min-height: 20px !important;
-  border: 2px solid var(--ltu-dark-grey);
+  border: 2px solid transparent;
   box-shadow: none;
-  padding: 5px 10px;
+  padding: .8125rem 1.5rem;
   line-height: 1;
   background: var(--ltu-red) !important;
   color: var(--ltu-white) !important;
-  border-radius: 2px !important;
+  border-radius: 1.875rem !important;
+  transition: top .3s;
+  font-size: 1rem;
+  text-decoration: none;
+  outline: 3px solid #75b6fc;
+  outline-offset: 1px;
+  text-transform: none;
+}
+prm-skip-to a:focus:hover, prm-skip-to .md-button:focus:hover {
+  background: var(--ltu-dark-red) !important;
+  text-decoration: underline;
 }
 /* ----- END GENERAL ----- */
 
@@ -71,18 +92,19 @@ prm-topbar prm-logo {
 prm-logo .product-logo {
   padding: 0;
 }
+#banner a.md-primoExplore-theme:empty {
+  display: none;
+}
+#banner a.md-primoExplore-theme:has(img) {
+  display: inline-block;
+  height: 80px;
+}
 #banner a.md-primoExplore-theme:hover, #banner a.md-primoExplore-theme:focus {
   box-shadow: none;
 }
 #banner a.md-primoExplore-theme:hover img, #banner a.md-primoExplore-theme:focus img {
   box-shadow: 0 0 3px #777;
 }
-/*#mainMenu a {
-  color: #000;
-  border: none;
-  box-shadow: none;
-  text-transform: none;
-}*/
 prm-main-menu[menu-type="menu"] {
   top: 80px;
   background: var(--ltu-black);
@@ -92,6 +114,7 @@ prm-main-menu[menu-type="menu"] {
   max-width: 100% !important;
   height: 50px;
   min-height: 50px;
+  z-index: 10;
 }
 #mainMenu {
   display: flex;
@@ -199,14 +222,21 @@ prm-user-area-expandable .button-with-menu-arrow:hover .menu-arrow:hover:not([di
 /* ----- END HEADER ----- */
 
 /* ----- SEARCH BAR ----- */
-prm-search-bar, .__sm prm-search-bar {
+prm-search-bar, .__sm prm-search-bar,
+prm-atoz-search-bar, .__sm prm-atoz-search-bar,
+prm-newspapers-search-bar, .__sm prm-newspapers-search-bar,
+prm-browse-search-bar, .__sm prm-browse-search-bar,
+prm-tags-search-bar, .__sm prm-tags-search-bar {
   padding-top: calc(1.5em + 50px);
   background: transparent;
 }
-prm-atoz-search-bar .search-element-inner, prm-browse-search-bar .search-element-inner, prm-newspapers-search-bar .search-element-inner, prm-search-bar .search-element-inner, prm-tags-search-bar .search-element-inner {
+prm-atoz-search-bar .search-element-inner, prm-browse-search-bar .classic-input, prm-tags-search-bar .classic-input, prm-newspapers-search-bar .classic-input, prm-search-bar .search-element-inner, prm-tags-search-bar .search-element-inner,
+prm-atoz-search-bar .simple-search-wrapper {
   border-radius: 30px !important;
   height: 60px;
   border: 2px solid #ccc;
+  overflow: visible;
+  box-shadow: none;
 }
 #searchElementsWrapper .simple-search-wrapper {
   box-shadow: none;
@@ -214,7 +244,11 @@ prm-atoz-search-bar .search-element-inner, prm-browse-search-bar .search-element
 #searchBar {
   background: none;
 }
-prm-search-bar .simple-search-wrapper .search-actions .md-button
+prm-search-bar .simple-search-wrapper .search-actions .md-button,
+prm-atoz-search-bar .simple-search-wrapper .md-button.submit-button,
+prm-newspapers-search-bar .classic-input .md-button.submit-button,
+prm-tags-search-bar .classic-input .md-button.submit-button,
+prm-browse-search-bar .classic-input .md-button.submit-button
 {
   background: var(--ltu-red);
   border-radius: 30px;
@@ -227,14 +261,22 @@ prm-search-bar .simple-search-wrapper .search-actions .md-button
   color: var(--ltu-white);
   position: relative;
 }
-prm-search-bar .simple-search-wrapper .search-actions .md-button:hover, prm-search-bar .simple-search-wrapper .search-actions .md-button:focus {
+prm-search-bar .simple-search-wrapper .search-actions .md-button:hover, prm-search-bar .simple-search-wrapper .search-actions .md-button:focus,
+prm-atoz-search-bar .simple-search-wrapper .md-button.submit-button:hover, prm-atoz-search-bar .simple-search-wrapper .md-button.submit-button:focus,
+prm-newspapers-search-bar .classic-input .md-button.submit-button:hover, prm-newspapers-search-bar .classic-input .md-button.submit-button:focus,
+prm-tags-search-bar .classic-input .md-button.submit-button:hover, prm-tags-search-bar .classic-input .md-button.submit-button:focus,
+prm-browse-search-bar .classic-input .md-button.submit-button:hover, prm-browse-search-bar .classic-input .md-button.submit-button:focus {
   background-color: var(--ltu-dark-red);
   text-decoration: underline;
   transform: translateY(-4px);
   box-shadow: 0 8px 16px rgba(0,0,0,.3);
   transition: transform .3s ease-in-out,box-shadow .3s ease-in-out;
 }
-prm-search-bar .simple-search-wrapper .search-actions .md-button:hover:after {
+prm-search-bar .simple-search-wrapper .search-actions .md-button:hover:after,
+prm-atoz-search-bar .simple-search-wrapper .md-button.submit-button:hover:after,
+prm-newspapers-search-bar .classic-input .md-button.submit-button:hover:after,
+prm-tags-search-bar .classic-input .md-button.submit-button:hover:after,
+prm-browse-search-bar .classic-input .md-button.submit-button:hover:after {
   content: ' ';
   position: absolute;
   top: 4px;
@@ -245,10 +287,51 @@ prm-search-bar .simple-search-wrapper .search-actions .md-button:hover:after {
   border-radius: 30px;
   z-index: -1;
 }
-prm-search-bar .search-switch-buttons .md-button.switch-to-advanced
+.search-elements-wrapper .simple-search-wrapper .search-scope,
+.search-elements-wrapper .classic-input .search-scope {
+  border-radius: 30px 0 0 30px;
+}
+prm-search-bar .search-switch-buttons .md-button.switch-to-advanced,
+prm-search-bar .search-switch-buttons .md-button.switch-to-simple
 {
   color: var(--ltu-red);
 }
+prm-search-bar .search-switch-buttons .md-button.switch-to-advanced > span,
+prm-search-bar .search-switch-buttons .md-button.switch-to-simple > span {
+  flex-direction: column;
+}
+prm-alphabet-toolbar .md-button {
+  color: var(--ltu-red);
+}
+
+/* --- overriding flex widths */
+.search-wrapper, prm-atoz-search-bar {
+  width: 1024px;
+  margin: 0 auto;
+  max-width: 100%;
+}
+.search-wrapper > div:empty, prm-atoz-search-bar .layout-row > div:empty {
+  display: none;
+}
+#searchElementsWrapper {
+  width: calc(100% - 150px);
+  flex: unset;
+  max-width: 100%;
+}
+.search-switch-buttons {
+  max-width: 150px !important;
+}
+prm-search-bar .search-switch-buttons .md-button.switch-to-advanced,
+prm-search-bar .search-switch-buttons .md-button.switch-to-simple {
+  width: 135px;
+  text-align: center;
+}
+prm-atoz-search-bar > .layout-row > .layout-column {
+  width: 100%;
+  flex: unset;
+  max-width: 100%;
+}
+/* --- end overriding flex widths */
 
 @media screen and (max-width: 599px) {
   prm-search-bar {
@@ -289,6 +372,11 @@ prm-search-bar .search-switch-buttons .md-button.switch-to-advanced
   prm-search-bar .simple-search-wrapper .search-actions .md-button {
     top: 2px;
   }
+
+  #searchElementsWrapper, prm-atoz-search-bar > .layout-row > .layout-column {
+    width: 100%;
+    margin: 0 15px;
+  }
 }
 /* ----- END SEARCH BAR ----- */
 
@@ -302,8 +390,8 @@ prm-search-bar .search-switch-buttons .md-button.switch-to-advanced
   border-width: 1px 0;
   border-radius: 0;
 }
-.bar prm-authentication .md-button, .md-button.button-as-link {
-  color: var(--ltu-red);
+.bar prm-authentication .md-button, .md-button.button-as-link, .toolbar-actions .md-button.button-link {
+  color: var(--ltu-dark-red);
 }
 
 .md-dialog-container.fixed-container {
@@ -340,5 +428,14 @@ prm-search-result-tool-bar .floated-max-results-message {
   line-height: 18px;
   padding: 7px 5px;
 }
+
+/* --- overriding flex layout */
+md-content > div:empty {
+  display: none;
+}
+prm-static {
+  max-width: 1400px;
+}
+/* --- end overriding flex layout */
 
 /* ----- END BODY CONTENT ----- */

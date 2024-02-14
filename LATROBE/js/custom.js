@@ -4,8 +4,8 @@
 
 var app = angular.module('viewCustom', ['angularLoad']);
 
-console.log('libTest JS version 0.1.11.5');
-console.log('includes: LibChat, Browzine, Talis');
+console.log('libTest JS version 0.1.12.2');
+//console.log('includes: LibChat, Browzine, Talis');
 
 /* -------------------------------------------
 / LibChat integration (via JS)
@@ -31,7 +31,7 @@ angular.module('chat', ['angularLoad'])
   .component('addChat', {
     controller: ['angularLoad', function(angularLoad) {
       this.$onInit = function() {
-        angularLoad.loadScript('https://latrobe.libanswers.com/load_chat.php?hash=18578295f317837477f054d32b1e7b01')
+        angularLoad.loadScript('https://latrobe.libanswers.com/load_chat.php?hash=18578295f317837477f054d32b1e7b01');
       }
     }]
   })
