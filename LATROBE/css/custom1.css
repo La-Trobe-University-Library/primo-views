@@ -13,10 +13,76 @@
 }
 /* ----- END VARS ---- */
 
+/* ----- FONTS ----- 
+@font-face {
+  font-family:knockout;
+  font-style:normal;
+  font-weight:400;
+  font-display:swap;
+  src:url(/uploaded_files/LATROBE/Knockout-50Welterweight.woff2) format("woff2");
+  font-feature-settings:"ss02"
+}
+@font-face {
+  font-display:swap;
+  font-family:dm sans;
+  font-style:normal;
+  font-weight:400;
+  src:url(/uploaded_files/LATROBE/dm-sans-v11-latin_latin-ext-regular.woff2) format("woff2"),
+  url(/uploaded_files/LATROBE/dm-sans-v11-latin_latin-ext-regular.woff) format("woff")
+}
+@font-face {
+  font-display:swap;
+  font-family:dm sans;
+  font-style:italic;
+  font-weight:400;
+  src:url(/uploaded_files/LATROBE/dm-sans-v11-latin_latin-ext-italic.woff2) format("woff2"),
+  url(/uploaded_files/LATROBE/dm-sans-v11-latin_latin-ext-italic.woff) format("woff")
+}
+@font-face {
+  font-display:swap;
+  font-family:dm sans;
+  font-style:normal;
+  font-weight:500;
+  src:url(/uploaded_files/LATROBE/dm-sans-v11-latin_latin-ext-500.woff2) format("woff2"),
+  url(/uploaded_files/LATROBE/dm-sans-v11-latin_latin-ext-500.woff) format("woff")
+}
+@font-face {
+  font-display:swap;
+  font-family:dm sans;
+  font-style:italic;
+  font-weight:500;
+  src:url(/uploaded_files/LATROBE/dm-sans-v11-latin_latin-ext-500italic.woff2) format("woff2"),
+  url(/uploaded_files/LATROBE/dm-sans-v11-latin_latin-ext-500italic.woff) format("woff")
+}
+@font-face {
+  font-display:swap;
+  font-family:dm sans;
+  font-style:normal;
+  font-weight:700;
+  src:url(/uploaded_files/LATROBE/dm-sans-v11-latin_latin-ext-700.woff2) format("woff2"),
+  url(/uploaded_files/LATROBE/dm-sans-v11-latin_latin-ext-700.woff) format("woff")
+}
+@font-face {
+  font-display:swap;
+  font-family:dm sans;
+  font-style:italic;
+  font-weight:700;
+  src:url(/uploaded_files/LATROBE/dm-sans-v11-latin_latin-ext-700italic.woff2) format("woff2"),
+  url(/uploaded_files/LATROBE/dm-sans-v11-latin_latin-ext-700italic.woff) format("woff")
+}
+ ----- END FONTS ----- */
+
 /* ----- GENERAL ----- */
 html, body {
   background: var(--ltu-light-grey);
+  /*font-family: dm sans;
+  font-weight: 400;
+  font-size: 1rem;*/
 }
+/*h2, .h2, h3, .h3, md-card-title-text {
+  font-family: knockout;
+  font-feature-settings: "ss02";
+}*/
 iframe {
   max-width: 100%;
 }
@@ -439,3 +505,23 @@ prm-static {
 /* --- end overriding flex layout */
 
 /* ----- END BODY CONTENT ----- */
+
+/* ----- CHAT WIDGET ----- */
+div[aria-label="Chat Widget"] > button {
+  background-color: var(--ltu-red);
+  border-radius: 28px;
+  width: 56px;
+  height: 56px;
+}
+div[aria-label="Chat Widget"] > button:hover, div[aria-label="Chat Widget"] > button:focus {
+  background-color: #4d4d4d;
+}
+div[aria-label="Chat Widget"] > button[aria-label="Offline"],
+div[aria-label="Chat Widget"] > button[aria-label="Offline"]:hover, div[aria-label="Chat Widget"] > button[aria-label="Offline"]:focus {
+  background-color: #999;
+  cursor: not-allowed;
+}
+div[aria-label="Chat Widget"] > button > svg {
+  max-width: 32px;
+}
+/* ----- END CHAT WIDGET ----- */

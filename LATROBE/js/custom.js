@@ -4,7 +4,7 @@
 
 var app = angular.module('viewCustom', ['angularLoad']);
 
-console.log('libTest JS version 0.1.12.2');
+console.log('libTest JS version 0.1.12.3');
 //console.log('includes: LibChat, Browzine, Talis');
 
 /* -------------------------------------------
