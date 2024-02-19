@@ -137,56 +137,6 @@
   
   
   /* -------------------------------------------
-  / Talis reading list integration, based on https://github.com/alfi1/primo-aspire-api
-  ------------------------------------------- */
-  /*
-  app.constant('AspireTrustBaseUrl', "https://latrobe.rl.talis.com/")
-    .config(['$sceDelegateProvider', 'AspireTrustBaseUrl', function($sceDelegateProvider, AspireTrustBaseUrl) {
-      var urlWhitelist = $sceDelegateProvider.resourceUrlWhitelist();
-      urlWhitelist.push(AspireTrustBaseUrl + '**');
-      $sceDelegateProvider.resourceUrlWhitelist(urlWhitelist);
-    }]);
-  
-  app.component('prmServiceDetailsAfter', {
-    bindings: {
-      parentCtrl: '<'
-    },
-    controller: 'DisplayAspireListsController',
-    template: '<div ng-if="listsFound"><span class="bold text">Cited on reading lists:</span><ul><li ng-repeat="(url,listname) in listsFound"><a href="{{url}}" target="_blank">{{listname}}</a></li></ul></div>'
-  });
-  
-  app.controller('DisplayAspireListsController', function($scope, $http) {
-    var vmt = this;
-  
-    this.$onInit = function() {
-      try {
-        console.log('Checking for MMSID...');
-        var theMMSID = vmt?.parentCtrl?.item?.pnx?.search?.addsrcrecordid[0];
-        
-        if(theMMSID && theMMSID != '') {
-          console.log("Found MMSID: " + theMMSID);
-          
-          var url = 'https://latrobe.rl.talis.com/lcn/' + theMMSID + '/lists.json';
-  
-          $http.jsonp(url, {
-            jsonpCallbackParam: 'cb'
-          })
-            .then(function handleSuccess(response) {
-              $scope.listsFound = response.data;
-            });
-        } else {
-          console.log('No MMSID found');
-        }
-      } catch(error) {
-        console.log('Error reading the MMSID')
-      }
-    };
-  });
-  */
-  // ------------------------------------------- end Talis reading list integration
-  
-  
-  /* -------------------------------------------
   / Talis reading list integration (v2)
   / Based on https://github.com/uqlibrary/exlibris-primo/blob/master/src/view_package/js/custom.js
   ------------------------------------------- */
