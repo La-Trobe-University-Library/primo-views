@@ -19,7 +19,7 @@
   font-style:normal;
   font-weight:400;
   font-display:swap;
-  src:url(http://www.lib.latrobe.edu.au/primo-live/fonts/knockout/Knockout-50Welterweight.woff2) format("woff2");
+  src:url(/primo-explore/custom/LATROBE/css/fonts/knockout/Knockout-50Welterweight.woff2) format("woff2");
   font-feature-settings:"ss02"
 }
 @font-face {
@@ -27,62 +27,62 @@
   font-family:dm sans;
   font-style:normal;
   font-weight:400;
-  src:url(http://www.lib.latrobe.edu.au/primo-live/fonts/dm-sans/dm-sans-v11-latin_latin-ext-regular.woff2) format("woff2"),
-  url(http://www.lib.latrobe.edu.au/primo-live/fonts/dm-sans/dm-sans-v11-latin_latin-ext-regular.woff) format("woff")
+  src:url(/primo-explore/custom/LATROBE/css/fonts/dm-sans/dm-sans-v11-latin_latin-ext-regular.woff2) format("woff2"),
+  url(/primo-explore/custom/LATROBE/css/fonts/dm-sans/dm-sans-v11-latin_latin-ext-regular.woff) format("woff")
 }
 @font-face {
   font-display:swap;
   font-family:dm sans;
   font-style:italic;
   font-weight:400;
-  src:url(http://www.lib.latrobe.edu.au/primo-live/fonts/dm-sans/dm-sans-v11-latin_latin-ext-italic.woff2) format("woff2"),
-  url(http://www.lib.latrobe.edu.au/primo-live/fonts/dm-sans/dm-sans-v11-latin_latin-ext-italic.woff) format("woff")
+  src:url(/primo-explore/custom/LATROBE/css/fonts/dm-sans/dm-sans-v11-latin_latin-ext-italic.woff2) format("woff2"),
+  url(/primo-explore/custom/LATROBE/css/fonts/dm-sans/dm-sans-v11-latin_latin-ext-italic.woff) format("woff")
 }
 @font-face {
   font-display:swap;
   font-family:dm sans;
   font-style:normal;
   font-weight:500;
-  src:url(http://www.lib.latrobe.edu.au/primo-live/fonts/dm-sans/dm-sans-v11-latin_latin-ext-500.woff2) format("woff2"),
-  url(http://www.lib.latrobe.edu.au/primo-live/fonts/dm-sans/dm-sans-v11-latin_latin-ext-500.woff) format("woff")
+  src:url(/primo-explore/custom/LATROBE/css/fonts/dm-sans/dm-sans-v11-latin_latin-ext-500.woff2) format("woff2"),
+  url(/primo-explore/custom/LATROBE/css/fonts/dm-sans/dm-sans-v11-latin_latin-ext-500.woff) format("woff")
 }
 @font-face {
   font-display:swap;
   font-family:dm sans;
   font-style:italic;
   font-weight:500;
-  src:url(http://www.lib.latrobe.edu.au/primo-live/fonts/dm-sans/dm-sans-v11-latin_latin-ext-500italic.woff2) format("woff2"),
-  url(http://www.lib.latrobe.edu.au/primo-live/fonts/dm-sans/dm-sans-v11-latin_latin-ext-500italic.woff) format("woff")
+  src:url(/primo-explore/custom/LATROBE/css/fonts/dm-sans/dm-sans-v11-latin_latin-ext-500italic.woff2) format("woff2"),
+  url(/primo-explore/custom/LATROBE/css/fonts/dm-sans/dm-sans-v11-latin_latin-ext-500italic.woff) format("woff")
 }
 @font-face {
   font-display:swap;
   font-family:dm sans;
   font-style:normal;
   font-weight:700;
-  src:url(http://www.lib.latrobe.edu.au/primo-live/fonts/dm-sans/dm-sans-v11-latin_latin-ext-700.woff2) format("woff2"),
-  url(http://www.lib.latrobe.edu.au/primo-live/fonts/dm-sans/dm-sans-v11-latin_latin-ext-700.woff) format("woff")
+  src:url(/primo-explore/custom/LATROBE/css/fonts/dm-sans/dm-sans-v11-latin_latin-ext-700.woff2) format("woff2"),
+  url(/primo-explore/custom/LATROBE/css/fonts/dm-sans/dm-sans-v11-latin_latin-ext-700.woff) format("woff")
 }
 @font-face {
   font-display:swap;
   font-family:dm sans;
   font-style:italic;
   font-weight:700;
-  src:url(http://www.lib.latrobe.edu.au/primo-live/fonts/dm-sans/dm-sans-v11-latin_latin-ext-700italic.woff2) format("woff2"),
-  url(http://www.lib.latrobe.edu.au/primo-live/fonts/dm-sans/dm-sans-v11-latin_latin-ext-700italic.woff) format("woff")
+  src:url(/primo-explore/custom/LATROBE/css/fonts/dm-sans/dm-sans-v11-latin_latin-ext-700italic.woff2) format("woff2"),
+  url(/primo-explore/custom/LATROBE/css/fonts/dm-sans/dm-sans-v11-latin_latin-ext-700italic.woff) format("woff")
 }
 /* ----- END FONTS ----- */
 
 /* ----- GENERAL ----- */
 html, body {
   background: var(--ltu-light-grey);
-  /*font-family: dm sans;
+  font-family: dm sans;
   font-weight: 400;
-  font-size: 1rem;*/
+  font-size: 1rem;
 }
-/*h2, .h2, h3, .h3, md-card-title-text {
+h2, .h2, h3, .h3, md-card-title-text {
   font-family: knockout;
   font-feature-settings: "ss02";
-}*/
+}
 iframe {
   max-width: 100%;
 }
@@ -309,12 +309,14 @@ prm-atoz-search-bar .simple-search-wrapper {
 }
 #searchBar {
   background: none;
+  width: 150px;
 }
 prm-search-bar .simple-search-wrapper .search-actions .md-button,
 prm-atoz-search-bar .simple-search-wrapper .md-button.submit-button,
 prm-newspapers-search-bar .classic-input .md-button.submit-button,
 prm-tags-search-bar .classic-input .md-button.submit-button,
-prm-browse-search-bar .classic-input .md-button.submit-button
+prm-browse-search-bar .classic-input .md-button.submit-button,
+prm-advanced-search .advanced-search-output .md-button.button-confirm
 {
   background: var(--ltu-red);
   border-radius: 30px;
@@ -331,7 +333,8 @@ prm-search-bar .simple-search-wrapper .search-actions .md-button:hover, prm-sear
 prm-atoz-search-bar .simple-search-wrapper .md-button.submit-button:hover, prm-atoz-search-bar .simple-search-wrapper .md-button.submit-button:focus,
 prm-newspapers-search-bar .classic-input .md-button.submit-button:hover, prm-newspapers-search-bar .classic-input .md-button.submit-button:focus,
 prm-tags-search-bar .classic-input .md-button.submit-button:hover, prm-tags-search-bar .classic-input .md-button.submit-button:focus,
-prm-browse-search-bar .classic-input .md-button.submit-button:hover, prm-browse-search-bar .classic-input .md-button.submit-button:focus {
+prm-browse-search-bar .classic-input .md-button.submit-button:hover, prm-browse-search-bar .classic-input .md-button.submit-button:focus,
+prm-advanced-search .advanced-search-output .md-button.button-confirm:hover, prm-advanced-search .advanced-search-output .md-button.button-confirm:focus {
   background-color: var(--ltu-dark-red);
   text-decoration: underline;
   transform: translateY(-4px);
@@ -342,7 +345,8 @@ prm-search-bar .simple-search-wrapper .search-actions .md-button:hover:after,
 prm-atoz-search-bar .simple-search-wrapper .md-button.submit-button:hover:after,
 prm-newspapers-search-bar .classic-input .md-button.submit-button:hover:after,
 prm-tags-search-bar .classic-input .md-button.submit-button:hover:after,
-prm-browse-search-bar .classic-input .md-button.submit-button:hover:after {
+prm-browse-search-bar .classic-input .md-button.submit-button:hover:after,
+prm-advanced-search .advanced-search-output .md-button.button-confirm:hover:after {
   content: ' ';
   position: absolute;
   top: 4px;
@@ -380,16 +384,16 @@ prm-alphabet-toolbar .md-button {
   display: none;
 }
 #searchElementsWrapper {
-  width: calc(100% - 150px);
+  width: calc(100% - 155px);
   flex: unset;
   max-width: 100%;
 }
 .search-switch-buttons {
-  max-width: 150px !important;
+  max-width: 170px !important;
 }
 prm-search-bar .search-switch-buttons .md-button.switch-to-advanced,
 prm-search-bar .search-switch-buttons .md-button.switch-to-simple {
-  width: 135px;
+  width: 155px;
   text-align: center;
 }
 prm-atoz-search-bar > .layout-row > .layout-column {
@@ -463,6 +467,10 @@ prm-atoz-search-bar > .layout-row > .layout-column {
 .md-dialog-container.fixed-container {
   /*background: #e2231baa;*/
   background: #666a;
+}
+
+.list-item-wrapper h3, #brief h3, prm-facet h3 {
+  font-family: dm sans;
 }
 
 prm-search-result-tool-bar .md-toolbar-tools {

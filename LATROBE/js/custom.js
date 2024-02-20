@@ -4,7 +4,7 @@
 
 var app = angular.module('viewCustom', ['angularLoad']);
 
-console.log('LATROBE (Branding) JS version 0.1.13');
+console.log('LATROBE (Branding) JS version 0.1.14');
 //console.log('includes: LibChat, Browzine, Talis');
 
 /* -------------------------------------------
