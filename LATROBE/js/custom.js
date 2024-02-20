@@ -4,7 +4,7 @@
   
   var app = angular.module('viewCustom', ['angularLoad']);
   
-  console.log('LATROBE view version 0.1.12.2');
+  console.log('LATROBE view version 0.1.13');
   //console.log('includes: LibChat, Browzine, Talis (v2)');
   
   /* -------------------------------------------
