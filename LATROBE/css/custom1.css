@@ -469,7 +469,8 @@ prm-atoz-search-bar > .layout-row > .layout-column {
   background: #666a;
 }
 
-.list-item-wrapper h3, #brief h3, prm-facet h3 {
+.list-item-wrapper h3, #brief h3, prm-facet h3, .spotlight-element h3,
+prm-no-search-result h3 {
   font-family: dm sans;
 }
 
@@ -543,6 +544,12 @@ md-content > div:empty {
 }
 prm-static {
   max-width: 1400px;
+}
+prm-newspapers-home {
+  max-width: 1400px;
+  display: block;
+  margin: 0 auto;
+  background-color: var(--ltu-white);
 }
 /* --- end overriding flex layout */
 
