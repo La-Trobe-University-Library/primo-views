@@ -4,28 +4,11 @@
   
   var app = angular.module('viewCustom', ['angularLoad']);
   
-  console.log('LATROBE view version 0.1.12.1');
+  console.log('LATROBE view version 0.1.12.2');
   //console.log('includes: LibChat, Browzine, Talis (v2)');
   
   /* -------------------------------------------
-  / LibChat integration (via JS)
-  ------------------------------------------- */
-  /*
-  var libchatHash = '18578295f317837477f054d32b1e7b01';
-  var div = document.createElement('div');
-  div.id = 'libchat_' + libchatHash;
-  document.getElementsByTagName('body')[0].appendChild(div);
-  var scr = document.createElement('script');
-  scr.src = 'https://latrobe.libanswers.com/load_chat.php?hash=' + libchatHash;
-  setTimeout(function() {
-    console.log('Adding LibChat script...');
-    document.getElementsByTagName('body')[0].appendChild(scr);
-  }, 2000);
-  */
-  // ------------------------------------------- end LibChat integration (via JS)
-  
-  /* -------------------------------------------
-  / LibChat integration (via Angular)
+  / LibChat integration
   ------------------------------------------- */
   angular.module('chat', ['angularLoad'])
     .component('addChat', {
@@ -39,7 +22,7 @@
     template: '<add-chat></add-chat>'
   })
   app.requires.push('chat');
-  // ------------------------------------------- end LibChat integration (via Angular)
+  // ------------------------------------------- end LibChat integration
   
   
   /* -------------------------------------------
