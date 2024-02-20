@@ -631,6 +631,7 @@ div[aria-label="Chat Widget"] > button {
   border-radius: 28px;
   width: 56px;
   height: 56px;
+  box-shadow: none;
 }
 div[aria-label="Chat Widget"] > button:hover, div[aria-label="Chat Widget"] > button:focus {
   background-color: #4d4d4d;
