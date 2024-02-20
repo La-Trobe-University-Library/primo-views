@@ -1,184 +1,323 @@
-// Primo custom file - updated 17 July 2023 to fix logo problem
-
-(function(){ //Talis-Primo integration 
-    "use strict";
-    'use strict';
-    
- 	// Based on https://github.com/alfi1/primo-aspire-api
-	
-	// Rewrite for Angular 1.6.  Tim Graves.  16/06/2017
-    // This version:
-    // Addresses the Trust issue by whitelisting the Talis url
-    // Changes the format in which a callback is declared
-    // Replaces the deprecated .success function
-    // Updated prior to VE update to Angular 1.8. TG. 05/09/2022
-    
-    var app = angular.module('viewCustom', ['angularLoad'])
-    
-    // Whitelisting
-    .constant('AspireTrustBaseUrl', "https://latrobe.rl.talis.com/").config(['$sceDelegateProvider', 'AspireTrustBaseUrl', function ($sceDelegateProvider, AspireTrustBaseUrl) {
-      var urlWhitelist = $sceDelegateProvider.resourceUrlWhitelist();
-      urlWhitelist.push(AspireTrustBaseUrl + '**');
-      $sceDelegateProvider.resourceUrlWhitelist(urlWhitelist);
-    }]);
-    
-    // End of whitelisting
-      
-           app.component('prmServiceDetailsAfter', {
-           bindings: { parentCtrl: '<' },
-           controller: 'DisplayAspireListsController',
-           //template: '<div ng-show="listsFound != null"><span class="bold text">Cited on reading lists:</span><ul><li ng-repeat="(url,listname) in listsFound"><a href="{{url}}">{{listname}} </a></li></ul></div>'
-           // Improved line. TG. 06/06/2022
-           template: '<div ng-if="listsFound"><span class="bold text">Cited on reading lists:</span><ul><li ng-repeat="(url,listname) in listsFound"><a href="{{url}}">{{listname}} </a></li></ul></div>'
-                           
-                           
-           });
-     
-     
-    app.controller('DisplayAspireListsController', function($scope, $http) {
-        //We changed the name of this variable to avoid conflict with definition in the logo
-		var vmt = this;
-    
-        this.$onInit = function(){
-          {
-            // Uncomment if you want to browse the object's contents
-            //console.log(this);
-            //console.log(vm.parentCtrl.item.pnx.search.addsrcrecordid[0];
-    
-            // Declare a global variable to hold the MMSID when it comes from the function
-            var theMMSID = vmt.parentCtrl.item.pnx.search.addsrcrecordid[0];
-            console.log("LY: function returns " + theMMSID);
-    
-            var url = 'https://latrobe.rl.talis.com/lcn/' + theMMSID + '/lists.json';
-    
-    
-            // Make the call to Aspire
-    
-            $http.jsonp(url,{jsonpCallbackParam: 'cb'})
-    
-            .then(function handleSuccess(response) {
-    
-             $scope.listsFound = response.data;
-                
-                });
-          }
-        };
-    });
-    
-    
-    
-    
-    })();
-
-(function() { // load libchat
-	var libchatHash = '18578295f317837477f054d32b1e7b01'; // hash string goes inside quotation marks
-	var div = document.createElement('div');
-	div.id = 'libchat_' + libchatHash;
-	document.getElementsByTagName('body')[0].appendChild(div);
-	var scr = document.createElement('script');
-	scr.src = 'https://latrobe.libanswers.com/load_chat.php? hash=' + libchatHash;
-	setTimeout(function() {
-		document.getElementsByTagName('body')[0].appendChild(scr);
-	}, 2000);
-}());
-
-(function () { // BrowZine integration
-    "use strict";
-    'use strict';
-
-	var app = angular.module('viewCustom', ['chat'])
-
-		angular
-		.module('chat', ['angularLoad'])
-		.component('addChat', {
-			controller: ['angularLoad', function (angularLoad) {
-				this.$onInit = function () {
-            angularLoad.loadScript('https://latrobe.libanswers.com/load_chat.php?hash=16f4a310dcd007c4fff853f28ece1970')
-			}
-		}]
-	})
-
-	app.component('prmTopBarBefore', {template: '<add-chat />'})
-
-    var app = angular.module('viewCustom', ['angularLoad'])
-
-    /****************************************************************************************************/
-
-        /*In case of CENTRAL_PACKAGE - comment out the below line to replace the other module definition*/
-
-        /*var app = angular.module('centralCustom', ['angularLoad']);*/
-
-    /****************************************************************************************************/
-
-	// Begin BrowZine - Primo Integration...
-		window.browzine = {
-		api: "https://public-api.thirdiron.com/public/v1/libraries/889",
-		apiKey: "a8d9b1e9-fda2-4043-9e64-08f7bbc85754",
-	  journalCoverImagesEnabled: true,
-
-      journalBrowZineWebLinkTextEnabled: true,
-      journalBrowZineWebLinkText: "View Journal Contents",
-
-      articleBrowZineWebLinkTextEnabled: true,
-      articleBrowZineWebLinkText: "View Issue Contents",
-
-      articlePDFDownloadLinkEnabled: true,
-      articlePDFDownloadLinkText: "Download PDF",
-
-      printRecordsIntegrationEnabled: true,
-  };
-
-    browzine.script = document.createElement("script");
-  browzine.script.src = "https://s3.amazonaws.com/browzine-adapters/primo/browzine-primo-adapter.js";
-  document.head.appendChild(browzine.script);
-
-  app.controller('prmSearchResultAvailabilityLineAfterController', function($scope) {
-  window.browzine.primo.searchResult($scope);
-  });
-
+(function(){
+  "use strict";
+  'use strict';
+  
+  var app = angular.module('viewCustom', ['angularLoad']);
+  
+  console.log('LATROBE view version 0.1.12.2');
+  //console.log('includes: LibChat, Browzine, Talis (v2)');
+  
+  /* -------------------------------------------
+  / LibChat integration
+  ------------------------------------------- */
+  angular.module('chat', ['angularLoad'])
+    .component('addChat', {
+      controller: ['angularLoad', function(angularLoad) {
+        this.$onInit = function() {
+          angularLoad.loadScript('https://latrobe.libanswers.com/load_chat.php?hash=18578295f317837477f054d32b1e7b01');
+        }
+      }]
+    })
+  app.component('prmExploreFooterAfter', {
+    template: '<add-chat></add-chat>'
+  })
+  app.requires.push('chat');
+  // ------------------------------------------- end LibChat integration
+  
+  
+  /* -------------------------------------------
+  / Browzine integration
+  ------------------------------------------- */
+  app.controller('SearchResultAvailabilityLineAfterController', [function () {
+    var vm = this;
+  }]);
+  
   app.component('prmSearchResultAvailabilityLineAfter', {
-  bindings: { parentCtrl: '<' },
-  controller: 'prmSearchResultAvailabilityLineAfterController'
+    bindings: { parentCtrl: '<' },
+    controller: 'SearchResultAvailabilityLineAfterController',
+    template: '\n    <primo-browzine parent-ctrl="$ctrl.parentCtrl"></primo-browzine>\n'
+  
   });
-    // ... End BrowZine - Primo Integration
+  
+  PrimoBrowzineController.$inject = ["$scope"];
+  
+  function isBrowzineLoaded() {
+    var validation = false;
+    var scripts = document.head.querySelectorAll("script");
+  
+    if (scripts) {
+      Array.prototype.forEach.call(scripts, function (script) {
+        if (script.src.indexOf("browzine-primo-adapter") > -1) {
+          validation = true;
+        }
+      });
+    }
+  
+    return validation;
+  };
+  
+  function PrimoBrowzineController($scope) {
+    if (!isBrowzineLoaded()) {
+      window.browzine = {
+        libraryId: "889",
+        apiKey: "a8d9b1e9-fda2-4043-9e64-08f7bbc85754",
+  
+        journalCoverImagesEnabled: true,
+  
+        journalBrowZineWebLinkTextEnabled: true,
+        journalBrowZineWebLinkText: "View Journal Contents",
+  
+        articleBrowZineWebLinkTextEnabled: true,
+        articleBrowZineWebLinkText: "View Issue Contents",
+  
+        articlePDFDownloadLinkEnabled: true,
+        articlePDFDownloadLinkText: "Download PDF",
+  
+        articleLinkEnabled: true,
+        articleLinkText: "Read Article",
+  
+        printRecordsIntegrationEnabled: true,
+  
+        unpaywallEmailAddressKey: "ltu-library@latrobe.edu.au",
+  
+        articlePDFDownloadViaUnpaywallEnabled: true,
+        articlePDFDownloadViaUnpaywallText: "Download PDF (via Unpaywall)",
+  
+        articleLinkViaUnpaywallEnabled: true,
+        articleLinkViaUnpaywallText: "Read Article (via Unpaywall)",
+  
+        articleAcceptedManuscriptPDFViaUnpaywallEnabled: true,
+        articleAcceptedManuscriptPDFViaUnpaywallText: "Download PDF (Accepted Manuscript via Unpaywall)",
+  
+        articleAcceptedManuscriptArticleLinkViaUnpaywallEnabled: true,
+        articleAcceptedManuscriptArticleLinkViaUnpaywallText: "Read Article (Accepted Manuscript via Unpaywall)"
+      };
+  
+      window.browzine.script = document.createElement("script");
+      window.browzine.script.src = "https://s3.amazonaws.com/browzine-adapters/primo/browzine-primo-adapter.js";
+      window.document.head.appendChild(window.browzine.script);
+    }
+  
+    (function poll() {
+      if (isBrowzineLoaded() && window.browzine.primo) {
+        window.browzine.primo.searchResult($scope);
+      } else {
+        requestAnimationFrame(poll);
+      }
+    })();
+  };
+  
+  var PrimoBrowzineComponent = {
+    selector: "primoBrowzine",
+    controller: PrimoBrowzineController,
+    bindings: { parentCtrl: "<" }
+  };
+  
+  var PrimoBrowzineModule = angular.module("primoBrowzine", []).component(PrimoBrowzineComponent.selector, PrimoBrowzineComponent).name;
+  
+  app.requires.push(PrimoBrowzineModule);
+  // ------------------------------------------- end Browzine integration
+  
+  
+  /* -------------------------------------------
+  / Talis reading list integration (v2)
+  / Based on https://github.com/uqlibrary/exlibris-primo/blob/master/src/view_package/js/custom.js
+  ------------------------------------------- */
+  app.constant('AspireTrustBaseUrl', "https://latrobe.rl.talis.com/")
+    .config([
+      '$sceDelegateProvider', 
+      'AspireTrustBaseUrl', 
+      function($sceDelegateProvider, AspireTrustBaseUrl) {
+        var urlWhitelist = $sceDelegateProvider.resourceUrlWhitelist();
+        urlWhitelist.push(AspireTrustBaseUrl + '**');
+        $sceDelegateProvider.resourceUrlWhitelist(urlWhitelist);
+      }
+    ]);
+  
+  function isFullDisplayPage() {
+    return window.location.pathname.includes("fulldisplay");
+  }
+  
+  function getListTalisUrls(item) {
+    const TALIS_DOMAIN = "https://latrobe.rl.talis.com/"; // AspireTrustBaseUrl
+    const list = [];
+    // need to restrict a new type and don't know the exact name? Get an example url for the type and put a debug
+    // stop in the browser Source Inspection in getListTalisUrls, and check what is found at
+    // Local > item > pnx > type in the variable Scope
+    const materialType = !!item?.pnx?.display?.type && item.pnx.display.type[0];
+    const restrictedCheckList = [
+      "article",
+      "book_chapter",
+      "conference_paper",
+      "conference_proceeding",
+      "design",
+      ///"government_document",
+      ///"magazinearticle", // Primo currently using a non-standard format
+      ///"magazine_article", // future-proof it
+      "market_research",
+      ///"newsletterarticle", // Primo currently using a non-standard format
+      ///"newsletter_article", // future-proof it
+      "newspaper_article",
+      "patent",
+      "questionnaire",
+      "report",
+      "review",
+      ///"web_resource",
+      "working_paper",
+    ];
+    const isRestrictedCheckType = restrictedCheckList.includes(materialType);
+  
+    // LCN
+    if (!!item?.pnx?.search?.addsrcrecordid && item.pnx.search.addsrcrecordid.length > 0) {
+      item.pnx.search.addsrcrecordid.forEach(r => {
+        list.push(TALIS_DOMAIN + 'lcn/' + r + '/lists.json');
+      })
+    }
+  
+    // DOI
+    if (!!item?.pnx?.addata?.doi && item.pnx.addata.doi.length > 0) {
+      item.pnx.addata.doi.forEach(r => {
+        list.push(TALIS_DOMAIN + 'doi/' + r + '/lists.json');
+      })
+    }
 
+    // check if the identifier is actually a DOI (as has been observed for some theses)
+    if (!!item?.pnx?.display?.identifier && item.pnx.display.identifier.length == 1) {
+      // single identifier, so if it looks like a DOI, use that
+      var ident = item.pnx.display.identifier[0];
+      if(ident.indexOf('10.') == 0) {
+        list.push(TALIS_DOMAIN + 'doi/' + ident + '/lists.json');
+      }
+    }    
+  
+    // EISBN
+    if (!isRestrictedCheckType && !!item?.pnx?.addata?.eisbn && item.pnx.addata.eisbn.length > 0) {
+      item.pnx.addata.eisbn.forEach(r => {
+        const isbn = r.replace(/[^0-9X]+/gi, '');
+        [10, 13].includes(isbn.length) && list.push(TALIS_DOMAIN + 'eisbn/' + isbn + '/lists.json');
+      })
+    }
+  
+    // ISBN
+    if (!isRestrictedCheckType && !!item?.pnx?.addata?.isbn && item.pnx.addata.isbn.length > 0) {
+      item.pnx.addata.isbn.forEach(r => {
+        const isbn = r.replace(/[^0-9X]+/gi, '');
+        [10, 13].includes(isbn.length) && list.push(TALIS_DOMAIN + 'isbn/' + isbn + '/lists.json');
+      })
+    }
+  
+    // EISSN
+    if (!isRestrictedCheckType && !!item?.pnx?.addata?.eissn && item.pnx.addata.eissn.length > 0) {
+      item.pnx.addata.eissn.forEach(r => {
+        list.push(TALIS_DOMAIN + 'eissn/' + r + '/lists.json');
+      })
+    }
+  
+    // ISSN
+    if (!isRestrictedCheckType && !!item?.pnx?.addata?.issn && item.pnx.addata.issn.length > 0) {
+      item.pnx.addata.issn.forEach(r => {
+        list.push(TALIS_DOMAIN + 'issn/' + r + '/lists.json');
+      })
+    }
+  
+    return list;
+  }
+  
+  app.component('prmServiceDetailsAfter', {
+    bindings: { parentCtrl: '<' },
+    controller: 'DisplayTalisListsController',
+    template: 
+      '<div class="reading-lists" ng-if="totalCourses > 0">' +
+        '<div layout="row" layout-xs="column">' +
+          '<div flex-gt-sm="20" flex-gt-xs="25" flex="">' +
+            '<span class="bold-text word-break" title="Reading lists">Included in {{totalCourses}} reading list{{totalCourses == 1 ? "" : "s"}}:</span>' +
+            '<a ng-if="totalCourses > 3" class="accessible-only skip-option" href="#afterRL" onclick="location.hash=\'\';">Skip over reading lists</a>' +
+          '</div>' +
 
-	/* Clickable Logo in banner */
+          '<div class="item-details-element-container" flex="">' +
+            '<div role="list" class="reading-lists-wrapper item-details-element" ng-switch="totalCourses">' +
+              '<div ng-switch-when="1">' +
+                '<span ng-repeat="(url,listname) in talisCourses">' +
+                  '<a href="{{url}}" target="_blank">{{listname}}</a>' +
+                '</span>' +
+              '</div>' +
+              '<ul ng-switch-default>' +
+                '<li ng-repeat="(url,listname) in talisCourses">' +
+                  '<a href="{{url}}" target="_blank">{{listname}}</a>' +
+                '</li>' +
+              '</ul>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +        
+        '<span ng-if="totalCourses > 3" id="afterRL"></span>' +
+      '</div>'
+  });
+  
+  app.controller('DisplayTalisListsController', function($scope, $http) {
+    var vm = this;
+    
+    this.$onInit = function () {
+      $scope.talisCourses = [];
+      $scope.totalCourses = 0;
+  
+      if (!isFullDisplayPage()) {
+        return;
+      }
+  
+      let courseList = {}; // associative arrays are done in js as objects
+  
+      async function getTalisDataFromAllApiCalls(listUrls) {
+        const listUrlsToCall = listUrls.filter(url => url.startsWith('http'))
+        const promiseList = listUrlsToCall.map(url => $http.jsonp(url, {jsonpCallbackParam: 'cb'}));
+        // get all the urls then sort them into a non-repeating list
+        await Promise.allSettled(promiseList)
+          .then(response => {
+            response.forEach(r => {
+              if (!r.status || r.status !== 'fulfilled' || !r.value || !r.value.data) {
+                return;
+              }
+              for (let talisUrl in r.value.data) {
+                const subjectCode = r.value.data[talisUrl];
+                !courseList[talisUrl] && (courseList[talisUrl] = subjectCode);
+              }
+            });
+          })
+          .finally(() => {
+            if (Object.keys(courseList).length > 0) {
+              const recordid = !!vm?.parentCtrl?.item?.pnx?.control?.recordid && vm.parentCtrl.item.pnx.control.recordid; // eg Almalu51268459680002146
+              
+              $scope.talisCourses = {};
+              var totalTestCourses = 0;
+              // sort by course code for display
+              let sortable = [];
+              for (let talisUrl in courseList) {
+                const subjectCode = courseList[talisUrl];
+                sortable.push([talisUrl, subjectCode]);
+              }
+              sortable.sort(function(a, b) {
+                return a[1] < b[1] ? -1 : a[1] > b[1] ? 1 : 0;
+              });
+              sortable.forEach((entry) => {
+                const subjectCode = entry[1];
+                const talisUrl = entry[0];
 
-	app.controller('prmLogoAfterController', [function () {
-		var vm = this;
-		vm.getIconLink = getIconLink;
-		function getIconLink() {
-              return vm.parentCtrl.iconLink;
-		}
-	}]);
+                // exclude any list with '[TEST LIST]' or '[RETIRED]' in its name
+                if(subjectCode.toLowerCase().indexOf("[test list]") == -1 && subjectCode.toLowerCase().indexOf("[retired]") == -1) $scope.talisCourses[talisUrl] = subjectCode;
+                else totalTestCourses++;
+              });
 
-	app.component('prmLogoAfter',{
-		bindings: {parentCtrl: '<'},
-		controller: 'prmLogoAfterController',
-		template: '<div class="product-logo product-logo-local" layout="row" layout-align="start center" layout-fill id="banner" tabindex="0" role="banner"><img src="custom/LATROBE/img/library-logo.png" alt="La Trobe University Library" usemap="#logomap_lg" class="logo-image"><map name="logomap_lg"><area shape="rect" coords="0,0,135,48" alt="La Trobe" href="http://latrobe.edu.au"><area shape="rect" coords="0,0,210,48" alt="Library" href="http://latrobe.edu.au/library"></map></div>'
-	});
-
-	/* app.component('prmSearchBarAfter', {
-      template: '<div role="alert" layout-align="center center" class="layout-align-center-center"><div layout="row" class="bar alert-bar layout-align-center-center layout-row alert-info md-margin-top" layout-align="center center">Books in the Borchardt (Bundoora) library are now available on Level 3</div></div>'
-	}); */
-
-	  // Add EasyCite link after Citations area
-	  /*Thanks to Amelia Rowe, RMIT 09/08/2019 . Added 20/09/21 Rachel S Discovery LTU*/
-
-	                app.component('prmCitationAfter', {
-	      bindings: { parentCtrl: '<' },
-	                template: `<div class="layout-align-center-center layout-row" layout-align="center center" style="background-color: #ede49e; padding-top: 0.5em;" ><span class="bar-text"><p style="font-size: medium;font-family: arial;font-weight: bold;">Ensure your Citation meets La Trobe standards via our <a target=_blank href=https://latrobe.libguides.com/academicreftoolgroup target="_blank">Academic Referencing Tool</a></p></span></div>`
-	                });
-
-
-
-
-	
-
-
-});
-
-
-
-
+              $scope.totalCourses = sortable.length - totalTestCourses;
+            }
+          });
+      }
+  
+      const listTalisUrls = vm?.parentCtrl?.item && getListTalisUrls(vm.parentCtrl.item);
+      if (!!listTalisUrls && listTalisUrls.length > 0) {
+        getTalisDataFromAllApiCalls(listTalisUrls);
+      }
+    };
+  });
+  // ------------------------------------------- end Talis reading list integration (v2)
+  
+  
+  })();

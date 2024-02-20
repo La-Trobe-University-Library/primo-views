@@ -503,3 +503,18 @@ prm-search-bar .layout-fill{
 .s-lch-widget-float {
     right:2px !important;
 }
+
+.reading-lists {
+  position: relative;
+  margin-top: 5px;
+}
+.reading-lists .reading-lists-wrapper {
+  max-height: 165px;
+  overflow-y: auto;
+  display: inline-block;
+}
+.reading-lists .reading-lists-wrapper ul {
+  margin-top: 0;
+  margin-bottom: 5px;
+  padding-left: 15px;
+}
