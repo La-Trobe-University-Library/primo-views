@@ -111,6 +111,9 @@ md-card.default-card, prm-featured-result-item md-card {
 md-card.default-card, #stickyDB {
   background: var(--ltu-white);
 }
+md-card md-card-content > :first-child {
+  margin-top: 0;
+}
 
 /* skip buttons (appear on focus only) */
 prm-skip-to a:focus, prm-skip-to .md-button:focus {
@@ -416,7 +419,7 @@ prm-search-bar .search-switch-buttons .md-button.switch-to-simple {
   width: 155px;
   text-align: center;
 }
-prm-atoz-search-bar > .layout-row > .layout-column
+prm-atoz-search-bar > .layout-row > .layout-column,
 prm-newspapers-search-bar > .layout-row > .layout-column {
   width: 100%;
   flex: unset;
@@ -468,7 +471,8 @@ prm-newspapers-search-bar > .layout-row > .layout-column {
   }
 
   #searchElementsWrapper, prm-atoz-search-bar > .layout-row > .layout-column,
-  prm-newspapers-search-bar > .layout-row > .layout-column {
+  prm-newspapers-search-bar > .layout-row > .layout-column,
+  prm-browse-search-bar > .layout-row > .layout-column {
     width: 100%;
     margin: 0 15px;
   }
@@ -495,7 +499,8 @@ prm-newspapers-search-bar > .layout-row > .layout-column {
 }
 
 .list-item-wrapper h3, #brief h3, prm-facet h3, .spotlight-element h3,
-prm-no-search-result h3, prm-saved-queries-list md-list-item h3 {
+prm-no-search-result h3, prm-saved-queries-list md-list-item h3,
+prm-newspapers-home md-card .md-button h3 {
   font-family: dm sans;
 }
 
@@ -521,6 +526,9 @@ prm-saved-queries-list md-list-item {
 .list-item-wrapper:hover, .list-item-wrapper:focus,
 prm-saved-queries-list md-list-item:hover, prm-saved-queries-list md-list-item:focus {
   box-shadow: 0px 0px 1px 1px var(--ltu-red) !important;
+}
+prm-saved-queries-list md-list-item .md-list-item-text a:hover, prm-saved-queries-list md-list-item .md-list-item-text a:focus {
+  text-decoration: underline;
 }
 .list-item-wrapper:hover .list-item-primary-content::before {
   border-radius: 5px;
@@ -620,7 +628,7 @@ prm-newspapers-home {
   margin: 0 auto;
   padding: 16px;
 }
-prm-newspapers-home md-content.layout-row {
+prm-newspapers-home > md-content.layout-row {
   background: #fff;
   margin: 8px;
   box-shadow: 0 1px 0 0 rgba(0,0,0,.03),0 5px 5px -3px rgba(0,0,0,.07);
