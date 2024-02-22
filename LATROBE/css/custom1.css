@@ -540,6 +540,7 @@ prm-saved-queries-list md-list-item .md-list-item-text a:hover, prm-saved-querie
 }
 .list-item-wrapper:hover .list-item-primary-content::before {
   border-radius: 5px;
+  background: transparent;
 }
 .__xs prm-brief-result-container .result-item-text {
   padding: 0 15px;
@@ -588,6 +589,51 @@ prm-newspapers-home > md-content > div {
   max-width: 1400px;
 }
 prm-newspapers-home .newspapers-card-container .md-button {
+  background: #eee;
+}
+
+/* bookmarked item */
+.list-item-wrapper .item-bookmarked {
+  background-color: transparent;
+  border-radius: 5px;
+  position: relative;
+}
+.list-item-wrapper .item-bookmarked:hover, .list-item-wrapper .item-bookmarked:focus {
+  background: transparent;
+}
+.list-item-wrapper:hover .item-bookmarked, .list-item-wrapper:focus .item-bookmarked {
+  box-shadow: none;
+}
+.result-item-actions .md-icon-button.unpin-button prm-icon {
+  background: #e2231b;
+  color: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px #e2231b;
+}
+.result-item-actions .md-icon-button.unpin-button:hover prm-icon,
+.result-item-actions .md-icon-button.unpin-button:focus prm-icon {
+  box-shadow: none;
+  background-color: transparent !important;
+  color: #3a3a3a !important;
+}
+
+.list-item-wrapper:not(.item-expanded) .item-bookmarked:before {
+  content: '';
+  position: absolute;
+  width: 4px;
+  top: 0;
+  bottom: 0;
+  display: block;
+  background: #e2231b;
+  border-radius: 5px 0 0 5px;
+  z-index: 99;
+}
+
+/* select drop-downs and input fields */
+md-select:not([disabled]):hover, md-select:not([disabled]):focus {
+  background: #eee;
+}
+md-input-container input:hover, md-input-container input:focus {
   background: #eee;
 }
 
