@@ -4,7 +4,7 @@
   
   var app = angular.module('viewCustom', ['angularLoad']);
   
-  console.log('LATROBE view version 0.1.12.2');
+  console.log('LATROBE legacy view version 0.1.13');
   //console.log('includes: LibChat, Browzine, Talis (v2)');
   
   /* -------------------------------------------
@@ -318,6 +318,43 @@
     };
   });
   // ------------------------------------------- end Talis reading list integration (v2)
+
+
+  /* -------------------------------------------
+  / Scaling iframes' height to match their responsive width
+  /
+  / If an iframe has the class 'maintain-aspect-ratio', the width & height attributes will determine its aspect ratio.
+  / If an iframe has the attribute 'data-aspect-ratio', that aspect ratio is used.
+  / If an iframe has the attribute 'data-aspect-ratio-offset', that value is added to the height calculated by the ratio.
+  ------------------------------------------- */
+  window.onresize = function() {
+    var iframes = angular.element(document).find('iframe');  
+    angular.forEach(iframes, function(el){
+        var iframe = angular.element(el);
+
+        var iRatio;
+        if(iframe.hasClass('maintain-aspect-ratio')) {
+            var iWidth = parseInt(iframe.attr('width'));
+            var iHeight = parseInt(iframe.attr('height'));
+            
+            iRatio = (iWidth && iHeight > 0) ? iWidth / iHeight : NaN;
+        } else {
+            iRatio = parseFloat(iframe.attr('data-aspect-ratio'));
+        }
+
+        if(iRatio) {
+            var actualWidth = iframe[0].offsetWidth;
+            
+            var newHeight = actualWidth / iRatio;
+            
+            var arOffset = parseInt(iframe.attr('data-aspect-ratio-offset'));
+            if(arOffset) newHeight += arOffset;
+
+            iframe.css('height', newHeight+'px');
+        }
+    });
+  }
+  // ------------------------------------------- end scaling iframes' height
   
   
   })();
