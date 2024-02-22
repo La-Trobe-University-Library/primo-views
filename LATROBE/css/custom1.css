@@ -42,7 +42,7 @@ color:white;
 
 /*hover arrow for login screen*/
 .md-button.md-icon-button:hover{
-  background-color:rgb(255, 255, 255);
+  /*background-color:rgb(255, 255, 255);*/
 }
 
 /* Change the reset password link to white */
@@ -125,7 +125,7 @@ md-dialog.light-on-dark-dialog md-list md-list-item.list-login .md-button:hover:
     color: #fff;
 }
 md-input-container label, md-input-container label:not(.md-no-float):not(._md-container-ignore) {
-  color: rgb(255 255 255) !important; /*this overwrites line 129 */
+  /*color: rgb(255 255 255) !important;*/ /*this overwrites line 129 */
 }
 .light-on-dark-dialog .md-button.button-confirm{
   color: #fff;
@@ -153,7 +153,7 @@ md-toolbar .md-button.button-with-icon > prm-icon + span{
   color:#ffffff;
 }
 md-toolbar .md-button md-icon, md-toolbar.md-primoExplore-theme .md-button md-icon, md-toolbar:not(.md-menu-toolbar) .md-button md-icon{
-  color:#ffffff !important;
+  /*color:#ffffff !important;*/
 }
 /*****Clickable LTUL logo****  max-width:240px;*/
 prm-topbar prm-logo{
@@ -202,17 +202,53 @@ prm-main-menu[menu-type="menu"] .md-button{
   background-color:rgba(51, 51, 51, 0.12);
 }*/
 prm-icon.rotate-25 md-icon{
-  color:#d34426 !important;
+  /*color:#d34426 !important;*/
 }
 .md-button.md-icon-button:hover prm-icon.rotate-25 md-icon{
   color:inherit !important;
 }
+
+md-menu-content md-menu-item button.md-button prm-icon md-icon {
+  color: #3a3a3a !important;
+}
+md-menu-content md-menu-item button.md-button:hover prm-icon md-icon,
+md-menu-content md-menu-item button.md-button:focus prm-icon md-icon {
+  color: #fff !important;
+}
+
 /**************Keep the shelf active KEEP THIS WHITE RS 15/10/21****************************/
-prm-search-bookmark-filter prm-icon md-icon.md-primoExplore-theme{
+prm-search-bookmark-filter #fixed-buttons-holder:not(.fixed-to-top) prm-icon md-icon {
   color:white !important;
 }
-prm-search-bookmark-filter .md-icon-button:hover prm-icon md-icon.md-primoExplore-theme{
+prm-search-bookmark-filter #fixed-buttons-holder:not(.fixed-to-top) a:hover prm-icon md-icon,
+prm-search-bookmark-filter #fixed-buttons-holder:not(.fixed-to-top) a:focus prm-icon md-icon {
+  color:#333 !important;
+}
+#fixed-buttons-holder:not(.fixed-to-top) a {
+  box-shadow: none !important;
+}
+#fixed-buttons-holder.fixed-to-top #favorites-button, #fixed-buttons-holder.fixed-to-top #search-button {
+  background: #fff9;
+}
+#fixed-buttons-holder.fixed-to-top #favorites-button:hover, #fixed-buttons-holder.fixed-to-top #favorites-button:focus,
+#fixed-buttons-holder.fixed-to-top #search-button:hover, #fixed-buttons-holder.fixed-to-top #search-button:focus {
+  color: #fff;
+  background-color: #333;
+  box-shadow: none;
+}
+prm-search-bookmark-filter .md-icon-button:hover prm-icon md-icon {
   color:inherit !important;
+}
+#back-to-top-button {
+  color: #333;
+  background: #fff9;
+  border-radius: 50%;
+  transition: box-shadow .4s cubic-bezier(.25,.8,.25,1),background-color .4s cubic-bezier(.25,.8,.25,1);
+}
+#back-to-top-button:hover, #back-to-top-button:focus {
+  color: #fff;
+  background-color: #333;
+  box-shadow: none;
 }
 /********Favourites toolbar*******/
 prm-favorites-tool-bar md-toolbar{
@@ -224,7 +260,18 @@ prm-favorites-tool-bar .toolbar-title{
 prm-favorites-tool-bar md-toolbar .md-button md-icon,
 prm-favorites-tool-bar md-toolbar.md-primoExplore-theme .md-button md-icon,
 prm-favorites-tool-bar md-toolbar:not(.md-menu-toolbar) .md-button md-icon{
-  color:#d34426 !important;
+  /*color:#d34426 !important;*/
+}
+prm-favorites-tool-bar md-toolbar .md-button prm-icon:not(.disabledFavTool) md-icon {
+  color: #fff !important;
+}
+prm-favorites-tool-bar md-toolbar .md-button:not([disabled="disabled"]):hover,
+prm-favorites-tool-bar md-toolbar .md-button:not([disabled="disabled"]):focus {
+  background: #fff;
+}
+prm-favorites-tool-bar md-toolbar .md-button:not([disabled="disabled"]):hover prm-icon md-icon,
+prm-favorites-tool-bar md-toolbar .md-button:not([disabled="disabled"]):focus prm-icon md-icon {
+  color: #333 !important;
 }
 /***Search bar background**/
 .prm-primary-bg, prm-spinner.overlay-cover.light-on-dark::after, prm-search-bar, prm-journals-search-bar, prm-browse-search-bar{
@@ -236,8 +283,8 @@ prm-favorites-tool-bar md-toolbar:not(.md-menu-toolbar) .md-button md-icon{
 }
 
 .md-button.button-confirm:hover:not([disabled]), .md-button.button-confirm:focus:not([disabled]), .md-button.button-confirm.hovered:not([disabled]), .md-button.button-confirm.md-focused:not([disabled]), .md-button.button-confirm._md-focused:not([disabled]){
-  color:#fff;
-  background-color:rgba(228,105,79,0.1);
+  /*color:#fff;
+  background-color:rgba(228,105,79,0.1);*/
 }
 /******Advanced search background************/
 md-input-container label, md-input-container label:not(.md-no-float):not(._md-container-ignore){
@@ -246,10 +293,20 @@ md-input-container label, md-input-container label:not(.md-no-float):not(._md-co
 prm-search-bar .advanced-search-backdrop{
   background-color:#f5f2e4;
 }
+md-select:not([disabled]):hover {
+  background: #eee;
+}
+md-input-container input:hover {
+  background: #eee;
+}
 /**Advanced search button***/
-prm-search-bar .search-switch-buttons .md-button.switch-to-advanced{
+prm-search-bar .search-switch-buttons .md-button.switch-to-advanced {
   color:#333;
   border:1px solid #999;
+}
+prm-search-bar .search-switch-buttons .md-button.switch-to-advanced:hover, prm-search-bar .search-switch-buttons .md-button.switch-to-advanced:focus {
+  background: #333 !important;
+  color: #fff !important;
 }
 prm-search-bar .search-switch-buttons .md-button.switch-to-simple{
   border:1px solid #999;
@@ -337,6 +394,9 @@ prm-user-area .user-menu-button .user-name{
 .text-italic.text-in-brackets {
   color: #d14124;
 }
+.facet-title:hover .text-italic.text-in-brackets, .facet-title:focus .text-italic.text-in-brackets {
+  color: #ffc5b9;
+}
 /******Side bar**********/
 .sidebar{
   margin-right:10px;
@@ -358,7 +418,10 @@ md-checkbox.md-checked .md-icon, md-checkbox.md-checked ._md-icon {
   margin-bottom: 0;
 }
 .section-title.layout-fill:focus, .section-title.layout-fill:hover{
-  background-color: #b96f09 !important;
+  background-color: #d14124 !important;
+}
+prm-facet-group .section-title prm-icon {
+  color: #fff;
 }
 
 .section-title.layout-fill .section-title-header{
@@ -457,13 +520,19 @@ md-tabs md-tabs-wrapper md-tabs-canvas md-pagination-wrapper md-tab-item:not([di
 }
 /*********************Saved searches*****************************/
 md-toolbar prm-saved-searches-group-actions .md-button md-icon, md-toolbar.md-primoExplore-theme prm-saved-searches-group-actions .md-button md-icon, md-toolbar:not(.md-menu-toolbar) prm-saved-searches-group-actions .md-button md-icon{
-  color:#d34426 !important;
+  /*color:#d34426 !important;*/
 }
 .saved-query-list > md-nav-bar .md-nav-item, prm-action-list > md-nav-bar .md-nav-item{
   max-width:170px;
 }
 /***************Close dialog icon****************/
-.prm-full-view-dialog ~ .close-button.md-icon-button prm-icon{
+.prm-full-view-dialog ~ .close-button.md-icon-button {
+  transition: none;
+}
+.prm-full-view-dialog ~ .close-button.md-icon-button:hover, .prm-full-view-dialog ~ .close-button.md-icon-button:focus {
+  background-color: #fff;
+}
+.prm-full-view-dialog ~ .close-button.md-icon-button:hover prm-icon, .prm-full-view-dialog ~ .close-button.md-icon-button:focus prm-icon {
   color:#d34426;
 }
 /**************Modal******************************/
@@ -517,4 +586,77 @@ prm-search-bar .layout-fill{
   margin-top: 0;
   margin-bottom: 5px;
   padding-left: 15px;
+}
+
+/* Placeholder for 'Document delivery' in 'More' menu when not signed in */
+md-dialog-content prm-main-menu .custom-links-container .main-menu-button:has(a.ng-hide):has([aria-label="Document Delivery, opens in a new window"]) {
+  padding:6px 8px
+}
+md-dialog-content prm-main-menu .custom-links-container .main-menu-button:has(a.ng-hide):has([aria-label="Document Delivery, opens in a new window"])::before {
+  content:'Sign in for DOCUMENT DELIVERY';
+  width:100%;
+  height:91px;
+  display:block;
+  background:#fff2;
+  border-radius:4px;
+  color:#fff;
+  text-align:center;
+  padding:25px 5px 5px;
+  cursor:not-allowed;
+  border:1px dashed #fff
+}
+
+/* 'Skip over reading lists' button */
+.accessible-only.skip-option:focus {
+  position: absolute;
+  top: 45px;
+  left: 12px;
+  z-index: 1000;
+  width: auto;
+  height: auto !important;
+  min-height: 20px !important;
+  border: 2px solid transparent;
+  box-shadow: none;
+  padding: 5px 10px;
+  line-height: 1;
+  background: #d34426 !important;
+  color: #fff !important;
+  transition: top .3s;
+  font-size: 1rem;
+  text-decoration: none;
+  outline: 3px solid #75b6fc;
+  outline-offset: 1px;
+  text-transform: none;
+}
+
+/* Chat widget button */
+.s-lch-widget-float-btn.online:hover, .s-lch-widget-float-btn.online:focus {
+  background-color: #666;
+}
+
+/* Favourites tabs */
+md-tabs md-tabs-wrapper md-tabs-canvas md-pagination-wrapper md-tab-item:not([disabled]):not([aria-selected="true"]):hover,
+md-tabs md-tabs-wrapper md-tabs-canvas md-pagination-wrapper md-tab-item:not([disabled]):not([aria-selected="true"]):focus {
+  background: #eee;
+}
+
+prm-saved-queries-list .item-actions .md-icon-button:hover:not([disabled]) prm-icon,
+prm-saved-queries-list .item-actions .md-icon-button:focus:not([disabled]) prm-icon {
+  color: #333;
+}
+
+/* active filter buttons */
+.md-chips .md-chip {
+  background: #eee;
+}
+.md-chip-remove {
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  margin: 0 4px;
+  padding: 0;
+}
+.md-chip-remove:hover, .md-chip-remove:focus {
+  background: #333;
+  color: #fff;
 }
