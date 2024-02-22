@@ -265,8 +265,8 @@ prm-favorites-tool-bar md-toolbar:not(.md-menu-toolbar) .md-button md-icon{
 prm-favorites-tool-bar md-toolbar .md-button prm-icon:not(.disabledFavTool) md-icon {
   color: #fff !important;
 }
-prm-favorites-tool-bar md-toolbar .md-button:not([disabled="disabled"]):hover,
-prm-favorites-tool-bar md-toolbar .md-button:not([disabled="disabled"]):focus {
+prm-favorites-tool-bar md-toolbar .toolbar-item .md-button:not([disabled="disabled"]):hover,
+prm-favorites-tool-bar md-toolbar .toolbar-item .md-button:not([disabled="disabled"]):focus {
   background: #fff;
 }
 prm-favorites-tool-bar md-toolbar .md-button:not([disabled="disabled"]):hover prm-icon md-icon,
