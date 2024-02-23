@@ -4,7 +4,7 @@
   
   var app = angular.module('viewCustom', ['angularLoad']);
   
-  console.log('LATROBE legacy view version 0.1.13');
+  console.log('LATROBE legacy view version 0.1.13.2');
   //console.log('includes: LibChat, Browzine, Talis (v2)');
   
   /* -------------------------------------------
@@ -327,7 +327,7 @@
   / If an iframe has the attribute 'data-aspect-ratio', that aspect ratio is used.
   / If an iframe has the attribute 'data-aspect-ratio-offset', that value is added to the height calculated by the ratio.
   ------------------------------------------- */
-  window.onresize = function() {
+  function scaleIframes() {
     var iframes = angular.element(document).find('iframe');  
     angular.forEach(iframes, function(el){
         var iframe = angular.element(el);
@@ -354,6 +354,8 @@
         }
     });
   }
+  window.onresize = scaleIframes;
+  setTimeout(scaleIframes, 1000);
   // ------------------------------------------- end scaling iframes' height
   
   
