@@ -384,6 +384,39 @@ prm-alphabet-toolbar .md-button {
   color: var(--ltu-red);
 }
 
+/* --- pre-filter drop-downs */
+prm-pre-filters md-input-container:first-child {
+  margin-left: 15px;
+}
+prm-pre-filters md-input-container {
+  color: #53738c;
+  font-weight: 500 !important;
+}
+prm-pre-filters md-input-container:before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 0;
+  right: 0;
+  height: 28px;
+  background: #fff;
+  width: calc(100% + 12px);
+  border-radius: 18px;
+  box-shadow: 0 1px 0 0 rgba(0,0,0,.4),0 5px 5px -3px rgba(0,0,0,.2);
+  margin-left: -8px;
+}
+prm-pre-filters md-input-container:after {
+  display: none;
+}
+prm-pre-filters md-input-container.md-input-focused:not(.is-active) .md-input-container-dummy>.md-select-dummy:not([disabled]):focus .md-select-value,
+prm-pre-filters md-input-container.md-input-focused:not(.is-active) md-select:not([disabled]):focus .md-select-value {
+  color: #45aab4;
+}
+prm-pre-filters md-input-container:hover md-select md-select-value > span:not(.md-select-icon), prm-pre-filters md-input-container:focus md-select md-select-value > span:not(.md-select-icon) {
+  text-decoration: underline;
+}
+/* --- end pre-filter drop-downs */
+
 /* --- placeholder for 'Document Delivery' in the 'More' menu (not accessible) */
 md-dialog-content prm-main-menu .custom-links-container .main-menu-button:has(a.ng-hide):has([aria-label="Document Delivery, opens in a new window"]) {
   padding: 6px 8px;
@@ -637,6 +670,28 @@ md-input-container input:hover, md-input-container input:focus {
   background: #eee;
 }
 
+/* remove active filter button */
+prm-saved-queries-list .item-actions .md-icon-button:hover:not([disabled]) prm-icon,
+prm-saved-queries-list .item-actions .md-icon-button:focus:not([disabled]) prm-icon {
+  color:#333
+}
+.md-chips .md-chip {
+  background:#fff
+}
+.md-chip-remove {
+  border-radius:50%;
+  width:20px;
+  height:20px;
+  margin:0 4px;
+  padding:0
+}
+.md-chip-remove:hover,
+.md-chip-remove:focus {
+  background:#333;
+  color:#fff
+}
+
+/* reading lists */
 .reading-lists {
   position: relative;
   margin-top: 5px;
