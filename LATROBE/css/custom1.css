@@ -517,6 +517,11 @@ prm-newspapers-search-bar > .layout-row > .layout-column {
     margin: 0 15px;
   }
 }
+@media (max-width: 959px) {
+  prm-newspapers-search-bar .search-elements-wrapper .search-options md-select {
+    width: 150px;
+  }
+}
 /* ----- END SEARCH BAR ----- */
 
 /* ----- BODY CONTENT ----- */
@@ -587,6 +592,10 @@ prm-saved-queries-list md-list-item .md-list-item-text a:hover, prm-saved-querie
   white-space: normal;
   line-height: 18px;
   padding: 7px 5px;
+}
+
+#facets {
+  margin-right: 5px;
 }
 
 /* --- Browse results page */
@@ -662,11 +671,31 @@ prm-newspapers-home .newspapers-card-container .md-button {
   z-index: 99;
 }
 
+/* --- Resource recommender (content warning etc.) */
+prm-resource-recommender md-card {
+  background: #fff;
+  border: 2px solid #666;
+}
+prm-resource-recommender .resource-header {
+  font-size: 24px;
+  background: #666;
+  color: #fff;
+  padding: 5px 16px;
+  text-transform: none;
+  font-weight: 300;
+}
+prm-resource-recommender md-card md-card-content {
+  padding: 0 16px 16px;
+}
+/* --- end Resource recommender (content warning etc.) */
+
 /* select drop-downs and input fields */
-md-select:not([disabled]):hover, md-select:not([disabled]):focus {
+.advanced-search-wrapper md-select:not([disabled]):hover, .advanced-search-wrapper md-select:not([disabled]):focus,
+prm-tabs-and-scopes-selector md-select:not([disabled]):hover, prm-tabs-and-scopes-selector md-select:not([disabled]):focus {
   background: #eee;
 }
-md-input-container input:hover, md-input-container input:focus {
+.advanced-search-wrapper md-input-container input:hover, .advanced-search-wrapper md-input-container input:focus,
+prm-tabs-and-scopes-selector md-input-container input:hover, prm-tabs-and-scopes-selector md-input-container input:focus {
   background: #eee;
 }
 
@@ -724,6 +753,13 @@ prm-full-view prm-view-online .all-links-options {
 }
 /* --- end full display for a single item */
 
+/* --- hide date from Databases search results */
+prm-databases .item-detail > span:has([data-field-selector="creationdate"]),
+prm-databases .item-detail > span:has([data-field-selector="creationdate"]) + span .media-delimiter {
+    display: none;
+}
+/* --- end hide date from Databases search results */
+
 /* --- overriding flex layout */
 md-content > div:empty {
   display: none;
@@ -745,6 +781,12 @@ prm-newspapers-home > md-content.layout-row {
 /* --- end overriding flex layout */
 
 /* ----- END BODY CONTENT ----- */
+
+/* ----- LOGIN PANEL ----- */
+md-backdrop.md-opaque {
+  background-color: #666;
+}
+/* ----- END LOGIN PANEL ----- */
 
 /* ----- CHAT WIDGET ----- */
 div[aria-label="Chat Widget"] > button {
