@@ -89,11 +89,16 @@ iframe {
 a:focus, 
 button:focus,
 input:focus,
+textarea:focus,
 select:focus,
 md-select:focus,
 md-radio-group:focus {
   outline: 3px solid #75b6fc !important;
   outline-offset: 1px;
+}
+md-input-container.md-input-focused label:not(.md-no-float), md-input-container.md-input-has-placeholder label:not(.md-no-float), 
+md-input-container.md-input-has-value label:not(.md-no-float) {
+  transform: translate3d(0,3px,0) scale(.85);
 }
 md-card-content a {
   color: var(--ltu-red);
@@ -183,7 +188,7 @@ prm-logo .product-logo {
 }
 prm-main-menu[menu-type="menu"] {
   top: 80px;
-  background: var(--ltu-black);
+  background: var(--ltu-dark-grey);
   position: absolute;
   left: 0;
   right: 0;
@@ -215,7 +220,7 @@ prm-main-menu[menu-type="menu"] {
 }
 #favorites-button, #qrCodeScanner, #signInBtn,
 .top-nav-bar prm-user-area-expandable md-menu.md-menu button.md-button {
-  color: var(--ltu-black);
+  color: var(--ltu-dark-grey);
 }
 #favorites-button, #qrCodeScanner, #back-to-top-button {
   background: #fffb;
@@ -268,7 +273,7 @@ prm-user-area-expandable .button-with-menu-arrow:hover .menu-arrow:hover:not([di
     top: 80px;
     right: 0;
     height: 50px;
-    background: var(--ltu-black);
+    background: var(--ltu-dark-grey);
     left: 0;
     padding-right: 60px;
     margin-right: 0;
@@ -691,11 +696,16 @@ prm-resource-recommender md-card md-card-content {
 
 /* select drop-downs and input fields */
 .advanced-search-wrapper md-select:not([disabled]):hover, .advanced-search-wrapper md-select:not([disabled]):focus,
-prm-tabs-and-scopes-selector md-select:not([disabled]):hover, prm-tabs-and-scopes-selector md-select:not([disabled]):focus {
+prm-tabs-and-scopes-selector md-select:not([disabled]):hover, prm-tabs-and-scopes-selector md-select:not([disabled]):focus,
+prm-report-problem md-select:not([disabled]):hover, prm-report-problem md-select:not([disabled]):focus {
   background: #eee;
 }
 .advanced-search-wrapper md-input-container input:hover, .advanced-search-wrapper md-input-container input:focus,
-prm-tabs-and-scopes-selector md-input-container input:hover, prm-tabs-and-scopes-selector md-input-container input:focus {
+.advanced-search-wrapper md-input-container textarea:hover, .advanced-search-wrapper md-input-container textarea:focus,
+prm-tabs-and-scopes-selector md-input-container input:hover, prm-tabs-and-scopes-selector md-input-container input:focus,
+prm-tabs-and-scopes-selector md-input-container textarea:hover, prm-tabs-and-scopes-selector md-input-container textarea:focus,
+prm-report-problem md-input-container input:hover, prm-report-problem md-input-container input:focus,
+prm-report-problem md-input-container textarea:hover, prm-report-problem md-input-container textarea:focus {
   background: #eee;
 }
 
@@ -808,3 +818,101 @@ div[aria-label="Chat Widget"] > button > svg {
   max-width: 32px;
 }
 /* ----- END CHAT WIDGET ----- */
+
+
+/* ----- REPORT A PROBLEM WIDGET ----- */
+prm-report-problem .report-container .report-problem-btn {
+  left: 15px;
+  bottom: 0;
+  background: var(--ltu-red);
+  border-radius: 10px 10px 0 0;
+  margin: 0;
+  min-height: 20px;
+  min-width: 20px;
+  padding: 0 10px;
+}
+prm-report-problem h2 {
+  font-family: dm sans;
+}
+prm-report-problem .report-container .report-problem-btn prm-icon {
+  color: #fff !important;
+}
+prm-report-problem .report-container .report-problem-btn:before {
+  content: 'Give us feedback';
+  color: #fff;
+  text-transform: none;
+}
+prm-report-problem .report-container .md-button.report-problem-btn:hover, 
+prm-report-problem .report-container .md-button.report-problem-btn:focus {
+  background: #666;
+}
+prm-report-problem .report-container .report-problem-btn prm-icon md-icon {
+  height: 24px;
+  min-height: 24px;
+  min-width: 24px;
+  width: 24px;
+  margin-left: 5px;
+  margin-top: -4px;
+}
+prm-report-problem .report-container .report-problem-btn prm-icon md-icon path {
+  fill: #fff !important;
+}
+prm-report-problem .report-container .report-problem-btn prm-icon md-icon g g path {
+  fill: var(--ltu-red) !important;
+}
+prm-report-problem .report-container .md-button.report-problem-btn:hover prm-icon md-icon g g path, 
+prm-report-problem .report-container .md-button.report-problem-btn:focus prm-icon md-icon g g path {
+  fill: #666 !important;
+}
+.report-problem-content .report-header {
+  background-color: var(--ltu-red);
+}
+prm-report-problem a {
+  color: var(--ltu-red);
+}
+prm-report-problem .md-button.button-link {
+  color: var(--ltu-red);
+}
+prm-report-problem .report-container .md-button.button-link:not(disabled):hover, prm-report-problem .report-container .md-button.button-link:not(disabled):focus {
+  background-color: var(--ltu-mid-grey);
+}
+.report-problem-content.report-menu-content-desktop {
+  box-shadow: 1px 1px 4px #333;
+  left: 92px;
+  right: auto;
+  bottom: 40px;
+}
+.report-problem-content .form-content {
+  padding: 10px 10px 0px 10px;
+}
+prm-report-problem a:hover {
+  box-shadow: none;
+  text-decoration: underline;
+}
+.report-problem-content .form-content {
+  padding: 10px 10px 0px 10px;
+}
+prm-report-problem .md-button.button-confirm:hover:not([disabled]), prm-report-problem .md-button.button-confirm:focus:not([disabled]) {
+  background: var(--ltu-dark-red);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0,0,0,.3);
+  transition: transform .3s ease-in-out,box-shadow .3s ease-in-out;
+}
+prm-report-problem .md-button.button-confirm:not([disabled]) {
+  background-color: var(--ltu-red);
+  color: #fff;
+  border-radius: 24px;
+  padding: 5px 20px;
+}
+prm-report-problem .md-button.button-confirm:hover:not([disabled]):before {
+  content: ' ';
+  position: absolute;
+  top: 4px;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  background: transparent;
+  border-radius: 30px;
+  z-index: -1;
+}
+/* ----- END REPORT A PROBLEM WIDGET ----- */
