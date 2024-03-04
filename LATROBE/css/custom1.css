@@ -838,7 +838,7 @@ prm-report-problem .report-container .report-problem-btn prm-icon {
   color: #fff !important;
 }
 prm-report-problem .report-container .report-problem-btn:before {
-  content: 'Give us feedback';
+  content: 'Report a problem';
   color: #fff;
   text-transform: none;
 }
@@ -916,3 +916,31 @@ prm-report-problem .md-button.button-confirm:hover:not([disabled]):before {
   z-index: -1;
 }
 /* ----- END REPORT A PROBLEM WIDGET ----- */
+
+/* ----- MY ACCOUNT ----- */
+prm-account .header + md-toolbar {
+  top: 50px;
+}
+prm-account md-toolbar + md-content {
+  top: 50px;
+}
+prm-account md-tab-content {
+  background: #fff;
+}
+prm-account md-tab-item.md-active {
+  background: #fff;
+}
+prm-account md-tab-item:hover, prm-account md-tab-item:focus {
+  background: #fff;
+}
+prm-account .tiles-grid-tile .button-link {
+  word-wrap: normal;
+  white-space: normal;
+}
+prm-account .tiles-grid-tile .tile-header .header-link {
+  line-height: 0.8;
+}
+prm-account .tiles-grid-tile .tile-header .header-link .arrow-icon {
+  top: -4px;
+}
+/* ----- END MY ACCOUNT ----- */
