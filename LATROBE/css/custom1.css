@@ -91,6 +91,7 @@ button:focus,
 input:focus,
 textarea:focus,
 select:focus,
+div.md-button:has(button:focus),
 md-select:focus,
 md-radio-group:focus {
   outline: 3px solid #75b6fc !important;
@@ -799,6 +800,9 @@ md-backdrop.md-opaque {
 /* ----- END LOGIN PANEL ----- */
 
 /* ----- CHAT WIDGET ----- */
+div[aria-label="Chat Widget"] {
+  z-index: 70 !important;
+}
 div[aria-label="Chat Widget"] > button {
   background-color: var(--ltu-red);
   border-radius: 28px;
@@ -830,6 +834,7 @@ prm-report-problem .report-container .report-problem-btn {
   min-height: 20px;
   min-width: 20px;
   padding: 0 10px;
+  z-index: 70;
 }
 prm-report-problem h2 {
   font-family: dm sans;
@@ -881,6 +886,7 @@ prm-report-problem .report-container .md-button.button-link:not(disabled):hover,
   left: 92px;
   right: auto;
   bottom: 40px;
+  z-index: 69;
 }
 .report-problem-content .form-content {
   padding: 10px 10px 0px 10px;
@@ -944,3 +950,109 @@ prm-account .tiles-grid-tile .tile-header .header-link .arrow-icon {
   top: -4px;
 }
 /* ----- END MY ACCOUNT ----- */
+
+
+/* ----- LOGIN DIALOG ----- */
+md-dialog.login-dialog {
+  background: #fff;
+  position: relative;
+  border-radius: 11px;
+  border: none;
+  box-shadow: 1px 1px 4px #333;
+}
+md-dialog.login-dialog .md-headline {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--ltu-red);
+  min-height: 50px;
+  font-family: dm sans;
+  font-weight: 500;
+}
+md-dialog.login-dialog prm-login {
+  max-height: 400px;
+}
+md-dialog.login-dialog form > .layout-row:first-child {
+  margin-top: 0 !important;
+  min-height: 50px !important;
+}
+md-dialog.login-dialog md-list {
+  padding: 0;
+  border: 1px solid #e6e6e6;
+  border-radius: 10px;
+  margin: 10px 10px 5px;
+}
+md-dialog.login-dialog md-dialog-actions button.md-button {
+  color: #333;
+}
+md-dialog.login-dialog md-dialog-actions button.md-button:not([disabled]):hover, md-dialog.login-dialog md-dialog-actions button.md-button:not([disabled]):focus {
+  background: #333;
+  color: #fff;
+}
+md-dialog.login-dialog md-list md-list-item.list-login prm-login-item {
+  color: var(--ltu-red);
+  font-size: 14px;
+  line-height: 2;
+}
+md-list-item._md-button-wrap > div.md-button:first-child {
+  padding: 0px 10px;
+}
+md-dialog.login-dialog md-list-item {
+  min-height: auto;
+  margin: 0 !important;
+  border-bottom: 1px solid #e6e6e6;
+}
+md-dialog.login-dialog md-list md-list-item.list-login prm-icon {
+  color: var(--ltu-red);
+}
+md-dialog.login-dialog md-list-item._md-button-wrap > div.md-button {
+  border-radius: 2px;
+}
+md-dialog.login-dialog md-list-item._md-button-wrap > div.md-button:hover, md-dialog.login-dialog md-list-item._md-button-wrap > div.md-button:has(button:focus) {
+  background: var(--ltu-mid-grey);
+  box-shadow: none;
+}
+md-dialog.login-dialog md-list-item > div.md-button:after {
+  content: ' ';
+  background: transparent;
+  transition: background-color .4s cubic-bezier(.25,.8,.25,1);
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  left: 0;
+}
+md-dialog.login-dialog md-list-item > div.md-button:hover:after, md-dialog.login-dialog md-list-item > div.md-button:has(button:focus):after {
+  background: var(--ltu-mid-grey);
+}
+md-dialog.login-dialog md-list md-list-item.list-login > .md-button:hover prm-login-item, md-dialog.login-dialog md-list md-list-item.list-login > .md-button:hover prm-icon,
+md-dialog.login-dialog md-list md-list-item.list-login > .md-button:has(button:focus) prm-login-item, md-dialog.login-dialog md-list md-list-item.list-login > .md-button:has(button:focus) prm-icon {
+  color: #fff;
+}
+md-dialog.login-dialog md-list-item._md-button-wrap > div.md-button button {
+  box-shadow: none;
+}
+md-dialog.login-dialog md-dialog-content {
+  padding: 10px;
+}
+md-dialog.login-dialog md-list-item:last-child {
+  border-bottom: none;
+}
+md-dialog.login-dialog md-list-item._md-button-wrap:first-child > div.md-button {
+  border-radius: 10px 10px 2px 2px;
+}
+md-dialog.login-dialog md-list-item._md-button-wrap:last-child > div.md-button {
+  border-radius: 2px 2px 10px 10px;
+}
+.md-list-item-inner {
+  padding: 10px;
+}
+.login-dialog md-dialog-actions {
+  margin-bottom: 5px;
+}
+md-dialog.login-dialog md-list-item._md-button-wrap > div.md-button .md-list-item-inner {
+  min-height: 36px;
+}
+/* ----- END LOGIN DIALOG ----- */
