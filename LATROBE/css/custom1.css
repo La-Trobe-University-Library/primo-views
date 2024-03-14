@@ -660,3 +660,121 @@ prm-saved-queries-list .item-actions .md-icon-button:focus:not([disabled]) prm-i
   background: #333;
   color: #fff;
 }
+
+md-card md-card-content > :first-child {
+  margin-top: 0;
+}
+
+/* --- Report a problem button & dialog --- */
+prm-report-problem .report-container .report-problem-btn {
+  left:15px;
+  right:auto;
+  bottom:0;
+  background:#e2231b;
+  border-radius:10px 10px 0 0;
+  margin:0;
+  min-height:20px;
+  min-width:20px;
+  padding:0 10px;
+  z-index:110
+}
+prm-report-problem h2 {
+  font-family: dm sans;
+}
+prm-report-problem .report-container .report-problem-btn prm-icon {
+  color:#fff !important;
+}
+prm-report-problem .report-container .report-problem-btn:before {
+  content:'Report a problem';
+  color:#fff;
+  text-transform:none;
+}
+prm-report-problem .report-container .md-button.report-problem-btn:hover,
+prm-report-problem .report-container .md-button.report-problem-btn:focus {
+  background:#666;
+}
+prm-report-problem .report-container .report-problem-btn prm-icon md-icon {
+  height:24px;
+  min-height:24px;
+  min-width:24px;
+  width:24px;
+  margin-left:5px;
+  margin-top:-4px
+}
+prm-report-problem .report-container .report-problem-btn prm-icon md-icon path {
+  fill:#fff !important;
+}
+prm-report-problem .report-container .report-problem-btn prm-icon md-icon g g path {
+  fill:#e2231b !important;
+}
+prm-report-problem .report-container .md-button.report-problem-btn:hover prm-icon md-icon g g path,
+prm-report-problem .report-container .md-button.report-problem-btn:focus prm-icon md-icon g g path {
+  fill:#666 !important;
+}
+.report-problem-content .report-header {
+  background-color:#e2231b;
+}
+prm-report-problem a {
+  color:#e2231b;
+}
+prm-report-problem .md-button.button-link {
+  color:#e2231b;
+}
+.report-problem-content .report-options li:first-child .md-button {
+  border-radius:11px 11px 0 0;
+}
+.report-problem-content .report-options li:last-child .md-button {
+  border-radius:0 0 11px 11px;
+}
+prm-report-problem .report-container .md-button.button-link:not(disabled):hover,
+prm-report-problem .report-container .md-button.button-link:not(disabled):focus {
+  background-color:#666;
+}
+.report-problem-content.report-menu-content-desktop {
+  box-shadow:1px 1px 4px #333;
+  left:92px;
+  right:auto;
+  bottom:40px;
+  z-index:109
+}
+.report-problem-content .form-content {
+  padding:10px 10px 0;
+}
+prm-report-problem a:hover,
+prm-report-problem a:focus {
+  box-shadow:none;
+  text-decoration:underline;
+}
+.report-problem-content .form-content {
+  padding:10px 10px 0;
+}
+prm-report-problem .md-button.button-confirm:hover:not([disabled]),
+prm-report-problem .md-button.button-confirm:focus:not([disabled]) {
+  color: #fff !important;
+  background:#b51c16 !important;
+  transform:translateY(-4px);
+  box-shadow:0 8px 16px rgba(0,0,0,.3);
+  transition:transform .3s ease-in-out,box-shadow .3s ease-in-out;
+}
+prm-report-problem .md-button.button-confirm:not([disabled]) {
+  background-color:#e2231b;
+  color:#fff;
+  border-radius:24px;
+  padding:5px 20px
+}
+prm-report-problem .md-button.button-confirm:hover:not([disabled]):before {
+  content:' ';
+  position:absolute;
+  top:4px;
+  bottom:-4px;
+  left:0;
+  right:0;
+  background:0 0;
+  border-radius:30px;
+  z-index:-1;
+}
+.report-problem-content .report-text-area md-input-container.text-area-description.md-required,
+.report-problem-content .report-text-area md-input-container.text-area-email.md-required {
+  margin-left:.5em;
+}
+/* --- END Report a problem button & dialog ---*/
