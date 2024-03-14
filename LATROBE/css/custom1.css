@@ -650,6 +650,12 @@ prm-newspapers-home .newspapers-card-container .md-button {
   background: #eee;
 }
 
+prm-account > md-content,
+prm-search > .layout-row {
+  max-width: 1400px;
+  margin: 0 auto !important;
+}
+
 /* bookmarked item */
 .list-item-wrapper .item-bookmarked {
   background-color: transparent;
