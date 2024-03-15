@@ -25,6 +25,16 @@ html,body{
 iframe {
   max-width: 100%;
 }
+p + ul {
+  margin-top: -5px;
+}
+md-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+md-content > div:empty {
+  display: none;
+}
 /*remove white background on login button*/
 .login-card md-list-item.login-brighter-dialog .md-button:focus, .login-card md-list-item.login-brighter-dialog .md-button:hover {
   background-color: transparent !important;
@@ -150,7 +160,7 @@ md-toolbar md-fab-actions{
   background-color:#d34426;
 }
 md-toolbar .md-button.button-with-icon > prm-icon + span{
-  color:#ffffff;
+  /*color:#ffffff;*/
 }
 md-toolbar .md-button md-icon, md-toolbar.md-primoExplore-theme .md-button md-icon, md-toolbar:not(.md-menu-toolbar) .md-button md-icon{
   /*color:#ffffff !important;*/
