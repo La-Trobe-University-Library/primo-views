@@ -402,27 +402,47 @@ prm-alphabet-toolbar .md-button {
 
 /* --- pre-filter drop-downs */
 prm-pre-filters md-input-container:first-child {
-  margin-left: 15px;
+  margin-left: 20px;
 }
 prm-pre-filters md-input-container {
-  color: #53738c;
-  font-weight: 500 !important;
+  padding: 0;
+  margin-top: 10px;
+  color: #242424 !important;
+  font-weight: 400 !important;
 }
-prm-pre-filters md-input-container:before {
+prm-pre-filters md-input-container + md-input-container {
+  margin-left: 15px;
+}
+prm-pre-filters md-input-container.is-active, prm-pre-filters md-input-container.is-active :focus {
+  padding: 0;
+  color: #242424 !important;
+  font-weight: 400 !important;
+}
+prm-pre-filters md-input-container:before, prm-pre-filters md-input-container.is-active:before {
   content: "";
   position: absolute;
-  top: 4px;
+  top: 0;
   left: 0;
   right: 0;
-  height: 28px;
+  bottom: 0;
   background: #fff;
-  width: calc(100% + 12px);
-  border-radius: 18px;
-  box-shadow: 0 1px 0 0 rgba(0,0,0,.4),0 5px 5px -3px rgba(0,0,0,.2);
-  margin-left: -8px;
+  width: 100%;
+  border-radius: 1px;
+  box-shadow: none;
+  border: 2px solid #ccc;
+  height: auto;
+  margin-left: 0;
 }
 prm-pre-filters md-input-container:after {
   display: none;
+}
+prm-pre-filters md-input-container md-select .md-select-value,
+md-select:not([disabled]):focus .md-select-value {
+  padding: 5px 10px;
+  border-bottom: none !important;
+}
+prm-pre-filters md-input-container .md-select-value .md-select-icon {
+  margin-right: 0;
 }
 prm-pre-filters md-input-container.md-input-focused:not(.is-active) .md-input-container-dummy>.md-select-dummy:not([disabled]):focus .md-select-value,
 prm-pre-filters md-input-container.md-input-focused:not(.is-active) md-select:not([disabled]):focus .md-select-value {
@@ -430,6 +450,9 @@ prm-pre-filters md-input-container.md-input-focused:not(.is-active) md-select:no
 }
 prm-pre-filters md-input-container:hover md-select md-select-value > span:not(.md-select-icon), prm-pre-filters md-input-container:focus md-select md-select-value > span:not(.md-select-icon) {
   text-decoration: underline;
+}
+prm-pre-filters md-input-container.is-active md-select:not([disabled]) .md-select-value {
+  border-bottom: none !important;
 }
 /* --- end pre-filter drop-downs */
 
