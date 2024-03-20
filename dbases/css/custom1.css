@@ -28,13 +28,15 @@ iframe {
 p + ul {
   margin-top: -5px;
 }
-md-content {
+md-content, prm-full-view-page md-content.layout-fill {
   max-width: 1200px;
   margin: 0 auto;
 }
-md-content > div:empty {
+md-content > div:empty, prm-full-view .layout-row > .full-view-spacer:empty {
   display: none;
 }
+
+
 /*remove white background on login button*/
 .login-card md-list-item.login-brighter-dialog .md-button:focus, .login-card md-list-item.login-brighter-dialog .md-button:hover {
   background-color: transparent !important;
