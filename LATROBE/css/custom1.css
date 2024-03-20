@@ -584,6 +584,9 @@ prm-search-bar .layout-fill{
 .s-lch-widget-float {
     right:2px !important;
 }
+div[aria-label="Chat Widget"] {
+  z-index: 70 !important;
+}
 
 .reading-lists {
   position: relative;
@@ -688,7 +691,7 @@ prm-report-problem .report-container .report-problem-btn {
   min-height:20px;
   min-width:20px;
   padding:0 10px;
-  z-index:110
+  z-index:110;
 }
 prm-report-problem h2 {
   font-family: dm sans;
@@ -789,6 +792,9 @@ prm-report-problem .md-button.button-confirm:hover:not([disabled]):before {
 .report-problem-content .report-text-area md-input-container.text-area-email.md-required {
   margin-left:.5em;
 }
+.md-select-menu-container.report-problem-cat-drop {
+  z-index: 201;
+}
 /* --- END Report a problem button & dialog ---*/
 
 /* --- pre-filter drop-downs */
@@ -823,3 +829,10 @@ prm-pre-filters md-input-container:hover md-select md-select-value > span:not(.m
   text-decoration: underline;
 }
 /* --- end pre-filter drop-downs */
+
+md-backdrop.md-dialog-backdrop {
+  z-index: 179;
+}
+.md-dialog-container {
+  z-index: 180;
+}
