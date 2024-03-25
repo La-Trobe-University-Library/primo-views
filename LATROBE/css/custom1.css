@@ -319,7 +319,9 @@ prm-atoz-search-bar, .__sm prm-atoz-search-bar,
 prm-newspapers-search-bar, .__sm prm-newspapers-search-bar,
 prm-browse-search-bar, .__sm prm-browse-search-bar,
 prm-tags-search-bar, .__sm prm-tags-search-bar {
-  padding-top: calc(1.5em + 50px);
+  margin-top: 50px;
+  padding-top: 1.5em;
+  /*padding-top: calc(1.5em + 50px);*/
   background: transparent;
 }
 prm-atoz-search-bar .search-element-inner, prm-browse-search-bar .classic-input, prm-tags-search-bar .classic-input, prm-newspapers-search-bar .classic-input, prm-search-bar .search-element-inner, prm-tags-search-bar .search-element-inner,
@@ -908,6 +910,9 @@ prm-report-problem .report-container .report-problem-btn prm-icon md-icon g g pa
 prm-report-problem .report-container .md-button.report-problem-btn:hover prm-icon md-icon g g path, 
 prm-report-problem .report-container .md-button.report-problem-btn:focus prm-icon md-icon g g path {
   fill: #666 !important;
+}
+.report-problem-content {
+  height: 355px;
 }
 .report-problem-content .report-header {
   background-color: var(--ltu-red);
