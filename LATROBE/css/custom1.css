@@ -168,10 +168,11 @@ prm-skip-to a:focus:hover, prm-skip-to .md-button:focus:hover,
 
 /* ----- HEADER ----- */
 prm-topbar {
-  height: 80px;
+  height: auto;
 }
 prm-topbar .top-nav-bar {
   height: 80px;
+  margin-bottom: 50px;
   background: #fff;
   position: relative;
 }
@@ -319,7 +320,7 @@ prm-atoz-search-bar, .__sm prm-atoz-search-bar,
 prm-newspapers-search-bar, .__sm prm-newspapers-search-bar,
 prm-browse-search-bar, .__sm prm-browse-search-bar,
 prm-tags-search-bar, .__sm prm-tags-search-bar {
-  margin-top: 50px;
+  /*margin-top: 50px;*/
   padding-top: 1.5em;
   /*padding-top: calc(1.5em + 50px);*/
   background: transparent;
@@ -1170,3 +1171,161 @@ md-card.login-dialog md-list-item._md-button-wrap > div.md-button .md-list-item-
   min-height: 36px;
 }
 /* ----- END LOGIN DIALOG ----- */
+
+
+/* ----- NOTICE (alert for link to guided tour) ----- */
+.notice {
+  margin: 0;
+  padding: 10px 20px;
+  text-align: center;
+  background: #ffdeab;
+  border-bottom: 1px solid #f8961d;
+  font-weight: 500;
+}
+.notice .notice-icon, .notice .notice-text {
+  display: inline-table;
+}
+.notice .notice-text > :last-child {
+  margin-bottom: 0;
+}
+.notice .notice-text > :first-child {
+  margin-top: 0;
+}
+.notice a {
+  color: #b51c16;
+  text-decoration: underline;
+}
+.notice a:hover {
+  text-decoration: none;
+  box-shadow: none;
+}
+.notice svg {
+  color: #b51c16;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-right: 1.5rem;
+  vertical-align: middle;
+}
+@media (max-width: 767px) {
+  .notice .notice-icon {
+    display: none;
+  }
+}
+/* ----- END NOTICE ----- */
+
+
+/* ----- GUIDED TOUR ----- */
+.driver-popover.ltu-tour {
+  max-width: 400px;
+  min-width: 350px;
+}
+.driver-popover.ltu-begin-tour {
+  max-width: 450px;
+}
+.ltu-tour .driver-popover-title {
+  font-size: 28px;
+  font-family: 'knockout';
+  font-weight: 500;
+}
+.ltu-tour .driver-popover-description {
+  font-size: 1rem;
+  font-family: 'dm sans';
+  font-weight: 400;
+}
+.ltu-tour .driver-popover-footer {
+  align-items: end;
+}
+.ltu-tour .driver-popover-progress-text {
+  font-family: dm sans;
+  font-size: 15px;
+}
+.ltu-tour .driver-popover-navigation-btns button {
+  border-radius: 28px;
+  height: 48px;
+  border: 2px solid #e2231b;
+  font-size: 18px;
+  font-family: dm sans;
+  font-weight: 500;
+  padding: 5px 20px;
+  color: #e2231b;
+  text-shadow: none;
+}
+.ltu-tour .driver-popover-navigation-btns button:hover, .ltu-tour .driver-popover-navigation-btns button:focus {
+  text-decoration: underline;
+  color: #b51c16;
+  border-color: #b51c16;
+  background: transparent;
+}
+.ltu-tour .driver-popover-navigation-btns button.driver-popover-next-btn {
+  background: #e2231b;
+  color: #fff;
+}
+.ltu-tour .driver-popover-navigation-btns button.driver-popover-next-btn:hover, .ltu-tour .driver-popover-navigation-btns button.driver-popover-next-btn:focus {
+  background: #b51c16;
+  color: #fff;
+}
+.ltu-tour .driver-popover-navigation-btns button.driver-popover-next-btn:not(.no-icon):after {
+  content: '';
+  background-image: url(https://www.latrobe.edu.au/__data/assets/git_bridge/0004/1094422/_ltu-components/dist/css/icons/feather/chevron-right.svg);
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  filter: invert(100%) sepia(0%) saturate(2%) hue-rotate(132deg) brightness(113%) contrast(101%);
+  margin-left: 10px;
+  background-size: contain;
+  vertical-align: bottom;
+  background-repeat: no-repeat;
+  margin-right: -5px;
+}
+.ltu-tour .driver-popover-navigation-btns button.driver-popover-prev-btn:not(.no-icon):before {
+  content: '';
+  background-image: url(https://www.latrobe.edu.au/__data/assets/git_bridge/0004/1094422/_ltu-components/dist/css/icons/feather/chevron-left.svg);
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  filter: invert(36%) sepia(31%) saturate(3720%) hue-rotate(337deg) brightness(81%) contrast(124%);
+  margin-right: 10px;
+  background-size: contain;
+  vertical-align: bottom;
+  background-repeat: no-repeat;
+  margin-left: -5px;
+}
+.ltu-tour.ltu-end-tour .driver-popover-navigation-btns button.driver-popover-next-btn:not(.no-icon):after {
+  background-image: url(https://www.latrobe.edu.au/__data/assets/git_bridge/0004/1094422/_ltu-components/dist/css/icons/feather/check.svg);
+}
+.ltu-tour.ltu-begin-tour .driver-popover-navigation-btns button.driver-popover-next-btn:not(.no-icon):after {
+  content: none;
+}
+.ltu-tour .driver-popover-close-btn {
+  line-height: 30px;
+  color: #e2231b;
+  font-size: 26px;
+}
+.ltu-tour .driver-popover-close-btn::before {
+  border: 2px solid #e2231b;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  display: block;
+  position: absolute;
+  content: '';
+  z-index: -1;
+  left: 3px;
+  top: 3px;
+  box-sizing: border-box;
+}
+.ltu-tour .driver-popover-close-btn:hover, .ltu-tour .driver-popover-close-btn:focus {
+  color: #b51c16;
+}
+.ltu-tour .driver-popover-close-btn:hover:before, .ltu-tour .driver-popover-close-btn:focus:before {
+  border-color: #b51c16;
+}
+/* ----- END GUIDED TOUR ----- */
+
+
+/* ----- TWEAKS FOR GUIDED TOUR ----- */
+.search-switch-buttons:not(body):has(> .driver-active-element),
+prm-logo:not(body):has(> .driver-active-element),
+prm-databases-categorize > div:has(> .driver-active-element) {
+  overflow: visible !important;
+}
