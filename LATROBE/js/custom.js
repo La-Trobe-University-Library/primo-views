@@ -369,7 +369,7 @@
         '<div class="notice-icon">'+
           '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-info"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="8"></line></svg>'+
         '</div>'+
-        '<div class="notice-text"><p>The {{tourType}} interface has been updated. <a id="tour_button" href="" ng-show="tourLabel" ng-click="startTour()">{{tourLabel}}</a></p></div>'+
+        '<div class="notice-text"><p><strong>Note:</strong> This site has been updated. <a id="tour_button" href="" ng-show="tourLabel" ng-click="startTour()" ng-bind-html="tourLabel"></a></p></div>'+
       '</div>'
   });
 
@@ -382,6 +382,7 @@
       $scope.currentUrl;
       $scope.driverObj;
       $scope.observer;
+      $scope.observers = {};
 
       $scope.startTour = function() {
         console.log('START TOUR...');
@@ -395,7 +396,7 @@
             console.log('GUIDED TOUR script loaded')
             
             // set up the mutation observer
-            self.setupObserver();
+            self.setupObserver("primo-explore");
 
             // set up the tour for the first instance
             self.updateTour();
@@ -407,7 +408,7 @@
 
         //if(!guidedTourObserving) {
           // set up the tour if there's no mutation observer yet, otherwise leave the update for the observer
-          self.setupObserver();
+          self.setupObserver("primo-explore");
 
           self.updateTour();
         //}
@@ -427,264 +428,718 @@
       // check which search we're on
       if(/\/search\?/.test(window.location.href)) {
         // standard search
-        $scope.tourType = 'library search';
+        if(/query/.test(window.location.href)) {
+          // results view
+          $scope.tourLabel = 'Take a tour of the <strong>Library search results</strong> page.';
 
-        tourSteps = [{ 
-          popover: { 
-              title: 'Welcome to the Library search tour', 
-              description: 'Take a quick tour to view some of the main features available on this site.',
-              nextBtnText: "Let's begin!",
-              showButtons: ["next", "close"],
-              popoverClass: 'ltu-tour ltu-begin-tour'
-          }
-        }, {
-          element: ".search-elements-wrapper",
-          popover: {
-            title: "Search field",
-            description: "Enter the term that you want to search for.",
-            side: "bottom",
-            align: "center"
-          }
-        }, {
-          element: ".search-switch-buttons button",
-          popover: {
-            title: "Need more search fields?",
-            description: "Switch between a simple search and an advanced search with more options.",
-            side: "bottom",
-            align: "center"
-          }
-        }, {
-          element: "#banner",
-          popover: {
-            title: "Library website",
-            description: "To return to the library website, select the La Trobe University logo.",
-            side: "bottom",
-            align: "center"
-          }
-        }, {
-          element: "#tour_button",
-          popover: {
-            title: "That's all for now",
-            description: "Thanks for taking the tour. You can restart it at any time from here.",
-            side: "bottom",
-            align: "center",
-            popoverClass: 'ltu-tour ltu-end-tour'
-          }
-        }]
+          var equivSearchUrl = window.location.href.replace('&mode=simple', '') + '&mode=advanced';
+
+          tourSteps = [
+            {
+              element: "#mainResults",
+              popover: {
+                title: "Search results",
+                description: "The results of your search are listed on the page.",
+                showButtons: ["next", "close"],
+                side: "top",
+                align: "start"
+              }
+            }, {
+              element: "prm-brief-result-container",
+              popover: {
+                title: "Item details",
+                description: "Select an item from the results to see its details.",
+                side: "bottom",
+                align: "center"
+              }
+            }, {
+              element: "prm-facet:has(.sidebar-section)",
+              popover: {
+                title: "Narrow your results",
+                description: "Apply filters (such as 'Resource type' and 'Location') to narrow down your search.",
+                side: "right",
+                align: "center"
+              }
+            }, {
+              element: "prm-newspapers-spotlight",
+              popover: {
+                title: "Search newspaper articles",
+                description: "A standard library search doesn't include newspaper articles. If you would like to search newspapers, you can select this link.",
+                side: "top",
+                align: "center",
+              }
+            }, {
+              element: ".search-wrapper",
+              popover: {
+                title: "Search fields",
+                description: "If you didn't get the results that you were after, try a new search. You can always add more search parameters using an <a href='"+equivSearchUrl+"'>Advanced search</a>.",
+                side: "bottom",
+                align: "center",
+                popoverClass: 'ltu-tour ltu-end-tour'
+              }
+            }]
+        } else {
+          $scope.tourType = 'library search';
+          $scope.tourLabel = 'Take a tour of the <strong>Library search</strong> page.';
+
+          tourSteps = [{ 
+            popover: { 
+                title: 'Welcome to the Library search tour', 
+                description: 'Take a quick tour to view some of the main features available on this site.',
+                nextBtnText: "Let's begin!",
+                showButtons: ["next", "close"],
+                popoverClass: 'ltu-tour ltu-begin-tour'
+            }
+          }, {
+            element: ".search-elements-wrapper",
+            popover: {
+              title: "Search field",
+              description: "Enter the term that you want to search for.",
+              side: "bottom",
+              align: "center"
+            }
+          }, {
+            element: ".search-switch-buttons button",
+            popover: {
+              title: "Need more search fields?",
+              description: "Switch between a simple search and an advanced search with more options.",
+              side: "bottom",
+              align: "center"
+            }
+          }, {
+            element: "prm-user-area-expandable",
+            popover: {
+              title: "Access your account",
+              description: "Use these menu items to sign in and view your library account. Access your account to view the status of any loans or requests for library resources.",
+              side: "bottom",
+              align: "center"
+            }
+          }, {
+            element: ".s-lch-widget-float-btn",
+            popover: {
+              title: "Need help?",
+              description: "Use the chat feature to talk with a librarian, or use the 'Help' option in the main menu to access resources and information to help you with your library search.",
+              side: "bottom",
+              align: "center"
+            }
+          }, {
+            element: "#banner",
+            popover: {
+              title: "Library website",
+              description: "To return to the library website, select the La Trobe University logo.",
+              side: "bottom",
+              align: "center"
+            }
+          }, {
+            element: "#tour_button",
+            popover: {
+              title: "That's all for now",
+              description: "Thanks for taking the tour. You can restart it at any time from here.",
+              side: "bottom",
+              align: "center",
+              popoverClass: 'ltu-tour ltu-end-tour'
+            }
+          }]
+        }
+
+        // set up a mutation observer for new searches, which update the results section
+        self.setupObserver("prm-explore-main");
       } else if(/\/dbsearch\?/.test(window.location.href)) {
         // database search
         $scope.tourType = 'database search';
 
-        tourSteps = [{ 
-          popover: { 
-              title: 'Welcome to the database search tour', 
-              description: 'Take a quick tour to view some of the main features available for a database search.',
-              nextBtnText: "Let's begin!",
-              showButtons: ["next", "close"],
-              popoverClass: 'ltu-tour ltu-begin-tour'
-          }
-        }, {
-          element: ".search-elements-wrapper",
-          popover: {
-            title: "Search field",
-            description: "Enter the term that you want to search for.",
-            side: "bottom",
-            align: "center"
-          }
-        }, {
-          element: ".language-characters",
-          popover: {
-            title: "Know what it starts with?",
-            description: "Search titles starting with these characters.",
-            side: "bottom",
-            align: "center"
-          }
-        }, {
-          element: ".databases-categories",
-          popover: {
-            title: "Database categories",
-            description: "Browse by database category. Select the arrow next to a category to see any sub-categories.",
-            side: "top",
-            align: "start"
-          }
-        }, {
-          element: "#banner",
-          popover: {
-            title: "Library website",
-            description: "To return to the library website, select the La Trobe University logo.",
-            side: "bottom",
-            align: "center"
-          }
-        }, {
-          element: "#tour_button",
-          popover: {
-            title: "That's all for now",
-            description: "Thanks for taking the tour. You can restart it at any time from here.",
-            side: "bottom",
-            align: "center",
-            popoverClass: 'ltu-tour ltu-end-tour'
-          }
-        }]
+        if(/query/.test(window.location.href)) {
+          $scope.tourLabel = 'Take a tour of the <strong>Database search results</strong> page.';
+
+          var equivSearchUrl = window.location.href.replace('/dbsearch', '/search').replace('&tab=jsearch_slot','') + '&facet=rtype,include,Databases';
+
+          tourSteps = [
+            {
+              element: "#mainResults",
+              popover: {
+                title: "Search results",
+                description: "The results of your search are listed on the page.",
+                showButtons: ["next", "close"],
+                side: "left",
+                align: "start"
+              }
+            }, {
+              element: "prm-brief-result-container",
+              popover: {
+                title: "Item details",
+                description: "Select an item from the results to see its details.",
+                side: "bottom",
+                align: "center"
+              }
+            }, {
+              element: "prm-alert-bar:has(prm-authentication)",
+              popover: {
+                title: "Sign in",
+                description: "You may need to be signed in to view some databases.",
+                side: "top",
+                align: "center"
+              }
+            }, {
+              element: "prm-resource-recommender:not(.ng-hide)",
+              popover: {
+                title: "Suggested databases",
+                description: "You may be presented with suggestions for other databases that could provide relevant resources.",
+                side: "top",
+                align: "center"
+              }
+            }, {
+              element: "prm-atoz-search-bar .layout-row[role='search'] > .layout-column",
+              popover: {
+                title: "Search field",
+                description: "If you didn't get the results that you were after, try a new search. You can also try a <a href='"+equivSearchUrl+"'>search using the standard library search</a>.",
+                side: "bottom",
+                align: "center",
+                popoverClass: 'ltu-tour ltu-end-tour'
+              }
+            }]
+        } else {
+          $scope.tourLabel = 'Take a tour of the <strong>Database search</strong> page.';
+
+          tourSteps = [{ 
+            popover: { 
+                title: 'Welcome to the database search tour', 
+                description: 'Take a quick tour to view some of the main features available for a database search.',
+                nextBtnText: "Let's begin!",
+                showButtons: ["next", "close"],
+                popoverClass: 'ltu-tour ltu-begin-tour'
+            }
+          }, {
+            element: ".search-elements-wrapper",
+            popover: {
+              title: "Search field",
+              description: "Enter the term that you want to search for.",
+              side: "bottom",
+              align: "center"
+            }
+          }, {
+            element: ".language-characters",
+            popover: {
+              title: "Know what it starts with?",
+              description: "Search titles starting with these characters.",
+              side: "bottom",
+              align: "center"
+            }
+          }, {
+            element: ".databases-categories",
+            popover: {
+              title: "Database categories",
+              description: "Browse by database category. Select the arrow next to a category to see any sub-categories.",
+              side: "top",
+              align: "start"
+            }
+          }, {
+            element: "#banner",
+            popover: {
+              title: "Library website",
+              description: "To return to the library website, select the La Trobe University logo.",
+              side: "bottom",
+              align: "center"
+            }
+          }, {
+            element: "#tour_button",
+            popover: {
+              title: "That's all for now",
+              description: "Thanks for taking the tour. You can restart it at any time from here.",
+              side: "bottom",
+              align: "center",
+              popoverClass: 'ltu-tour ltu-end-tour'
+            }
+          }]
+        }
+
+        // set up a mutation observer for new searches, which update the results section
+        self.setupObserver("prm-explore-main");
       } else if(/\/npsearch\?/.test(window.location.href)) {
         // newspaper article search
         $scope.tourType = 'newspaper article search';
-        
-        tourSteps = [{ 
-          popover: { 
-              title: 'Welcome to the newspaper article search tour', 
-              description: 'Take a quick tour to view some of the main features available for a newspaper article search.',
-              nextBtnText: "Let's begin!",
-              showButtons: ["next", "close"],
-              popoverClass: 'ltu-tour ltu-begin-tour'
-          }
-        }, {
-          element: ".search-elements-wrapper",
-          popover: {
-            title: "Search field",
-            description: "Enter the term that you want to search for.",
-            side: "bottom",
-            align: "center"
-          }
-        }, {
-          element: "#banner",
-          popover: {
-            title: "Library website",
-            description: "To return to the library website, select the La Trobe University logo.",
-            side: "bottom",
-            align: "center"
-          }
-        }, {
-          element: "#tour_button",
-          popover: {
-            title: "That's all for now",
-            description: "Thanks for taking the tour. You can restart it at any time from here.",
-            side: "bottom",
-            align: "center",
-            popoverClass: 'ltu-tour ltu-end-tour'
-          }
-        }]
+
+        if(/query/.test(window.location.href)) {
+          $scope.tourLabel = 'Take a tour of the <strong>Newspaper search results</strong> page.';
+
+          tourSteps = [
+            {
+              element: "#mainResults",
+              popover: {
+                title: "Search results",
+                description: "The results of your search are listed on the page.",
+                showButtons: ["next", "close"],
+                side: "left",
+                align: "start"
+              }
+            }, {
+              element: "prm-brief-result-container",
+              popover: {
+                title: "Item details",
+                description: "Select an item from the results to see its details.",
+                side: "bottom",
+                align: "center"
+              }
+            }, {
+              element: "prm-facet",
+              popover: {
+                title: "Narrow your results",
+                description: "Apply filters (such as 'Date' and 'Subject') to narrow down your search.",
+                side: "right",
+                align: "center"
+              }
+            }, {
+              element: "prm-alert-bar:has(prm-authentication)",
+              popover: {
+                title: "Sign in",
+                description: "You may need to be signed in to view some articles.",
+                side: "top",
+                align: "center"
+              }
+            }, {
+              element: ".search-elements-wrapper",
+              popover: {
+                title: "Search field",
+                description: "If you didn't get the results that you were after, try searching for a different term.",
+                side: "bottom",
+                align: "center",
+                popoverClass: 'ltu-tour ltu-end-tour'
+              }
+            }]
+        } else {
+          $scope.tourLabel = 'Take a tour of the <strong>Newspaper search</strong> page.';
+          
+          tourSteps = [{ 
+            popover: { 
+                title: 'Welcome to the newspaper article search tour', 
+                description: 'Take a quick tour to view some of the main features available for a newspaper article search.',
+                nextBtnText: "Let's begin!",
+                showButtons: ["next", "close"],
+                popoverClass: 'ltu-tour ltu-begin-tour'
+            }
+          }, {
+            element: ".search-elements-wrapper",
+            popover: {
+              title: "Search field",
+              description: "Enter the term that you want to search for.",
+              side: "bottom",
+              align: "center"
+            }
+          }, {
+            element: "[ng-if='$ctrl.displayFeaturedNewspapers()']",
+            popover: {
+              title: "Featured newspapers",
+              description: "You may limit your search to within one of the featured newspapers.",
+              side: "top",
+              align: "center"
+            }
+          }, {
+            element: "#banner",
+            popover: {
+              title: "Library website",
+              description: "To return to the library website, select the La Trobe University logo.",
+              side: "bottom",
+              align: "center"
+            }
+          }, {
+            element: "#tour_button",
+            popover: {
+              title: "That's all for now",
+              description: "Thanks for taking the tour. You can restart it at any time from here.",
+              side: "bottom",
+              align: "center",
+              popoverClass: 'ltu-tour ltu-end-tour'
+            }
+          }]
+        }
+
+        // set up a mutation observer for new searches, which update the results section
+        self.setupObserver("prm-explore-main");
       } else if(/\/jsearch\?/.test(window.location.href)) {
         // journal search
         $scope.tourType = 'journal search';
 
-        tourSteps = [{ 
-          popover: { 
-              title: 'Welcome to the journal search tour', 
-              description: 'Take a quick tour to view some of the main features available for a journal search.',
-              nextBtnText: "Let's begin!",
-              showButtons: ["next", "close"],
-              popoverClass: 'ltu-tour ltu-begin-tour'
-          }
-        }, {
-          element: ".search-elements-wrapper",
-          popover: {
-            title: "Search field",
-            description: "Enter the term that you want to search for.",
-            side: "bottom",
-            align: "center"
-          }
-        }, {
-          element: "#banner",
-          popover: {
-            title: "Library website",
-            description: "To return to the library website, select the La Trobe University logo.",
-            side: "bottom",
-            align: "center"
-          }
-        }, {
-          element: "#tour_button",
-          popover: {
-            title: "That's all for now",
-            description: "Thanks for taking the tour. You can restart it at any time from here.",
-            side: "bottom",
-            align: "center",
-            popoverClass: 'ltu-tour ltu-end-tour'
-          }
-        }]
+        var equivSearchUrl = window.location.href.replace('/jsearch', '/search').replace('&tab=jsearch_slot','') + '&facet=rtype,include,journals';
+
+        if(/query/.test(window.location.href)) {
+          $scope.tourLabel = 'Take a tour of the <strong>Journal search results</strong> page.';
+
+          tourSteps = [
+            {
+              element: "#mainResults",
+              popover: {
+                title: "Search results",
+                description: "The results of your search are listed on the page.",
+                showButtons: ["next", "close"],
+                side: "left",
+                align: "start"
+              }
+            }, {
+              element: "prm-brief-result-container",
+              popover: {
+                title: "Item details",
+                description: "Select an item from the results to see its details.",
+                side: "bottom",
+                align: "center"
+              }
+            }, {
+              element: "prm-alert-bar:has(prm-authentication)",
+              popover: {
+                title: "Sign in",
+                description: "You may need to be signed in to view some results.",
+                side: "top",
+                align: "center"
+              }
+            }, {
+              element: "prm-atoz-search-bar .layout-row[role='search'] > .layout-column",
+              popover: {
+                title: "Search field",
+                description: "If you didn't get the results that you were after, try a new search. You can also try a <a href='"+equivSearchUrl+"'>search using the standard library search</a>.",
+                side: "bottom",
+                align: "center",
+                popoverClass: 'ltu-tour ltu-end-tour'
+              }
+            }]
+        } else {
+          $scope.tourLabel = 'Take a tour of the <strong>Journal search</strong> page.';
+
+          tourSteps = [{ 
+            popover: { 
+                title: 'Welcome to the journal search tour', 
+                description: 'Take a quick tour to view some of the main features available for a journal search.',
+                nextBtnText: "Let's begin!",
+                showButtons: ["next", "close"],
+                popoverClass: 'ltu-tour ltu-begin-tour'
+            }
+          }, {
+            element: ".search-elements-wrapper",
+            popover: {
+              title: "Search field",
+              description: "Enter the term that you want to search for.",
+              side: "bottom",
+              align: "center"
+            }
+          }, {
+            element: ".language-characters",
+            popover: {
+              title: "Know what it starts with?",
+              description: "Search titles starting with these characters.",
+              side: "bottom",
+              align: "center"
+            }
+          }, {
+            element: "#banner",
+            popover: {
+              title: "Library website",
+              description: "To return to the library website, select the La Trobe University logo.",
+              side: "bottom",
+              align: "center"
+            }
+          }, {
+            element: "#tour_button",
+            popover: {
+              title: "That's all for now",
+              description: "Thanks for taking the tour. You can restart it at any time from here.",
+              side: "bottom",
+              align: "center",
+              popoverClass: 'ltu-tour ltu-end-tour'
+            }
+          }]
+        }
+
+        // set up a mutation observer for new searches, which update the results section
+        self.setupObserver("prm-explore-main");
       } else if(/\/browse\?/.test(window.location.href)) {
         // Browse
         $scope.tourType = 'browse';
 
-        tourSteps = [{ 
-          popover: { 
-              title: 'Welcome to the browse tour', 
-              description: 'Take a quick tour to view some of the main features available when browsing.',
-              nextBtnText: "Let's begin!",
-              showButtons: ["next", "close"],
-              popoverClass: 'ltu-tour ltu-begin-tour'
-          }
-        }, {
-          element: ".search-elements-wrapper",
-          popover: {
-            title: "Search field",
-            description: "Enter the term that you want to search for.",
-            side: "bottom",
-            align: "center"
-          }
-        }, {
-          element: "#banner",
-          popover: {
-            title: "Library website",
-            description: "To return to the library website, select the La Trobe University logo.",
-            side: "bottom",
-            align: "center"
-          }
-        }, {
-          element: "#tour_button",
-          popover: {
-            title: "That's all for now",
-            description: "Thanks for taking the tour. You can restart it at any time from here.",
-            side: "bottom",
-            align: "center",
-            popoverClass: 'ltu-tour ltu-end-tour'
-          }
-        }]
+        if(/browseQuery/.test(window.location.href)) {
+          $scope.tourLabel = 'Take a tour of the <strong>Browse results</strong> page.';
+
+          tourSteps = [
+            {
+              element: "#mainResults",
+              popover: {
+                title: "Search results",
+                description: "The results of your search are listed on the page.",
+                showButtons: ["next", "close"],
+                side: "left",
+                align: "start"
+              }
+            }, {
+              element: "prm-browse-result",
+              popover: {
+                title: "Collection of records",
+                description: "Select an item from the results to see the records it contains.",
+                side: "bottom",
+                align: "center"
+              }
+            }, {
+              element: ".search-elements-wrapper",
+              popover: {
+                title: "Search field",
+                description: "If you didn't get the results that you were after, try a different search term.",
+                side: "bottom",
+                align: "center",
+                popoverClass: 'ltu-tour ltu-end-tour'
+              }
+            }]
+        } else {
+          $scope.tourLabel = 'Take a tour of the <strong>Browse</strong> page.';
+
+          tourSteps = [{ 
+            popover: { 
+                title: 'Welcome to the browse tour', 
+                description: 'Take a quick tour to view some of the main features available when browsing.',
+                nextBtnText: "Let's begin!",
+                showButtons: ["next", "close"],
+                popoverClass: 'ltu-tour ltu-begin-tour'
+            }
+          }, {
+            element: ".search-elements-wrapper",
+            popover: {
+              title: "Search field",
+              description: "Enter the term that you want to search for.",
+              side: "bottom",
+              align: "center"
+            }
+          }, {
+            element: "#banner",
+            popover: {
+              title: "Library website",
+              description: "To return to the library website, select the La Trobe University logo.",
+              side: "bottom",
+              align: "center"
+            }
+          }, {
+            element: "#tour_button",
+            popover: {
+              title: "That's all for now",
+              description: "Thanks for taking the tour. You can restart it at any time from here.",
+              side: "bottom",
+              align: "center",
+              popoverClass: 'ltu-tour ltu-end-tour'
+            }
+          }]
+        }
+
+        // set up a mutation observer for new searches, which update the results section
+        self.setupObserver("prm-explore-main");
       } else if(/\/account\?/.test(window.location.href)) {
         // my account
         $scope.tourType = '\'My account\'';
 
-        tourSteps = [{ 
-          popover: { 
-              title: 'Welcome to the \'My account\' tour', 
-              description: 'Take a quick tour to view some of the main features available in your account.',
-              nextBtnText: "Let's begin!",
-              showButtons: ["next", "close"],
-              popoverClass: 'ltu-tour ltu-begin-tour'
-          }
-        }, {
-          element: "md-tab-item:has([translate='nui.loans.header'])",
-          popover: {
-            title: "Your loans",
-            description: "Select this tab to see a list of your current loans.",
-            side: "top",
-            align: "center"
-          }
-        }, {
-          element: "md-tab-item:has([translate='nui.requests.header'])",
-          popover: {
-            title: "Your requests",
-            description: "Select this tab to see the status of any requests for library resources.",
-            side: "bottom",
-            align: "center"
-          }
-        }, {
-          element: "#banner",
-          popover: {
-            title: "Library website",
-            description: "To return to the library website, select the La Trobe University logo.",
-            side: "bottom",
-            align: "center"
-          }
-        }, {
-          element: "#tour_button",
-          popover: {
-            title: "That's all for now",
-            description: "Thanks for taking the tour. You can restart it at any time from here.",
-            side: "bottom",
-            align: "center",
-            popoverClass: 'ltu-tour ltu-end-tour'
-          }
-        }]
+        if(/section=loans/.test(window.location.href)) {
+          $scope.tourLabel = 'Take a tour of the <strong>Loans</strong> tab.';
+
+          tourSteps = [
+            {
+              element: "md-tab-content.md-active",
+              popover: {
+                title: "Your loans",
+                description: "Any loans that you have are listed here.",
+                showButtons: ["next", "close"],
+                side: "top",
+                align: "start"
+              }
+            }, {
+              element: "#loans-focus",
+              popover: {
+                title: "View active or previous loans",
+                description: "Use this drop-down to view any previous loans your have made.",
+                side: "right",
+                align: "start"
+              }
+            }, {
+              element: "md-tabs-canvas",
+              popover: {
+                title: "Account sections",
+                description: "Use the tabs to view other aspects of your library account.",
+                side: "bottom",
+                align: "center",
+                popoverClass: 'ltu-tour ltu-end-tour'
+              }
+            }]
+        } else if(/section=requests/.test(window.location.href)) {
+          $scope.tourLabel = 'Take a tour of the <strong>Requests</strong> tab.';
+
+          tourSteps = [
+            {
+              element: "md-tab-content.md-active",
+              popover: {
+                title: "Your requests",
+                description: "Any requests for library resources that you have made are listed here.",
+                showButtons: ["next", "close"],
+                side: "top",
+                align: "start"
+              }
+            }, {
+              element: "md-tabs-canvas",
+              popover: {
+                title: "Account sections",
+                description: "Use the tabs to view other aspects of your library account.",
+                side: "bottom",
+                align: "center",
+                popoverClass: 'ltu-tour ltu-end-tour'
+              }
+            }]
+        } else if(/section=fines/.test(window.location.href)) {
+          $scope.tourLabel = 'Take a tour of the <strong>Fines</strong> tab.';
+
+          tourSteps = [
+            {
+              element: "md-tab-content.md-active",
+              popover: {
+                title: "Your fines",
+                description: "Any fines that you are required to pay are listed here.",
+                showButtons: ["next", "close"],
+                side: "top",
+                align: "start"
+              }
+            }, {
+              element: "prm-fines a[ng-if='$ctrl.payFinesLink']",
+              popover: {
+                title: "Pay your fines",
+                description: "Follow this link to pay any fines you have.",
+                side: "right",
+                align: "start"
+              }
+            }, {
+              element: "md-tabs-canvas",
+              popover: {
+                title: "Account sections",
+                description: "Use the tabs to view other aspects of your library account.",
+                side: "bottom",
+                align: "center",
+                popoverClass: 'ltu-tour ltu-end-tour'
+              }
+            }]
+        } else if(/section=blocks_messages/.test(window.location.href)) {
+          $scope.tourLabel = 'Take a tour of the <strong>Messages</strong> tab.';
+
+          tourSteps = [
+            {
+              element: "md-tab-content.md-active",
+              popover: {
+                title: "Your messages",
+                description: "Any messages regarding your loans or requests are listed here.",
+                showButtons: ["next", "close"],
+                side: "top",
+                align: "start"
+              }
+            }, {
+              element: "md-tabs-canvas",
+              popover: {
+                title: "Account sections",
+                description: "Use the tabs to view other aspects of your library account.",
+                side: "bottom",
+                align: "center",
+                popoverClass: 'ltu-tour ltu-end-tour'
+              }
+            }]
+        } else if(/section=personal_details/.test(window.location.href)) {
+          $scope.tourLabel = 'Take a tour of the <strong>Personal details</strong> tab.';
+
+          tourSteps = [
+            {
+              element: "md-tab-content.md-active",
+              popover: {
+                title: "Your personal details",
+                description: "The personal details that the library stores for your account are displayed here.",
+                showButtons: ["next", "close"],
+                side: "top",
+                align: "start"
+              }
+            }, {
+              element: "#personal_settings-focus",
+              popover: {
+                title: "Edit details",
+                description: "You can edit the details and notification settings for your library account.",
+                side: "bottom",
+                align: "center",
+                popoverClass: 'ltu-tour ltu-end-tour'
+              }
+            }]
+        } else {
+          $scope.tourLabel = 'Take a tour of the <strong>My account</strong> page.';
+
+          tourSteps = [{ 
+            popover: { 
+                title: 'Welcome to the \'My account\' tour', 
+                description: 'Take a quick tour to view some of the main features available in your account.',
+                nextBtnText: "Let's begin!",
+                showButtons: ["next", "close"],
+                popoverClass: 'ltu-tour ltu-begin-tour'
+            }
+          }, {
+            element: "md-tab-item:has([translate='nui.loans.header'])",
+            popover: {
+              title: "Your loans",
+              description: "Select this tab to see a list of your current loans.",
+              side: "top",
+              align: "center"
+            }
+          }, {
+            element: "md-tab-item:has([translate='nui.requests.header'])",
+            popover: {
+              title: "Your requests",
+              description: "Select this tab to see the status of any requests for library resources.",
+              side: "top",
+              align: "center"
+            }
+          }, {
+            element: "md-tab-item:has([translate='nui.fines.header'])",
+            popover: {
+              title: "Your fines",
+              description: "Select this tab to see if you have any outstanding fines for overdue or lost items.",
+              side: "top",
+              align: "center"
+            }
+          }, {
+            element: "md-tab-item:has([translate='nui.blocks.header'])",
+            popover: {
+              title: "Your messages",
+              description: "Select this tab to see any messages regarding your loans or requests.",
+              side: "top",
+              align: "center"
+            }
+          }, {
+            element: "md-tab-item:has([translate='nui.details.header'])",
+            popover: {
+              title: "Your personal details",
+              description: "Select this tab to view and modify your library account details.",
+              side: "top",
+              align: "center"
+            }
+          }, {
+            element: "#mainMenu",
+            popover: {
+              title: "Main menu",
+              description: "Use this menu to start a search for any library resources or view help documentation.",
+              side: "bottom",
+              align: "center"
+            }
+          }, {
+            element: "#banner",
+            popover: {
+              title: "Library website",
+              description: "To return to the library website, select the La Trobe University logo.",
+              side: "bottom",
+              align: "center"
+            }
+          }, {
+            element: "#tour_button",
+            popover: {
+              title: "That's all for now",
+              description: "Thanks for taking the tour. You can restart it at any time from here.",
+              side: "bottom",
+              align: "center",
+              popoverClass: 'ltu-tour ltu-end-tour'
+            }
+          }]
+        }
+
+        // set up a mutation observer for changing tabs
+        self.setupObserver("md-tabs-content-wrapper");
       }
 
       //console.log('$scope.tourType: '+$scope.tourType);
@@ -701,25 +1156,25 @@
           steps: tourSteps
         });
 
-        $scope.tourLabel = 'Take a tour.';
+        //$scope.tourLabel = 'Take a tour.';
         //$scope.tourType = window.location.href;
       }
     }
 
-    this.setupObserver = function() {
+    this.setupObserver = function(qSelector) {
       // only set up the observer once
-      if($scope.observer) {
-        console.log('OBSERVER already set up')
+      if($scope.observers[qSelector]) {
+        console.log('OBSERVER already set up for '+qSelector)
         return;
       }
 
       // flag global var that an observer has been set up
       guidedTourObserving = true;
 
-      console.log('set up OBSERVER')
+      console.log('set up OBSERVER: '+qSelector);
       // add a mutation observer to check when the tour needs to be updated
-      $scope.observer = new MutationObserver(() => {
-        console.log('mutation observed... ');
+      var observer = new MutationObserver(() => {
+        console.log('mutation observed... '+qSelector);
         console.log('$scope.currentUrl: '+$scope.currentUrl);
         console.log('window.location.href: '+window.location.href);
         
@@ -727,30 +1182,17 @@
         if($scope.currentUrl != window.location.href) {
           console.log("Updating tour...");
           $scope.currentUrl = window.location.href;
-          //currentTourUrl = window.location.href;
+          
           console.log('new stored URL: '+$scope.currentUrl);
           self.updateTour();
-          /*
-          if(/\/search\?/.test(window.location.href)) {
-            $scope.tourType = 'LIB search';
-          } else if(/\/dbsearch\?/.test(window.location.href)) {
-            $scope.tourType = 'DB search';
-          } else if(/\/npsearch\?/.test(window.location.href)) {
-            $scope.tourType = 'NP search';
-          } else if(/\/jsearch\?/.test(window.location.href)) {
-            $scope.tourType = 'J search';
-          } else if(/\/browse\?/.test(window.location.href)) {
-            $scope.tourType = 'BROWSE';
-          } else if(/\/account\?/.test(window.location.href)) {
-            $scope.tourType = 'ACCOUNT';
-          }
-          */
         }
       });
-      $scope.observer.observe(document.querySelector("primo-explore"), {
+      observer.observe(document.querySelector(qSelector), {
         subtree: false,
         childList: true
       });
+
+      $scope.observers[qSelector] = observer;
     }
   });
   // ------------------------------------------- end Guided tour integration

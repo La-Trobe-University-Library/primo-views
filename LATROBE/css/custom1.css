@@ -489,7 +489,7 @@ prm-newspapers-search-bar .layout-row > div:empty {
   display: none;
 }
 #searchElementsWrapper {
-  width: calc(100% - 155px);
+  width: calc(100% - 155px - 1.5em);
   flex: unset;
   max-width: 100%;
 }
