@@ -404,6 +404,9 @@ prm-alphabet-toolbar .md-button {
 }
 
 /* --- pre-filter drop-downs */
+.search-extras:has(prm-pre-filters) {
+  min-height: 48px;
+}
 prm-pre-filters md-input-container:first-child {
   margin-left: 20px;
 }
@@ -1004,6 +1007,9 @@ prm-account .tiles-grid-tile .tile-header .header-link {
 }
 prm-account .tiles-grid-tile .tile-header .header-link .arrow-icon {
   top: -4px;
+}
+prm-account-overview .actions-list-spacer {
+  min-height: auto;
 }
 /* ----- END MY ACCOUNT ----- */
 

@@ -4,7 +4,7 @@
   
   var app = angular.module('viewCustom', ['angularLoad']);
   
-  console.log('LATROBE view version 0.1.16.3');
+  console.log('LATROBE view version 0.1.16.4');
   //console.log('includes: LibChat, Browzine, Talis (v2)');
   
   /* -------------------------------------------
@@ -385,7 +385,6 @@
       $scope.observers = {};
 
       $scope.startTour = function() {
-        console.log('START TOUR...');
         $scope.driverObj.drive();
       }
 
@@ -393,8 +392,6 @@
         angularLoad.loadCSS('https://cdnjs.cloudflare.com/ajax/libs/driver.js/1.1.0/driver.css')
         angularLoad.loadScript('https://cdnjs.cloudflare.com/ajax/libs/driver.js/1.1.0/driver.js.iife.js')
           .then(function() {
-            console.log('GUIDED TOUR script loaded')
-            
             // set up the mutation observer
             self.setupObserver("primo-explore");
 
@@ -402,24 +399,18 @@
             self.updateTour();
           })
       } else {
-        // driverJS already loaded, so just update the tour if the URL has changed
-        console.log('Tour controller init...');
-        console.log('$scope.currentUrl: '+$scope.currentUrl);
+        // driverJS already loaded, so just set up the observer and update the tour
+        self.setupObserver("primo-explore");
 
-        //if(!guidedTourObserving) {
-          // set up the tour if there's no mutation observer yet, otherwise leave the update for the observer
-          self.setupObserver("primo-explore");
-
-          self.updateTour();
-        //}
+        self.updateTour();
       }
     };
 
     this.updateTour = function() {
-      console.log('updateTour() for '+window.location.href);
+      //console.log('updateTour() for '+window.location.href);
 
       if(!window.driver?.js?.driver) {
-        console.log('Driver not defined');
+        console.log('DriverJS not defined');
         return;
       }
       
@@ -428,27 +419,21 @@
       // check which search we're on
       if(/\/search\?/.test(window.location.href)) {
         // standard search
+        $scope.tourType = 'library search';
+        
         if(/query/.test(window.location.href)) {
           // results view
           $scope.tourLabel = 'Take a tour of the <strong>Library search results</strong> page.';
 
-          var equivSearchUrl = window.location.href.replace('&mode=simple', '') + '&mode=advanced';
+          var equivSearchUrl = window.location.href.replace('&mode=simple', '').replace('&mode=advanced', '') + '&mode=advanced';
 
           tourSteps = [
             {
-              element: "#mainResults",
-              popover: {
-                title: "Search results",
-                description: "The results of your search are listed on the page.",
-                showButtons: ["next", "close"],
-                side: "top",
-                align: "start"
-              }
-            }, {
               element: "prm-brief-result-container",
               popover: {
-                title: "Item details",
-                description: "Select an item from the results to see its details.",
+                title: "Search results",
+                description: "The results of your search are listed on the page. Select an item from the results to see its details.",
+                showButtons: ["next", "close"],
                 side: "bottom",
                 align: "center"
               }
@@ -479,7 +464,6 @@
               }
             }]
         } else {
-          $scope.tourType = 'library search';
           $scope.tourLabel = 'Take a tour of the <strong>Library search</strong> page.';
 
           tourSteps = [{ 
@@ -494,7 +478,7 @@
             element: ".search-elements-wrapper",
             popover: {
               title: "Search field",
-              description: "Enter the term that you want to search for.",
+              description: "Enter the term that you want to search for. Use the drop-downs to apply filters to your search.",
               side: "bottom",
               align: "center"
             }
@@ -521,6 +505,14 @@
               description: "Use the chat feature to talk with a librarian, or use the 'Help' option in the main menu to access resources and information to help you with your library search.",
               side: "bottom",
               align: "center"
+            }
+          }, {
+            element: "#reportProblem",
+            popover: {
+              title: "Run into an issue?",
+              description: "If you have encountered a problem with a search, resource, or logging in, use this form to report it to the library. ",
+              side: "right",
+              align: "end"
             }
           }, {
             element: "#banner",
@@ -555,19 +547,11 @@
 
           tourSteps = [
             {
-              element: "#mainResults",
-              popover: {
-                title: "Search results",
-                description: "The results of your search are listed on the page.",
-                showButtons: ["next", "close"],
-                side: "left",
-                align: "start"
-              }
-            }, {
               element: "prm-brief-result-container",
               popover: {
-                title: "Item details",
-                description: "Select an item from the results to see its details.",
+                title: "Search results",
+                description: "The results of your search are listed on the page. Select an item from the results to see its details.",
+                showButtons: ["next", "close"],
                 side: "bottom",
                 align: "center"
               }
@@ -663,19 +647,11 @@
 
           tourSteps = [
             {
-              element: "#mainResults",
-              popover: {
-                title: "Search results",
-                description: "The results of your search are listed on the page.",
-                showButtons: ["next", "close"],
-                side: "left",
-                align: "start"
-              }
-            }, {
               element: "prm-brief-result-container",
               popover: {
-                title: "Item details",
-                description: "Select an item from the results to see its details.",
+                title: "Search results",
+                description: "The results of your search are listed on the page. Select an item from the results to see its details.",
+                showButtons: ["next", "close"],
                 side: "bottom",
                 align: "center"
               }
@@ -761,23 +737,15 @@
         var equivSearchUrl = window.location.href.replace('/jsearch', '/search').replace('&tab=jsearch_slot','') + '&facet=rtype,include,journals';
 
         if(/query/.test(window.location.href)) {
-          $scope.tourLabel = 'Take a tour of the <strong>Journal search results</strong> page.';
+          $scope.tourLabel = 'Take a tour of the <strong>E-journal search results</strong> page.';
 
           tourSteps = [
             {
-              element: "#mainResults",
-              popover: {
-                title: "Search results",
-                description: "The results of your search are listed on the page.",
-                showButtons: ["next", "close"],
-                side: "left",
-                align: "start"
-              }
-            }, {
               element: "prm-brief-result-container",
               popover: {
-                title: "Item details",
-                description: "Select an item from the results to see its details.",
+                title: "Search results",
+                description: "The results of your search are listed on the page. Select an item from the results to see its details.",
+                showButtons: ["next", "close"],
                 side: "bottom",
                 align: "center"
               }
@@ -800,7 +768,7 @@
               }
             }]
         } else {
-          $scope.tourLabel = 'Take a tour of the <strong>Journal search</strong> page.';
+          $scope.tourLabel = 'Take a tour of the <strong>E-journal search</strong> page.';
 
           tourSteps = [{ 
             popover: { 
@@ -857,19 +825,11 @@
 
           tourSteps = [
             {
-              element: "#mainResults",
-              popover: {
-                title: "Search results",
-                description: "The results of your search are listed on the page.",
-                showButtons: ["next", "close"],
-                side: "left",
-                align: "start"
-              }
-            }, {
               element: "prm-browse-result",
               popover: {
-                title: "Collection of records",
-                description: "Select an item from the results to see the records it contains.",
+                title: "Search results",
+                description: "The results of your search are listed on the page. Select an item from the results to see the records it contains.",
+                showButtons: ["next", "close"],
                 side: "bottom",
                 align: "center"
               }
@@ -1047,13 +1007,21 @@
                 description: "The personal details that the library stores for your account are displayed here.",
                 showButtons: ["next", "close"],
                 side: "top",
-                align: "start"
+                align: "center"
               }
             }, {
               element: "#personal_settings-focus",
               popover: {
                 title: "Edit details",
                 description: "You can edit the details and notification settings for your library account.",
+                side: "bottom",
+                align: "center",
+              }
+            }, {
+              element: "md-tabs-canvas",
+              popover: {
+                title: "Account sections",
+                description: "Use the tabs to view other aspects of your library account.",
                 side: "bottom",
                 align: "center",
                 popoverClass: 'ltu-tour ltu-end-tour'
@@ -1139,10 +1107,8 @@
         }
 
         // set up a mutation observer for changing tabs
-        self.setupObserver("md-tabs-content-wrapper");
+        self.setupObserver("prm-account-overview md-tabs", true);
       }
-
-      //console.log('$scope.tourType: '+$scope.tourType);
 
       if(tourSteps != null) {
         $scope.driverObj = window.driver.js.driver({
@@ -1155,41 +1121,34 @@
           doneBtnText: "Done",
           steps: tourSteps
         });
-
-        //$scope.tourLabel = 'Take a tour.';
-        //$scope.tourType = window.location.href;
       }
     }
 
-    this.setupObserver = function(qSelector) {
+    this.setupObserver = function(qSelector, checkAttributes = false) {
       // only set up the observer once
       if($scope.observers[qSelector]) {
-        console.log('OBSERVER already set up for '+qSelector)
+        //console.log('OBSERVER already set up for '+qSelector)
         return;
       }
 
       // flag global var that an observer has been set up
       guidedTourObserving = true;
 
-      console.log('set up OBSERVER: '+qSelector);
+      //console.log('set up OBSERVER: '+qSelector);
+
       // add a mutation observer to check when the tour needs to be updated
       var observer = new MutationObserver(() => {
-        console.log('mutation observed... '+qSelector);
-        console.log('$scope.currentUrl: '+$scope.currentUrl);
-        console.log('window.location.href: '+window.location.href);
-        
         // check if the URL has been changed (i.e. interface likely updated)
         if($scope.currentUrl != window.location.href) {
-          console.log("Updating tour...");
           $scope.currentUrl = window.location.href;
           
-          console.log('new stored URL: '+$scope.currentUrl);
           self.updateTour();
         }
       });
       observer.observe(document.querySelector(qSelector), {
         subtree: false,
-        childList: true
+        childList: true,
+        attributes: checkAttributes
       });
 
       $scope.observers[qSelector] = observer;
