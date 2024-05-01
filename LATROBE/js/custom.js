@@ -373,42 +373,45 @@
       '</div>'
   });
 
-  app.controller('GuidedTourController', function($scope, angularLoad) {
-    var self = this;
-
+  app.controller('GuidedTourController', function($scope, $location, angularLoad) {
     this.$onInit = function () {
-      $scope.tourType;
       $scope.tourLabel;
-      $scope.currentUrl;
       $scope.driverObj;
-      $scope.observer;
-      $scope.observers = {};
-
-      $scope.startTour = function() {
-        $scope.driverObj.drive();
-      }
 
       if(!window.driver?.js?.driver) {
+        // load driverJS
         angularLoad.loadCSS('https://cdnjs.cloudflare.com/ajax/libs/driver.js/1.1.0/driver.css')
         angularLoad.loadScript('https://cdnjs.cloudflare.com/ajax/libs/driver.js/1.1.0/driver.js.iife.js')
           .then(function() {
-            // set up the mutation observer
-            self.setupObserver("primo-explore");
-
-            // set up the tour for the first instance
-            self.updateTour();
+            // set up the listener
+            $scope.setupNavigationListener();
           })
       } else {
-        // driverJS already loaded, so just set up the observer and update the tour
-        self.setupObserver("primo-explore");
-
-        self.updateTour();
+        // driverJS already loaded, so just set up the listener
+        $scope.setupNavigationListener();
       }
     };
 
-    this.updateTour = function() {
-      //console.log('updateTour() for '+window.location.href);
+    $scope.startTour = function() {
+      if($scope.driverObj) $scope.driverObj.drive();
+    }
 
+    $scope.setupNavigationListener = function() {
+      // listen for the location change event
+      $scope.$on('$locationChangeStart', function(event, next, current) {
+        console.log('locationChangeStart - next: '+next);
+        
+        // update the tour for the new content
+        $scope.updateTour(next);
+      });
+
+      // update the tour for the initial page content
+      $scope.updateTour();
+    }
+
+    $scope.updateTour = function(url) {
+      if(!url) url = window.location.href;
+      
       if(!window.driver?.js?.driver) {
         console.log('DriverJS not defined');
         return;
@@ -416,12 +419,11 @@
       
       var tourSteps;
       
-      // check which search we're on
-      if(/\/search\?/.test(window.location.href)) {
+      // check which page we're on
+      if(/\/search\?/.test(url)) {
         // standard search
-        $scope.tourType = 'library search';
         
-        if(/query/.test(window.location.href)) {
+        if(/query/.test(url)) {
           // results view
           $scope.tourLabel = 'Take a tour of the <strong>Library search results</strong> page.';
 
@@ -533,17 +535,13 @@
             }
           }]
         }
-
-        // set up a mutation observer for new searches, which update the results section
-        self.setupObserver("prm-explore-main");
-      } else if(/\/dbsearch\?/.test(window.location.href)) {
+      } else if(/\/dbsearch\?/.test(url)) {
         // database search
-        $scope.tourType = 'database search';
-
-        if(/query/.test(window.location.href)) {
+        
+        if(/query/.test(url)) {
           $scope.tourLabel = 'Take a tour of the <strong>Database search results</strong> page.';
 
-          var equivSearchUrl = window.location.href.replace('/dbsearch', '/search').replace('&tab=jsearch_slot','') + '&facet=rtype,include,Databases';
+          var equivSearchUrl = url.replace('/dbsearch', '/search').replace('&tab=jsearch_slot','') + '&facet=rtype,include,Databases';
 
           tourSteps = [
             {
@@ -635,14 +633,10 @@
             }
           }]
         }
-
-        // set up a mutation observer for new searches, which update the results section
-        self.setupObserver("prm-explore-main");
-      } else if(/\/npsearch\?/.test(window.location.href)) {
+      } else if(/\/npsearch\?/.test(url)) {
         // newspaper article search
-        $scope.tourType = 'newspaper article search';
-
-        if(/query/.test(window.location.href)) {
+        
+        if(/query/.test(url)) {
           $scope.tourLabel = 'Take a tour of the <strong>Newspaper search results</strong> page.';
 
           tourSteps = [
@@ -727,16 +721,12 @@
             }
           }]
         }
-
-        // set up a mutation observer for new searches, which update the results section
-        self.setupObserver("prm-explore-main");
-      } else if(/\/jsearch\?/.test(window.location.href)) {
+      } else if(/\/jsearch\?/.test(url)) {
         // journal search
-        $scope.tourType = 'journal search';
+        
+        var equivSearchUrl = url.replace('/jsearch', '/search').replace('&tab=jsearch_slot','') + '&facet=rtype,include,journals';
 
-        var equivSearchUrl = window.location.href.replace('/jsearch', '/search').replace('&tab=jsearch_slot','') + '&facet=rtype,include,journals';
-
-        if(/query/.test(window.location.href)) {
+        if(/query/.test(url)) {
           $scope.tourLabel = 'Take a tour of the <strong>E-journal search results</strong> page.';
 
           tourSteps = [
@@ -813,14 +803,10 @@
             }
           }]
         }
-
-        // set up a mutation observer for new searches, which update the results section
-        self.setupObserver("prm-explore-main");
-      } else if(/\/browse\?/.test(window.location.href)) {
+      } else if(/\/browse\?/.test(url)) {
         // Browse
-        $scope.tourType = 'browse';
-
-        if(/browseQuery/.test(window.location.href)) {
+        
+        if(/browseQuery/.test(url)) {
           $scope.tourLabel = 'Take a tour of the <strong>Browse results</strong> page.';
 
           tourSteps = [
@@ -881,14 +867,10 @@
             }
           }]
         }
-
-        // set up a mutation observer for new searches, which update the results section
-        self.setupObserver("prm-explore-main");
-      } else if(/\/account\?/.test(window.location.href)) {
+      } else if(/\/account\?/.test(url)) {
         // my account
-        $scope.tourType = '\'My account\'';
-
-        if(/section=loans/.test(window.location.href)) {
+        
+        if(/section=loans/.test(url)) {
           $scope.tourLabel = 'Take a tour of the <strong>Loans</strong> tab.';
 
           tourSteps = [
@@ -919,7 +901,7 @@
                 popoverClass: 'ltu-tour ltu-end-tour'
               }
             }]
-        } else if(/section=requests/.test(window.location.href)) {
+        } else if(/section=requests/.test(url)) {
           $scope.tourLabel = 'Take a tour of the <strong>Requests</strong> tab.';
 
           tourSteps = [
@@ -942,7 +924,7 @@
                 popoverClass: 'ltu-tour ltu-end-tour'
               }
             }]
-        } else if(/section=fines/.test(window.location.href)) {
+        } else if(/section=fines/.test(url)) {
           $scope.tourLabel = 'Take a tour of the <strong>Fines</strong> tab.';
 
           tourSteps = [
@@ -973,7 +955,7 @@
                 popoverClass: 'ltu-tour ltu-end-tour'
               }
             }]
-        } else if(/section=blocks_messages/.test(window.location.href)) {
+        } else if(/section=blocks_messages/.test(url)) {
           $scope.tourLabel = 'Take a tour of the <strong>Messages</strong> tab.';
 
           tourSteps = [
@@ -996,7 +978,7 @@
                 popoverClass: 'ltu-tour ltu-end-tour'
               }
             }]
-        } else if(/section=personal_details/.test(window.location.href)) {
+        } else if(/section=personal_details/.test(url)) {
           $scope.tourLabel = 'Take a tour of the <strong>Personal details</strong> tab.';
 
           tourSteps = [
@@ -1105,9 +1087,6 @@
             }
           }]
         }
-
-        // set up a mutation observer for changing tabs
-        self.setupObserver("prm-account-overview md-tabs", true);
       }
 
       if(tourSteps != null) {
@@ -1122,36 +1101,6 @@
           steps: tourSteps
         });
       }
-    }
-
-    this.setupObserver = function(qSelector, checkAttributes = false) {
-      // only set up the observer once
-      if($scope.observers[qSelector]) {
-        //console.log('OBSERVER already set up for '+qSelector)
-        return;
-      }
-
-      // flag global var that an observer has been set up
-      guidedTourObserving = true;
-
-      //console.log('set up OBSERVER: '+qSelector);
-
-      // add a mutation observer to check when the tour needs to be updated
-      var observer = new MutationObserver(() => {
-        // check if the URL has been changed (i.e. interface likely updated)
-        if($scope.currentUrl != window.location.href) {
-          $scope.currentUrl = window.location.href;
-          
-          self.updateTour();
-        }
-      });
-      observer.observe(document.querySelector(qSelector), {
-        subtree: false,
-        childList: true,
-        attributes: checkAttributes
-      });
-
-      $scope.observers[qSelector] = observer;
     }
   });
   // ------------------------------------------- end Guided tour integration
