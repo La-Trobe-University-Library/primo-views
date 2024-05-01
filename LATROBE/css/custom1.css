@@ -1176,6 +1176,33 @@ md-dialog.login-dialog md-list-item._md-button-wrap > div.md-button .md-list-ite
 md-card.login-dialog md-list-item._md-button-wrap > div.md-button .md-list-item-inner {
   min-height: 36px;
 }
+
+.md-button.md-icon-button.icon-button-large prm-icon {
+  left: -10px;
+  line-height: 40px;
+  height: 40px;
+  display: block;
+  width: 40px;
+  top: -8px;
+}
+.md-button.md-icon-button.icon-button-large {
+  top: 4px;
+  margin-top: -15px;
+  color: #fff;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+}
+md-input-container .md-input {
+  border: 1px solid #999;
+}
+md-input-container {
+  margin-bottom: 10px;
+}
+md-card.login-dialog md-dialog-actions button.md-button {
+  border: 1px solid #333;
+}
 /* ----- END LOGIN DIALOG ----- */
 
 
