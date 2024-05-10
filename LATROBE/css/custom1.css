@@ -230,14 +230,15 @@ prm-main-menu[menu-type="menu"] {
   color: var(--ltu-white);
   background: var(--ltu-mid-grey);
 }
-#favorites-button, #qrCodeScanner, #signInBtn,
+#favorites-button, #qrCodeScanner, #signInBtn, #search-button,
 .top-nav-bar prm-user-area-expandable md-menu.md-menu button.md-button {
   color: var(--ltu-dark-grey);
 }
-#favorites-button, #qrCodeScanner, #back-to-top-button {
+#favorites-button, #qrCodeScanner, #back-to-top-button, #search-button {
   background: #fffb;
 }
 #favorites-button:hover, #favorites-button:focus, 
+#search-button:hover, #search-button:focus, 
 #qrCodeScanner:hover, #qrCodeScanner:focus, 
 #back-to-top-button:hover, #back-to-top-button:focus {
   background: #ccc;
@@ -290,13 +291,14 @@ prm-user-area-expandable .button-with-menu-arrow:hover .menu-arrow:hover:not([di
     padding-right: 60px;
     margin-right: 0;
   }
-  prm-search-bookmark-filter #qrCodeScanner, prm-search-bookmark-filter :not(.fixed-to-top) #favorites-button {
+  prm-search-bookmark-filter #qrCodeScanner, prm-search-bookmark-filter :not(.fixed-to-top) #favorites-button, prm-search-bookmark-filter :not(.fixed-to-top) #search-button {
     color: var(--ltu-white);
     background: none;
     transition: none;
   }
   prm-search-bookmark-filter #qrCodeScanner:hover, prm-search-bookmark-filter #qrCodeScanner:focus,
-  prm-search-bookmark-filter :not(.fixed-to-top) #favorites-button:hover, prm-search-bookmark-filter :not(.fixed-to-top) #favorites-button:focus {
+  prm-search-bookmark-filter :not(.fixed-to-top) #favorites-button:hover, prm-search-bookmark-filter :not(.fixed-to-top) #favorites-button:focus,
+  prm-search-bookmark-filter :not(.fixed-to-top) #search-button:hover, prm-search-bookmark-filter :not(.fixed-to-top) #search-button:focus {
     background: var(--ltu-mid-grey);
   }
   prm-user-area .mobile-menu-button {
@@ -856,7 +858,7 @@ div[aria-label="Chat Widget"] > button {
   box-shadow: none;
 }
 div[aria-label="Chat Widget"] > button:hover, div[aria-label="Chat Widget"] > button:focus {
-  background-color: #4d4d4d;
+  background-color: var(--ltu-dark-red);
 }
 div[aria-label="Chat Widget"] > button[aria-label="Offline"],
 div[aria-label="Chat Widget"] > button[aria-label="Offline"]:hover, div[aria-label="Chat Widget"] > button[aria-label="Offline"]:focus {
@@ -895,7 +897,7 @@ prm-report-problem .report-container .report-problem-btn:before {
 }
 prm-report-problem .report-container .md-button.report-problem-btn:hover, 
 prm-report-problem .report-container .md-button.report-problem-btn:focus {
-  background: #666;
+  background: var(--ltu-dark-red);
 }
 prm-report-problem .report-container .report-problem-btn prm-icon md-icon {
   height: 24px;
@@ -913,7 +915,7 @@ prm-report-problem .report-container .report-problem-btn prm-icon md-icon g g pa
 }
 prm-report-problem .report-container .md-button.report-problem-btn:hover prm-icon md-icon g g path, 
 prm-report-problem .report-container .md-button.report-problem-btn:focus prm-icon md-icon g g path {
-  fill: #666 !important;
+  fill: var(--ltu-dark-red) !important;
 }
 .report-problem-content {
   height: 355px;
@@ -934,7 +936,7 @@ prm-report-problem .md-button.button-link {
   border-radius: 0 0 11px 11px;
 }
 prm-report-problem .report-container .md-button.button-link:not(disabled):hover, prm-report-problem .report-container .md-button.button-link:not(disabled):focus {
-  background-color: var(--ltu-mid-grey);
+  background-color: var(--ltu-dark-red);
 }
 .report-problem-content.report-menu-content-desktop {
   box-shadow: 1px 1px 4px #333;
@@ -1214,6 +1216,8 @@ md-card.login-dialog md-dialog-actions button.md-button {
   background: #ffdeab;
   border-bottom: 1px solid #f8961d;
   font-weight: 500;
+  position: relative;
+  z-index: 2;
 }
 .notice .notice-icon, .notice .notice-text {
   display: inline-table;
@@ -1354,6 +1358,84 @@ md-card.login-dialog md-dialog-actions button.md-button {
   border-color: #b51c16;
 }
 /* ----- END GUIDED TOUR ----- */
+
+/* ----- LAUNCH GUIDED TOUR BUTTON ----- */
+prm-topbar-after:has(#tour_button) {
+  position: relative;
+  display: block;
+}
+.header:has(#tour_button) prm-search-bar,
+.header:has(#tour_button) prm-atoz-search-bar,
+.header:has(#tour_button) prm-newspapers-search-bar,
+.header:has(#tour_button) prm-browse-search-bar {
+  padding-top: calc(1.5em + 15px);
+}
+#tour_button {
+  background: #e2231b;
+  color: #fff;
+  padding: 5px 10px 7px;
+  border-radius: 0 0 10px 10px;
+  position: absolute;
+  right: 10px;
+  height: 30px;
+  bottom: 0;
+  transition: none;
+  z-index: 1;
+}
+#tour_button.show {
+  bottom: -30px;
+}
+
+#tour_button:hover, #tour_button:focus {
+  background: var(--ltu-dark-red);
+  box-shadow: 2px 2px 4px rgba(0,0,0,.3);
+  transition: box-shadow .3s ease-in-out;
+}
+#tour_button .icon {
+  margin: 0 5px 0 0;
+  font-size: 1.1em;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.125em;
+}
+
+#tour_button.animate {
+  animation-duration: 0.5s;
+  animation-iteration-count: 1;
+  animation-name: reveal;
+}
+@keyframes reveal {
+  0%   { transform: translateY(-30px); }
+  100%  { transform: translateY(0); }
+}
+
+/* advanved tour GT button */
+prm-advanced-search .md-tab {
+  overflow: visible !important;
+}
+#adv_search_tour {
+  fill: #fff;
+  font-size: 1.5em;
+  position: absolute;
+  right: -10px;
+  top: 1px;
+  background: #e2231b;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+}
+#adv_search_tour:hover {
+  box-shadow: none;
+  background-color: var(--ltu-dark-red);
+}
+#adv_search_tour .icon {
+  font-size: 1.1em;
+  width: 24px;
+  height: 24px;
+  vertical-align: -.125em;
+  margin: 2px;
+}
+/* ----- END LAUNCH GUIDED TOUR BUTTON ----- */
 
 
 /* ----- TWEAKS FOR GUIDED TOUR ----- */

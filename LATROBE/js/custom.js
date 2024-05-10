@@ -4,8 +4,8 @@
   
   var app = angular.module('viewCustom', ['angularLoad']);
   
-  console.log('LATROBE view version 0.1.16.4');
-  //console.log('includes: LibChat, Browzine, Talis (v2)');
+  console.log('LATROBE view version 0.1.17');
+  //console.log('includes: LibChat, Browzine, Talis (v2), guided tours');
   
   /* -------------------------------------------
   / LibChat integration
@@ -365,38 +365,63 @@
     bindings: { parentCtrl: '<' },
     controller: 'GuidedTourController',
     template: 
-      '<div class="notice">'+
+      '<style>:not(body):has(> .driver-active-element) { overflow: inherit !important; }</style>'+
+      '<a id="tour_button" href="" ng-show="tourLabel" ng-click="startTour()" ng-class="{\'animate\':animateButton, \'show\':tourLabel}">'+
+        '<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" style="margin: 0 5px 0 0;font-size: 1.1em;"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M224 32H64C46.3 32 32 46.3 32 64v64c0 17.7 14.3 32 32 32H441.4c4.2 0 8.3-1.7 11.3-4.7l48-48c6.2-6.2 6.2-16.4 0-22.6l-48-48c-3-3-7.1-4.7-11.3-4.7H288c0-17.7-14.3-32-32-32s-32 14.3-32 32zM480 256c0-17.7-14.3-32-32-32H288V192H224v32H70.6c-4.2 0-8.3 1.7-11.3 4.7l-48 48c-6.2 6.2-6.2 16.4 0 22.6l48 48c3 3 7.1 4.7 11.3 4.7H448c17.7 0 32-14.3 32-32V256zM288 480V384H224v96c0 17.7 14.3 32 32 32s32-14.3 32-32z"></path></svg>'+
+        '<span ng-bind-html="tourLabel"></span>'+
+      '</a>'
+      
+      /*'<div class="notice">'+
         '<div class="notice-icon">'+
           '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-info"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="8"></line></svg>'+
         '</div>'+
-        '<div class="notice-text"><p><strong>Note:</strong> This site has been updated. <a id="tour_button" href="" ng-show="tourLabel" ng-click="startTour()" ng-bind-html="tourLabel"></a></p></div>'+
-      '</div>'
+        '<div class="notice-text"><p><strong>Note:</strong> This site has been updated.</p></div>'+
+      '</div>'*/
   });
 
-  app.controller('GuidedTourController', function($scope, $location, angularLoad) {
+  app.controller('GuidedTourController', function($scope, $rootScope, $timeout, angularLoad) {
     this.$onInit = function () {
-      $scope.tourLabel;
       $scope.driverObj;
+      $scope.tourLabel;
+      $scope.tourSteps;
+      $scope.advSearchTourSteps;
+      $scope.animateButton;
+      $scope.timer;
 
       if(!window.driver?.js?.driver) {
         // load driverJS
-        angularLoad.loadCSS('https://cdnjs.cloudflare.com/ajax/libs/driver.js/1.1.0/driver.css')
-        angularLoad.loadScript('https://cdnjs.cloudflare.com/ajax/libs/driver.js/1.1.0/driver.js.iife.js')
+        angularLoad.loadCSS('https://cdnjs.cloudflare.com/ajax/libs/driver.js/1.3.1/driver.css')
+        angularLoad.loadScript('https://cdnjs.cloudflare.com/ajax/libs/driver.js/1.3.1/driver.js.iife.js')
           .then(function() {
-            // set up the listener
-            $scope.setupNavigationListener();
+            // set up the guided tour
+            $scope.setupGuidedTour();
           })
       } else {
-        // driverJS already loaded, so just set up the listener
-        $scope.setupNavigationListener();
+        // driverJS already loaded, so just set it up
+        $scope.setupGuidedTour();
       }
     };
 
     $scope.startTour = function() {
-      if($scope.driverObj) $scope.driverObj.drive();
+      // start the tour (removing any active ones)
+      if($scope.driverObj && $scope.tourSteps) {
+        $scope.driverObj.destroy();
+        $scope.driverObj.setSteps($scope.tourSteps);
+        $scope.driverObj.drive();
+      }
     }
 
-    $scope.setupNavigationListener = function() {
+    $scope.setupGuidedTour = function() {
+      $scope.driverObj = window.driver.js.driver({
+        animate: 0,
+        popoverClass: 'ltu-tour',
+        showProgress: !0,
+        showButtons: ["next", "previous", "close"],
+        nextBtnText: "Next",
+        prevBtnText: "Previous",
+        doneBtnText: "Done"
+      });
+
       // listen for the location change event
       $scope.$on('$locationChangeStart', function(event, next, current) {
         console.log('locationChangeStart - next: '+next);
@@ -405,7 +430,7 @@
         $scope.updateTour(next);
       });
 
-      // update the tour for the initial page content
+      // update the tour for the initial page content 
       $scope.updateTour();
     }
 
@@ -416,8 +441,8 @@
         console.log('DriverJS not defined');
         return;
       }
-      
-      var tourSteps;
+
+      $scope.animateButton = false;
       
       // check which page we're on
       if(/\/search\?/.test(url)) {
@@ -425,11 +450,11 @@
         
         if(/query/.test(url)) {
           // results view
-          $scope.tourLabel = 'Take a tour of the <strong>Library search results</strong> page.';
+          $scope.tourLabel = 'Tour the <strong>Library search results</strong> page';
 
           var equivSearchUrl = window.location.href.replace('&mode=simple', '').replace('&mode=advanced', '') + '&mode=advanced';
 
-          tourSteps = [
+          $scope.tourSteps = [
             {
               element: "prm-brief-result-container",
               popover: {
@@ -466,9 +491,9 @@
               }
             }]
         } else {
-          $scope.tourLabel = 'Take a tour of the <strong>Library search</strong> page.';
+          $scope.tourLabel = 'Tour the <strong>Library search</strong> page';
 
-          tourSteps = [{ 
+          $scope.tourSteps = [{ 
             popover: { 
                 title: 'Welcome to the Library search tour', 
                 description: 'Take a quick tour to view some of the main features available on this site.',
@@ -488,7 +513,7 @@
             element: ".search-switch-buttons button",
             popover: {
               title: "Need more search fields?",
-              description: "Switch between a simple search and an advanced search with more options.",
+              description: "Switch between a simple search and an advanced search that has more options.",
               side: "bottom",
               align: "center"
             }
@@ -512,7 +537,7 @@
             element: "#reportProblem",
             popover: {
               title: "Run into an issue?",
-              description: "If you have encountered a problem with a search, resource, or logging in, use this form to report it to the library. ",
+              description: "If you have encountered a problem with a search, resource, or logging in, select 'Report a problem' to report it to the library. ",
               side: "right",
               align: "end"
             }
@@ -539,11 +564,11 @@
         // database search
         
         if(/query/.test(url)) {
-          $scope.tourLabel = 'Take a tour of the <strong>Database search results</strong> page.';
+          $scope.tourLabel = 'Tour the <strong>Database search results</strong> page';
 
           var equivSearchUrl = url.replace('/dbsearch', '/search').replace('&tab=jsearch_slot','') + '&facet=rtype,include,Databases';
 
-          tourSteps = [
+          $scope.tourSteps = [
             {
               element: "prm-brief-result-container",
               popover: {
@@ -580,9 +605,9 @@
               }
             }]
         } else {
-          $scope.tourLabel = 'Take a tour of the <strong>Database search</strong> page.';
+          $scope.tourLabel = 'Tour the <strong>Database search</strong> page';
 
-          tourSteps = [{ 
+          $scope.tourSteps = [{ 
             popover: { 
                 title: 'Welcome to the database search tour', 
                 description: 'Take a quick tour to view some of the main features available for a database search.',
@@ -637,9 +662,9 @@
         // newspaper article search
         
         if(/query/.test(url)) {
-          $scope.tourLabel = 'Take a tour of the <strong>Newspaper search results</strong> page.';
+          $scope.tourLabel = 'Tour the <strong>Newspaper search results</strong> page';
 
-          tourSteps = [
+          $scope.tourSteps = [
             {
               element: "prm-brief-result-container",
               popover: {
@@ -676,9 +701,9 @@
               }
             }]
         } else {
-          $scope.tourLabel = 'Take a tour of the <strong>Newspaper search</strong> page.';
+          $scope.tourLabel = 'Tour the <strong>Newspaper search</strong> page';
           
-          tourSteps = [{ 
+          $scope.tourSteps = [{ 
             popover: { 
                 title: 'Welcome to the newspaper article search tour', 
                 description: 'Take a quick tour to view some of the main features available for a newspaper article search.',
@@ -727,9 +752,9 @@
         var equivSearchUrl = url.replace('/jsearch', '/search').replace('&tab=jsearch_slot','') + '&facet=rtype,include,journals';
 
         if(/query/.test(url)) {
-          $scope.tourLabel = 'Take a tour of the <strong>E-journal search results</strong> page.';
+          $scope.tourLabel = 'Tour the <strong>E-journal search results</strong> page';
 
-          tourSteps = [
+          $scope.tourSteps = [
             {
               element: "prm-brief-result-container",
               popover: {
@@ -758,9 +783,9 @@
               }
             }]
         } else {
-          $scope.tourLabel = 'Take a tour of the <strong>E-journal search</strong> page.';
+          $scope.tourLabel = 'Tour the <strong>E-journal search</strong> page';
 
-          tourSteps = [{ 
+          $scope.tourSteps = [{ 
             popover: { 
                 title: 'Welcome to the journal search tour', 
                 description: 'Take a quick tour to view some of the main features available for a journal search.',
@@ -807,9 +832,9 @@
         // Browse
         
         if(/browseQuery/.test(url)) {
-          $scope.tourLabel = 'Take a tour of the <strong>Browse results</strong> page.';
+          $scope.tourLabel = 'Tour the <strong>Browse results</strong> page';
 
-          tourSteps = [
+          $scope.tourSteps = [
             {
               element: "prm-browse-result",
               popover: {
@@ -830,9 +855,9 @@
               }
             }]
         } else {
-          $scope.tourLabel = 'Take a tour of the <strong>Browse</strong> page.';
+          $scope.tourLabel = 'Tour the <strong>Browse</strong> page';
 
-          tourSteps = [{ 
+          $scope.tourSteps = [{ 
             popover: { 
                 title: 'Welcome to the browse tour', 
                 description: 'Take a quick tour to view some of the main features available when browsing.',
@@ -871,9 +896,9 @@
         // my account
         
         if(/section=loans/.test(url)) {
-          $scope.tourLabel = 'Take a tour of the <strong>Loans</strong> tab.';
+          $scope.tourLabel = 'Tour the <strong>Loans</strong> tab';
 
-          tourSteps = [
+          $scope.tourSteps = [
             {
               element: "md-tab-content.md-active",
               popover: {
@@ -902,9 +927,9 @@
               }
             }]
         } else if(/section=requests/.test(url)) {
-          $scope.tourLabel = 'Take a tour of the <strong>Requests</strong> tab.';
+          $scope.tourLabel = 'Tour the <strong>Requests</strong> tab';
 
-          tourSteps = [
+          $scope.tourSteps = [
             {
               element: "md-tab-content.md-active",
               popover: {
@@ -925,9 +950,9 @@
               }
             }]
         } else if(/section=fines/.test(url)) {
-          $scope.tourLabel = 'Take a tour of the <strong>Fines</strong> tab.';
+          $scope.tourLabel = 'Tour the <strong>Fines</strong> tab';
 
-          tourSteps = [
+          $scope.tourSteps = [
             {
               element: "md-tab-content.md-active",
               popover: {
@@ -956,9 +981,9 @@
               }
             }]
         } else if(/section=blocks_messages/.test(url)) {
-          $scope.tourLabel = 'Take a tour of the <strong>Messages</strong> tab.';
+          $scope.tourLabel = 'Tour the <strong>Messages</strong> tab';
 
-          tourSteps = [
+          $scope.tourSteps = [
             {
               element: "md-tab-content.md-active",
               popover: {
@@ -979,9 +1004,9 @@
               }
             }]
         } else if(/section=personal_details/.test(url)) {
-          $scope.tourLabel = 'Take a tour of the <strong>Personal details</strong> tab.';
+          $scope.tourLabel = 'Tour the <strong>Personal details</strong> tab';
 
-          tourSteps = [
+          $scope.tourSteps = [
             {
               element: "md-tab-content.md-active",
               popover: {
@@ -1010,9 +1035,9 @@
               }
             }]
         } else {
-          $scope.tourLabel = 'Take a tour of the <strong>My account</strong> page.';
+          $scope.tourLabel = 'Tour the <strong>My account</strong> page';
 
-          tourSteps = [{ 
+          $scope.tourSteps = [{ 
             popover: { 
                 title: 'Welcome to the \'My account\' tour', 
                 description: 'Take a quick tour to view some of the main features available in your account.',
@@ -1087,19 +1112,279 @@
             }
           }]
         }
+      } else if(/\/favorites\?/.test(url)) {
+        // My favourites
+
+        if(/section=queries/.test(url)) {
+          $scope.tourLabel = 'Tour the <strong>Saved searches</strong> tab';
+
+          $scope.tourSteps = [
+            {
+              element: "md-tab-content.md-active md-list",
+              popover: {
+                title: "Your saved searches",
+                description: "Any searches that you have saved are listed here. Select the search term to perform that search again.",
+                showButtons: ["next", "close"],
+                side: "top",
+                align: "start"
+              }
+            },
+            {
+              element: "button[aria-label='Set an RSS for this search']",
+              popover: {
+                title: "RSS feed",
+                description: "An RSS feed of results is available for each saved search.",
+                side: "left",
+                align: "center"
+              }
+            },
+            {
+              element: "button[aria-label*='lert For this saved search']",
+              popover: {
+                title: "Set an alert",
+                description: "You can opt to receive email alerts when there is an update to a saved search query. Select the alert button again to remove that alert.",
+                side: "top",
+                align: "center"
+              }
+            },
+            {
+              element: "md-tab-content.md-active button[aria-label='Remove Saved Search']",
+              popover: {
+                title: "Remove a saved search",
+                description: "You can 'unpin' a search to remove it from your saved searches.",
+                side: "top",
+                align: "center",
+                popoverClass: 'ltu-tour ltu-end-tour'
+              }
+            }];
+        } else if(/section=search_history/.test(url)) {
+          $scope.tourLabel = 'Tour the <strong>Search history</strong> tab';
+
+          $scope.tourSteps = [
+            {
+              element: "md-tab-content.md-active md-list",
+              popover: {
+                title: "Your previous searches",
+                description: "Any searches that you have performed are listed here. Select the search term to perform that search again.",
+                showButtons: ["next", "close"],
+                side: "top",
+                align: "start"
+              }
+            },
+            {
+              element: "md-tab-content.md-active button[aria-label='Add this search']",
+              popover: {
+                title: "Add to saved searches",
+                description: "If you're signed in, you can add a search from your history to your saved searches.",
+                side: "left",
+                align: "start"
+              }
+            },            
+            {
+              element: "md-tab-content.md-active button[aria-label='Remove this search']",
+              popover: {
+                title: "Remove a saved search",
+                description: "You can remove searches from your search history.",
+                side: "top",
+                align: "center",
+                popoverClass: 'ltu-tour ltu-end-tour'
+              }
+            }];
+        } else {
+          $scope.tourLabel = 'Tour the <strong>My favourites</strong> page';
+
+          $scope.tourSteps = [
+            {
+              element: "md-tab-item:has([translate='nui.favorites.records.tabheader'])",
+              popover: {
+                title: "Your saved records",
+                description: "Any item that you have added to your favourites is listed under the 'Saved records' tab.",
+                showButtons: ["next", "close"],
+                side: "top",
+                align: "start"
+              }
+            },
+            {
+              element: "md-tab-content.md-active prm-search-result-list .search-within",
+              popover: {
+                title: "Search within your favourites",
+                description: "You can search to find an item within your favourites.",
+                side: "right",
+                align: "start"
+              }
+            },
+            {
+              element: "md-tab-content.md-active  md-list-item .unpin-button",
+              popover: {
+                title: "Remove from your favourites",
+                description: "You can 'unpin' an item to remove it from your favourites.",
+                side: "right",
+                align: "start"
+              }
+            }, 
+            {
+              element: "md-tab-content.md-active prm-favorites-edit-labels-menu button",
+              popover: {
+                title: "Label your favourites",
+                description: "You can add labels to your saved items to categorise them. It will make finding them again easier.",
+                side: "right",
+                align: "start"
+              }
+            },
+            {
+              element: "prm-favorites-labels .sidebar-inner-wrapper",
+              popover: {
+                title: "Filter by label",
+                description: "Select a label to only show saved items that have that label applied.",
+                side: "left",
+                align: "start"
+              }
+            },
+            {
+              element: "md-tab-item:has([translate='nui.favorites.search.tabheader'])",
+              popover: {
+                title: "Your saved searches",
+                description: "If you're signed in, any queries that you have saved are listed under the 'Saved searches' tab.",
+                side: "top",
+                align: "center"
+              }
+            },
+            {
+              element: "md-tab-item:has([translate='nui.favorites.history.tabheader'])",
+              popover: {
+                title: "Your search history",
+                description: "Your previously used search queries are listed under the 'Search history' tab.",
+                side: "bottom",
+                align: "center",
+                popoverClass: 'ltu-tour ltu-end-tour'
+              }
+            }
+          ];
+        }
+      } else {
+        $scope.tourLabel = null;
       }
 
-      if(tourSteps != null) {
-        $scope.driverObj = window.driver.js.driver({
-          animate: 0,
-          popoverClass: 'ltu-tour',
-          showProgress: !0,
-          showButtons: ["next", "previous", "close"],
-          nextBtnText: "Next",
-          prevBtnText: "Previous",
-          doneBtnText: "Done",
-          steps: tourSteps
+      if($scope.tourLabel != null) {
+        // animate the button if the type of tour has changed
+        $scope.animateButton = $rootScope.tourLabel != $scope.tourLabel;
+        $rootScope.tourLabel = $scope.tourLabel;      
+        console.log('animate tour button: '+$scope.animateButton);
+
+        if($scope.animateButton) {
+          // remove the 'animate' class after the animation would have finished
+          $timeout.cancel($scope.timer);
+          $scope.timer = $timeout(function(e){
+            $scope.animateButton = false;
+          }, 550);
+        }
+      }
+
+      if(/mode=advanced/.test(url)) {
+        // add another guided tour specifically for the advanced search
+        
+        // remove any previous GT btn
+        var prevGTBtn = document.getElementById("adv_search_tour");
+        if(prevGTBtn) prevGTBtn.remove();
+
+        // create a link/button to launch the tour
+        var div = document.createElement('div');
+        div.innerHTML = '<a href="" id="adv_search_tour" title="Tour the advanced search"><svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M464 256A208 208 0 1 0 48 256a208 208 0 1 0 416 0zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm169.8-90.7c7.9-22.3 29.1-37.3 52.8-37.3h58.3c34.9 0 63.1 28.3 63.1 63.1c0 22.6-12.1 43.5-31.7 54.8L280 264.4c-.2 13-10.9 23.6-24 23.6c-13.3 0-24-10.7-24-24V250.5c0-8.6 4.6-16.5 12.1-20.8l44.3-25.4c4.7-2.7 7.6-7.7 7.6-13.1c0-8.4-6.8-15.1-15.1-15.1H222.6c-3.4 0-6.4 2.1-7.5 5.3l-.4 1.2c-4.4 12.5-18.2 19-30.6 14.6s-19-18.2-14.6-30.6l.4-1.2zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"/></svg></a>';
+        var btn = div.firstElementChild;
+
+        // set up the tour steps
+        $scope.advSearchTourSteps = [
+          {
+            popover: {
+              title: "Using the advanced search",
+              description: "The advanced search lets you specify more search criteria to narrow down the results that are returned.",
+              showButtons: ["next", "close"],
+              side: "top",
+              align: "center"
+            }
+          }, {
+            element: "prm-advanced-search md-input-container:has([translate='search-advanced.scopes.label'])",
+            popover: {
+              title: "Set the scope",
+              description: "If you want to limit your search to either physical or online resources, select that option here.",
+              showButtons: ["next", "close"],
+              side: "bottom",
+              align: "center"
+            }
+          }, {
+            element: "prm-advanced-search md-select:has([translate='search-advanced.scope.option.nui.advanced.index.any']",
+            popover: {
+              title: "Specify a field",
+              description: "To search in a specific field (e.g. title or subject), you can select it here.",
+              side: "top",
+              align: "center"
+            }
+          }, {
+            element: "prm-advanced-search md-select:has([translate='search-advanced.precisionOperator.option.contains']",
+            popover: {
+              title: "Specify the precision",
+              description: "Select whether the field should contain, match exactly, or begin with your search term.",
+              side: "top",
+              align: "center"
+            }
+          }, {
+            element: "prm-advanced-search input[aria-label^='Type Search Query for complex line number']",
+            popover: {
+              title: "Add your search term",
+              description: "Enter the search term for this line here.",
+              side: "top",
+              align: "center"
+            }
+          }, {
+            element: "prm-advanced-search div:has(> button[aria-label='Add a new line'])",
+            popover: {
+              title: "Add another line",
+              description: "You can add up to seven lines in your search query.",
+              side: "top",
+              align: "center"
+            }
+          }, {
+            element: "prm-advanced-search .advanced-drop-downs",
+            popover: {
+              title: "Apply filters",
+              description: "You can apply filters to limit the results to certain types (e.g. Articles or Databases), languages, and date of publication.",
+              side: "left",
+              align: "center",
+            }
+          }, {
+            element: "prm-advanced-search button.button-confirm",
+            popover: {
+              title: "Perform the search",
+              description: "When you have prepared all the search filters and terms, select 'Search' to view the results of your query. Note that you will be able to apply additional filters to narrow down the search results after performing the search.",
+              side: "top",
+              align: "center",
+              popoverClass: 'ltu-tour ltu-end-tour'
+            }
+          }];
+        
+        btn.addEventListener("click", function(e) {
+          e.preventDefault();
+          console.log('CLICK')
+          // expand the advanced search (if it's collapsed)
+          var expBtn = document.querySelector("prm-advanced-search .collapsed-button[aria-expanded='false']");
+          if(expBtn) expBtn.click();
+
+          // start the tour (removing any active ones)
+          if($scope.driverObj && $scope.advSearchTourSteps) {
+            $scope.driverObj.destroy();
+            $scope.driverObj.setSteps($scope.advSearchTourSteps);
+            $scope.driverObj.drive();
+          }
         });
+
+        // set a timeout as the advanced tab may not be there straight away
+        setTimeout(function() {
+          // add the button to the tab
+          var tab = document.querySelector("prm-advanced-search md-tab-item");
+          console.log('Add adv tour - '+(tab != null))
+          
+          if(tab) tab.appendChild(btn);
+        }, 200);
       }
     }
   });
