@@ -1277,6 +1277,9 @@
           $scope.timer = $timeout(function(e){
             $scope.animateButton = false;
           }, 550);
+
+          // check whether the tour should be launched automatically (via a URL param)
+          if(/startTour=1/.test(url)) $scope.startTour();
         }
       }
 
