@@ -316,6 +316,27 @@ prm-user-area-expandable .button-with-menu-arrow:hover .menu-arrow:hover:not([di
 }
 /* ----- END HEADER ----- */
 
+/* ----- 3-DOT MENU ----- */
+prm-main-menu[menu-type="full"] .custom-links-container .main-menu-button .transparent-card {
+  padding: 15px 10px;
+}
+prm-main-menu[menu-type="full"] .md-headline {
+  color: #e84f49 !important;
+}
+prm-main-menu[menu-type="full"] .main-menu-button a:hover .md-headline, prm-main-menu[menu-type="full"] .main-menu-button a:focus .md-headline {
+  color: #e2231b !important;
+}
+prm-main-menu[menu-type="full"] .main-menu-button a:hover .md-subhead, prm-main-menu[menu-type="full"] .main-menu-button a:focus .md-subhead {
+  color: #242424 !important;
+}
+prm-main-menu[menu-type="full"] .md-button:hover,prm-main-menu[menu-type="full"] .md-button:focus {
+  color: #b51c16 !important;
+}
+prm-main-menu[menu-type="full"] .close-button:hover md-icon, prm-main-menu[menu-type="full"] .close-button:focus md-icon {
+  color: #b51c16 !important;
+}
+/* ----- END 3-DOT MENU ----- */
+
 /* ----- SEARCH BAR ----- */
 prm-search-bar, .__sm prm-search-bar,
 prm-atoz-search-bar, .__sm prm-atoz-search-bar,
@@ -400,6 +421,11 @@ prm-search-bar .search-switch-buttons .md-button.switch-to-simple
 prm-search-bar .search-switch-buttons .md-button.switch-to-advanced > span,
 prm-search-bar .search-switch-buttons .md-button.switch-to-simple > span {
   flex-direction: column;
+}
+prm-search-bar .search-switch-buttons .md-button.switch-to-advanced:hover, 
+prm-search-bar .search-switch-buttons .md-button.switch-to-advanced:focus {
+  background-color: #3a3a3a !important;
+  color: #fff !important;
 }
 prm-alphabet-toolbar .md-button {
   color: var(--ltu-red);
@@ -632,6 +658,10 @@ prm-saved-queries-list md-list-item .md-list-item-text a:hover, prm-saved-querie
 }
 .__xs prm-full-view prm-brief-result-container .list-item-primary-content {
   padding-left: 0 !important;
+}
+.fixed-position.fixed-bottom, md-toolbar.bottom-fixed-toolbar, md-toolbar.bottom-fixed-toolbar:not(.md-menu-toolbar), md-toolbar.md-primoExplore-theme.bottom-fixed-toolbar {
+  width: calc(100% - 80px);
+  right: 80px;
 }
 
 #services-index button {
@@ -1398,7 +1428,7 @@ prm-topbar-after:has(#tour_button) {
   text-overflow: ellipsis;
   overflow: hidden;
   max-width: calc(100% - 20px);
-  z-index: 1;
+  z-index: -1;
 }
 #tour_button.show {
   bottom: -30px;
