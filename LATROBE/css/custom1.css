@@ -687,6 +687,17 @@ prm-search > .layout-row {
   margin: 0 auto !important;
 }
 
+prm-databases-categorize .databases-categories {
+  min-width: 280px !important;
+}
+
+.facet-to-left prm-page-nav-menu #speedDialWidget {
+  right: calc(1.15em + 8px);
+}
+.facet-to-left prm-page-nav-menu #speedDialWidget .counter-nav, .facet-to-left prm-page-nav-menu #speedDialWidget .page-nav-inner:after {
+  right: 0;
+}
+
 /* bookmarked item */
 .list-item-wrapper .item-bookmarked {
   background-color: transparent;
@@ -1252,6 +1263,9 @@ md-card.login-dialog md-dialog-actions button.md-button {
 
 
 /* ----- GUIDED TOUR ----- */
+.driver-popover * {
+  font-family: 'dm sans';
+}
 .driver-popover.ltu-tour {
   max-width: 400px;
   min-width: 350px;
@@ -1331,7 +1345,7 @@ md-card.login-dialog md-dialog-actions button.md-button {
   background-image: url(https://www.latrobe.edu.au/__data/assets/git_bridge/0004/1094422/_ltu-components/dist/css/icons/feather/check.svg);
 }
 .ltu-tour.ltu-begin-tour .driver-popover-navigation-btns button.driver-popover-next-btn:not(.no-icon):after {
-  content: none;
+  /*content: none;*/
 }
 .ltu-tour .driver-popover-close-btn {
   line-height: 30px;
@@ -1380,6 +1394,10 @@ prm-topbar-after:has(#tour_button) {
   height: 30px;
   bottom: 0;
   transition: none;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: calc(100% - 20px);
   z-index: 1;
 }
 #tour_button.show {

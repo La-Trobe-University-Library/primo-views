@@ -450,25 +450,49 @@
         
         if(/query/.test(url)) {
           // results view
-          $scope.tourLabel = 'Tour the <strong>Library search results</strong> page';
+          $scope.tourLabel = 'Tour the <strong>Library collections</strong> search results page';
 
-          var equivSearchUrl = window.location.href.replace('&mode=simple', '').replace('&mode=advanced', '') + '&mode=advanced';
+          var advSearchUrl = window.location.href.replace('&mode=simple', '').replace('&mode=advanced', '').replace('&startTour=1', '') + '&mode=advanced';
 
           $scope.tourSteps = [
             {
               element: "prm-brief-result-container",
               popover: {
-                title: "Search results",
-                description: "The results of your search are listed on the page. Select an item from the results to see its details.",
+                title: "Library collections search results",
+                description: "The results of your library collections search are listed on the page. Select an item from the results to see its details.",
                 showButtons: ["next", "close"],
                 side: "bottom",
+                align: "center"
+              }
+            }, {
+              element: ".result-item-actions prm-save-to-favorites-button",
+              popover: {
+                title: "Save to favourites",
+                description: "You can save an item to your favourites to make it easier to find again.",
+                side: "right",
+                align: "center"
+              }
+            }, {
+              element: ".result-item-actions button[data-qa='open_up_front_Citation_action']",
+              popover: {
+                title: "View citation formats",
+                description: "If you need to cite an item, select its citation button to view its details in various standard formats.",
+                side: "right",
+                align: "center"
+              }
+            }, {
+              element: "#personalizationBtn",
+              popover: {
+                title: "Personalise your results",
+                description: "You can specify your preferred disciplines to have relevant items listed higher in the search results.",
+                side: "right",
                 align: "center"
               }
             }, {
               element: "prm-facet:has(.sidebar-section)",
               popover: {
                 title: "Narrow your results",
-                description: "Apply filters (such as 'Resource type' and 'Location') to narrow down your search.",
+                description: "Apply filters (such as 'Peer-reviewed' and 'Resource type') to narrow down your search. You can also 'Search beyond our collection' to include results from other libraries.",
                 side: "right",
                 align: "center"
               }
@@ -483,29 +507,53 @@
             }, {
               element: ".search-wrapper",
               popover: {
-                title: "Search fields",
-                description: "If you didn't get the results that you were after, try a new search. You can always add more search parameters using an <a href='"+equivSearchUrl+"'>Advanced search</a>.",
+                title: "Search form",
+                description: "If you didn't get the results that you were after, try a new search. You can always add more search parameters using an <a href='"+advSearchUrl+"'>Advanced search</a>.",
+                side: "bottom",
+                align: "center"
+              }
+            }, {
+              element: ".s-lch-widget-float-btn",
+              popover: {
+                title: "Need help?",
+                description: "Use the chat feature to talk with a librarian, or use the 'Help' option in the main menu to access resources and information to help you with your library search.",
+                side: "bottom",
+                align: "center"
+              }
+            }, {
+              element: "#reportProblem",
+              popover: {
+                title: "Ran into an issue?",
+                description: "If you have encountered a problem with a search, resource, or logging in, select 'Report a problem' to report it to the library. ",
+                side: "right",
+                align: "end"
+              }
+            }, {
+              element: "#banner",
+              popover: {
+                title: "Library website",
+                description: "To return to the library website, select the La Trobe University logo.",
                 side: "bottom",
                 align: "center",
                 popoverClass: 'ltu-tour ltu-end-tour'
               }
             }]
         } else {
-          $scope.tourLabel = 'Tour the <strong>Library search</strong> page';
+          $scope.tourLabel = 'Tour the <strong>Library collections</strong> search page';
 
           $scope.tourSteps = [{ 
             popover: { 
-                title: 'Welcome to the Library search tour', 
-                description: 'Take a quick tour to view some of the main features available on this site.',
-                nextBtnText: "Let's begin!",
+                title: 'Welcome to the Library collections search', 
+                description: "This search allows you to find any resource within the library's many collections.",
+                //nextBtnText: "Let's begin!",
                 showButtons: ["next", "close"],
                 popoverClass: 'ltu-tour ltu-begin-tour'
             }
           }, {
             element: ".search-elements-wrapper",
             popover: {
-              title: "Search field",
-              description: "Enter the term that you want to search for. Use the drop-downs to apply filters to your search.",
+              title: "Search form",
+              description: "<p>Enter the term that you want to search for. Use the drop-downs to apply filters to your search.</p><p>You can also 'Search by voice' in supported web browsers (Chrome or Edge are recommended).</p>",
               side: "bottom",
               align: "center"
             }
@@ -513,15 +561,23 @@
             element: ".search-switch-buttons button",
             popover: {
               title: "Need more search fields?",
-              description: "Switch between a simple search and an advanced search that has more options.",
+              description: "Switch between a simple search and an advanced search that lets you specify more filters and criteria.",
+              side: "bottom",
+              align: "center"
+            }
+          }, {
+            element: "#favorites-button",
+            popover: {
+              title: "View your favourites",
+              description: "If you have saved any items or searches to your favourites, you can view them via this button.",
               side: "bottom",
               align: "center"
             }
           }, {
             element: "prm-user-area-expandable",
             popover: {
-              title: "Access your account",
-              description: "Use these menu items to sign in and view your library account. Access your account to view the status of any loans or requests for library resources.",
+              title: "Your library account",
+              description: "Sign in to access your library account, where you can view the status of any loans or requests for library resources.",
               side: "bottom",
               align: "center"
             }
@@ -536,7 +592,7 @@
           }, {
             element: "#reportProblem",
             popover: {
-              title: "Run into an issue?",
+              title: "Ran into an issue?",
               description: "If you have encountered a problem with a search, resource, or logging in, select 'Report a problem' to report it to the library. ",
               side: "right",
               align: "end"
@@ -564,9 +620,9 @@
         // database search
         
         if(/query/.test(url)) {
-          $scope.tourLabel = 'Tour the <strong>Database search results</strong> page';
+          $scope.tourLabel = 'Tour the <strong>Databases</strong> search results page';
 
-          var equivSearchUrl = url.replace('/dbsearch', '/search').replace('&tab=jsearch_slot','') + '&facet=rtype,include,Databases';
+          var stdSearchUrl = url.replace('/dbsearch', '/search').replace('&tab=jsearch_slot','').replace('&startTour=1', '') + '&facet=rtype,include,Databases';
 
           $scope.tourSteps = [
             {
@@ -576,6 +632,22 @@
                 description: "The results of your search are listed on the page. Select an item from the results to see its details.",
                 showButtons: ["next", "close"],
                 side: "bottom",
+                align: "center"
+              }
+            }, {
+              element: ".result-item-actions prm-save-to-favorites-button",
+              popover: {
+                title: "Save to favourites",
+                description: "You can save an item to your favourites to make it easier to find again.",
+                side: "right",
+                align: "center"
+              }
+            }, {
+              element: ".result-item-actions button[data-qa='open_up_front_Citation_action']",
+              popover: {
+                title: "View citation formats",
+                description: "If you need to cite an item, select its citation button to view its details in various standard formats.",
+                side: "right",
                 align: "center"
               }
             }, {
@@ -597,21 +669,53 @@
             }, {
               element: "prm-atoz-search-bar .layout-row[role='search'] > .layout-column",
               popover: {
-                title: "Search field",
-                description: "If you didn't get the results that you were after, try a new search. You can also try a <a href='"+equivSearchUrl+"'>search using the standard library search</a>.",
+                title: "Search form",
+                description: "<p>If you didn't get the results that you were after, try a new search term or select a letter/number to search databases whose name begins with that character.</p><p>You can also try searching the <a href='"+stdSearchUrl+"'>library collections</a>, which will allow you to apply filters to narrow down your results.</p>",
+                side: "bottom",
+                align: "center"
+              }
+            }, {
+              element: ".databases-categories",
+              popover: {
+                title: "Database categories",
+                description: "You can browse categories to see a list of relevant databases. Select the arrow next to a category to see any sub-categories.",
+                side: "top",
+                align: "start"
+              }
+            }, {
+              element: ".s-lch-widget-float-btn",
+              popover: {
+                title: "Need help?",
+                description: "Use the chat feature to talk with a librarian, or use the 'Help' option in the main menu to access resources and information to help you with your library search.",
+                side: "bottom",
+                align: "center"
+              }
+            }, {
+              element: "#reportProblem",
+              popover: {
+                title: "Ran into an issue?",
+                description: "If you have encountered a problem with a search, resource, or logging in, select 'Report a problem' to report it to the library. ",
+                side: "right",
+                align: "end"
+              }
+            }, {
+              element: "#banner",
+              popover: {
+                title: "Library website",
+                description: "To return to the library website, select the La Trobe University logo.",
                 side: "bottom",
                 align: "center",
                 popoverClass: 'ltu-tour ltu-end-tour'
               }
             }]
         } else {
-          $scope.tourLabel = 'Tour the <strong>Database search</strong> page';
+          $scope.tourLabel = 'Tour the <strong>Databases</strong> search page';
 
           $scope.tourSteps = [{ 
             popover: { 
-                title: 'Welcome to the database search tour', 
-                description: 'Take a quick tour to view some of the main features available for a database search.',
-                nextBtnText: "Let's begin!",
+                title: 'Welcome to the databases search', 
+                description: "This search allows you to find databases within the library's many collections.",
+                //nextBtnText: "Let's begin!",
                 showButtons: ["next", "close"],
                 popoverClass: 'ltu-tour ltu-begin-tour'
             }
@@ -640,6 +744,22 @@
               align: "start"
             }
           }, {
+            element: ".s-lch-widget-float-btn",
+            popover: {
+              title: "Need help?",
+              description: "Use the chat feature to talk with a librarian, or use the 'Help' option in the main menu to access resources and information to help you with your library search.",
+              side: "bottom",
+              align: "center"
+            }
+          }, {
+            element: "#reportProblem",
+            popover: {
+              title: "Ran into an issue?",
+              description: "If you have encountered a problem with a search, resource, or logging in, select 'Report a problem' to report it to the library. ",
+              side: "right",
+              align: "end"
+            }
+          }, {
             element: "#banner",
             popover: {
               title: "Library website",
@@ -662,7 +782,7 @@
         // newspaper article search
         
         if(/query/.test(url)) {
-          $scope.tourLabel = 'Tour the <strong>Newspaper search results</strong> page';
+          $scope.tourLabel = 'Tour the <strong>Newspaper articles</strong> search results page';
 
           $scope.tourSteps = [
             {
@@ -672,6 +792,22 @@
                 description: "The results of your search are listed on the page. Select an item from the results to see its details.",
                 showButtons: ["next", "close"],
                 side: "bottom",
+                align: "center"
+              }
+            }, {
+              element: ".result-item-actions prm-save-to-favorites-button",
+              popover: {
+                title: "Save to favourites",
+                description: "You can save an item to your favourites to make it easier to find again.",
+                side: "right",
+                align: "center"
+              }
+            }, {
+              element: ".result-item-actions button[data-qa='open_up_front_Citation_action']",
+              popover: {
+                title: "View citation formats",
+                description: "If you need to cite an item, select its citation button to view its details in various standard formats.",
+                side: "right",
                 align: "center"
               }
             }, {
@@ -696,18 +832,41 @@
                 title: "Search field",
                 description: "If you didn't get the results that you were after, try searching for a different term.",
                 side: "bottom",
+                align: "center"
+              }
+            }, {
+              element: ".s-lch-widget-float-btn",
+              popover: {
+                title: "Need help?",
+                description: "Use the chat feature to talk with a librarian, or use the 'Help' option in the main menu to access resources and information to help you with your library search.",
+                side: "bottom",
+                align: "center"
+              }
+            }, {
+              element: "#reportProblem",
+              popover: {
+                title: "Ran into an issue?",
+                description: "If you have encountered a problem with a search, resource, or logging in, select 'Report a problem' to report it to the library. ",
+                side: "right",
+                align: "end"
+              }
+            }, {
+              element: "#banner",
+              popover: {
+                title: "Library website",
+                description: "To return to the library website, select the La Trobe University logo.",
+                side: "bottom",
                 align: "center",
                 popoverClass: 'ltu-tour ltu-end-tour'
               }
             }]
         } else {
-          $scope.tourLabel = 'Tour the <strong>Newspaper search</strong> page';
+          $scope.tourLabel = 'Tour the <strong>Newspaper articles</strong> search page';
           
           $scope.tourSteps = [{ 
             popover: { 
-                title: 'Welcome to the newspaper article search tour', 
-                description: 'Take a quick tour to view some of the main features available for a newspaper article search.',
-                nextBtnText: "Let's begin!",
+                title: 'Welcome to the newspaper articles search', 
+                description: "This search allows you to find newspaper articles within the library's collections.",
                 showButtons: ["next", "close"],
                 popoverClass: 'ltu-tour ltu-begin-tour'
             }
@@ -720,12 +879,28 @@
               align: "center"
             }
           }, {
-            element: "[ng-if='$ctrl.displayFeaturedNewspapers()']",
+            element: "prm-newspapers-home div:has(> .newspapers-card-container)",
             popover: {
               title: "Featured newspapers",
               description: "You may limit your search to within one of the featured newspapers.",
               side: "top",
               align: "center"
+            }
+          }, {
+            element: ".s-lch-widget-float-btn",
+            popover: {
+              title: "Need help?",
+              description: "Use the chat feature to talk with a librarian, or use the 'Help' option in the main menu to access resources and information to help you with your library search.",
+              side: "bottom",
+              align: "center"
+            }
+          }, {
+            element: "#reportProblem",
+            popover: {
+              title: "Ran into an issue?",
+              description: "If you have encountered a problem with a search, resource, or logging in, select 'Report a problem' to report it to the library. ",
+              side: "right",
+              align: "end"
             }
           }, {
             element: "#banner",
@@ -749,10 +924,10 @@
       } else if(/\/jsearch\?/.test(url)) {
         // journal search
         
-        var equivSearchUrl = url.replace('/jsearch', '/search').replace('&tab=jsearch_slot','') + '&facet=rtype,include,journals';
+        var stdJSearchUrl = url.replace('/jsearch', '/search').replace('&tab=jsearch_slot','').replace('&startTour=1', '') + '&facet=rtype,include,journals';
 
         if(/query/.test(url)) {
-          $scope.tourLabel = 'Tour the <strong>E-journal search results</strong> page';
+          $scope.tourLabel = 'Tour the <strong>E-journals</strong> search results page';
 
           $scope.tourSteps = [
             {
@@ -776,20 +951,20 @@
               element: "prm-atoz-search-bar .layout-row[role='search'] > .layout-column",
               popover: {
                 title: "Search field",
-                description: "If you didn't get the results that you were after, try a new search. You can also try a <a href='"+equivSearchUrl+"'>search using the standard library search</a>.",
+                description: "If you didn't get the results that you were after, try a new search. You can also try a <a href='"+stdJSearchUrl+"'>search using the standard library search</a>.",
                 side: "bottom",
                 align: "center",
                 popoverClass: 'ltu-tour ltu-end-tour'
               }
             }]
         } else {
-          $scope.tourLabel = 'Tour the <strong>E-journal search</strong> page';
+          $scope.tourLabel = 'Tour the <strong>E-journals</strong> search page';
 
           $scope.tourSteps = [{ 
             popover: { 
                 title: 'Welcome to the journal search tour', 
                 description: 'Take a quick tour to view some of the main features available for a journal search.',
-                nextBtnText: "Let's begin!",
+                //nextBtnText: "Let's begin!",
                 showButtons: ["next", "close"],
                 popoverClass: 'ltu-tour ltu-begin-tour'
             }
@@ -845,6 +1020,14 @@
                 align: "center"
               }
             }, {
+              element: "#speedDialWidget",
+              popover: {
+                title: "There's more",
+                description: "Use the pagination buttons to move between pages of results.",
+                side: "left",
+                align: "center"
+              }
+            }, {
               element: ".search-elements-wrapper",
               popover: {
                 title: "Search field",
@@ -859,19 +1042,35 @@
 
           $scope.tourSteps = [{ 
             popover: { 
-                title: 'Welcome to the browse tour', 
-                description: 'Take a quick tour to view some of the main features available when browsing.',
-                nextBtnText: "Let's begin!",
+                title: 'Welcome to the browse search', 
+                description: "This search allows you to find a range of resources that are similar in a specific way (e.g. that have a simliar title, or have a similar call number).",
+                //nextBtnText: "Let's begin!",
                 showButtons: ["next", "close"],
                 popoverClass: 'ltu-tour ltu-begin-tour'
             }
           }, {
             element: ".search-elements-wrapper",
             popover: {
-              title: "Search field",
-              description: "Enter the term that you want to search for.",
+              title: "Search form",
+              description: "<p>Enter the term that you want to search for. Select the drop-down to specify which field to use for the search.</p><p>Browsing by call number will provide a list of items that would normally appear on the shelf next to the call number that you specify.</p>",
               side: "bottom",
               align: "center"
+            }
+          }, {
+            element: ".s-lch-widget-float-btn",
+            popover: {
+              title: "Need help?",
+              description: "Use the chat feature to talk with a librarian, or use the 'Help' option in the main menu to access resources and information to help you with your library search.",
+              side: "bottom",
+              align: "center"
+            }
+          }, {
+            element: "#reportProblem",
+            popover: {
+              title: "Ran into an issue?",
+              description: "If you have encountered a problem with a search, resource, or logging in, select 'Report a problem' to report it to the library. ",
+              side: "right",
+              align: "end"
             }
           }, {
             element: "#banner",
@@ -903,7 +1102,7 @@
               element: "md-tab-content.md-active",
               popover: {
                 title: "Your loans",
-                description: "Any loans that you have are listed here.",
+                description: "Any loans that you have are listed here. You can see their due dates and renew to extend the loan period.",
                 showButtons: ["next", "close"],
                 side: "top",
                 align: "start"
@@ -912,7 +1111,7 @@
               element: "#loans-focus",
               popover: {
                 title: "View active or previous loans",
-                description: "Use this drop-down to view any previous loans your have made.",
+                description: "Use this drop-down to view any previous loans you have made.",
                 side: "right",
                 align: "start"
               }
@@ -934,7 +1133,7 @@
               element: "md-tab-content.md-active",
               popover: {
                 title: "Your requests",
-                description: "Any requests for library resources that you have made are listed here.",
+                description: "Any requests for library resources that you have made are listed here. You can also cancel any requests if you need to.",
                 showButtons: ["next", "close"],
                 side: "top",
                 align: "start"
@@ -1039,9 +1238,9 @@
 
           $scope.tourSteps = [{ 
             popover: { 
-                title: 'Welcome to the \'My account\' tour', 
+                title: "Welcome to 'My account'", 
                 description: 'Take a quick tour to view some of the main features available in your account.',
-                nextBtnText: "Let's begin!",
+                //nextBtnText: "Let's begin!",
                 showButtons: ["next", "close"],
                 popoverClass: 'ltu-tour ltu-begin-tour'
             }
