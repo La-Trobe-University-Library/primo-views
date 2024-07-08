@@ -321,6 +321,26 @@
 
 
   /* -------------------------------------------
+  / Google Analytics
+  ------------------------------------------- */
+  // add the GA4 script to the <head>
+  var ga4Script = document.createElement("script");
+  ga4Script.src = "https://www.googletagmanager.com/gtag/js?id=G-DZJSBPP4TG";
+  window.document.head.appendChild(ga4Script);
+
+  // add the GTAG function to the <body>
+  var gtagScript = document.createElement("script");
+  var scriptText = "window.dataLayer = window.dataLayer || []; "+
+    "function gtag(){dataLayer.push(arguments);}"+
+    "gtag('js', new Date());"+
+    "gtag('config', 'G-DZJSBPP4TG');";
+  gtagScript.innerHTML = scriptText;
+  window.document.body.insertBefore(gtagScript, window.document.body.firstChild);  
+  // ------------------------------------------- end Google Analytics
+
+
+
+  /* -------------------------------------------
   / Scaling iframes' height to match their responsive width
   /
   / If an iframe has the class 'maintain-aspect-ratio', the width & height attributes will determine its aspect ratio.
@@ -360,29 +380,23 @@
   /* -------------------------------------------
   / Guided tour integration
   ------------------------------------------- */
-  var guidedTourObserving = false;
   app.component('prmTopbarAfter', {
     bindings: { parentCtrl: '<' },
     controller: 'GuidedTourController',
     template: 
-      '<style>:not(body):has(> .driver-active-element) { overflow: inherit !important; }</style>'+
       '<a id="tour_button" href="" ng-show="tourLabel" ng-click="startTour()" ng-class="{\'animate\':animateButton, \'show\':tourLabel}">'+
         '<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" style="margin: 0 5px 0 0;font-size: 1.1em;"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M224 32H64C46.3 32 32 46.3 32 64v64c0 17.7 14.3 32 32 32H441.4c4.2 0 8.3-1.7 11.3-4.7l48-48c6.2-6.2 6.2-16.4 0-22.6l-48-48c-3-3-7.1-4.7-11.3-4.7H288c0-17.7-14.3-32-32-32s-32 14.3-32 32zM480 256c0-17.7-14.3-32-32-32H288V192H224v32H70.6c-4.2 0-8.3 1.7-11.3 4.7l-48 48c-6.2 6.2-6.2 16.4 0 22.6l48 48c3 3 7.1 4.7 11.3 4.7H448c17.7 0 32-14.3 32-32V256zM288 480V384H224v96c0 17.7 14.3 32 32 32s32-14.3 32-32z"></path></svg>'+
         '<span ng-bind-html="tourLabel"></span>'+
       '</a>'
-      
-      /*'<div class="notice">'+
-        '<div class="notice-icon">'+
-          '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-info"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="8"></line></svg>'+
-        '</div>'+
-        '<div class="notice-text"><p><strong>Note:</strong> This site has been updated.</p></div>'+
-      '</div>'*/
   });
 
   app.controller('GuidedTourController', function($scope, $rootScope, $timeout, angularLoad) {
     this.$onInit = function () {
       $scope.driverObj;
       $scope.tourLabel;
+      $scope.tourType = '';
+      $scope.stepsTaken = '';
+      $scope.tourStartTime;
       $scope.tourSteps;
       $scope.advSearchTourSteps;
       $scope.animateButton;
@@ -402,24 +416,55 @@
       }
     };
 
-    $scope.startTour = function() {
-      // start the tour (removing any active ones)
-      if($scope.driverObj && $scope.tourSteps) {
-        $scope.driverObj.destroy();
-        $scope.driverObj.setSteps($scope.tourSteps);
-        $scope.driverObj.drive();
-      }
-    }
-
     $scope.setupGuidedTour = function() {
       $scope.driverObj = window.driver.js.driver({
-        animate: 0,
+        animate: false,
+        disableActiveInteraction: true,
         popoverClass: 'ltu-tour',
-        showProgress: !0,
+        showProgress: true,
         showButtons: ["next", "previous", "close"],
         nextBtnText: "Next",
         prevBtnText: "Previous",
-        doneBtnText: "Done"
+        doneBtnText: "Done",
+        onHighlighted: function(element, step, options) {
+          //console.log('GT - onHighlighted');
+
+          // add this step to the record of steps taken
+          if($scope.stepsTaken != '') $scope.stepsTaken += ',';
+          $scope.stepsTaken += options.state.activeIndex;
+
+          // track in GA4
+          gtag("event", "guided_tour_step", {
+            tour_label: $scope.tourLabel.replaceAll('<strong>','').replaceAll('</strong>',''),
+            tour_type: $scope.tourType,
+            steps_taken: $scope.stepsTaken,
+            step_title: step.popover.title,
+            step_index: options.state.activeIndex,
+            step_element: step.element,
+            page_location: window.location.href
+          });
+        },
+        onDestroyStarted: function(element, step, options) {
+          //console.log('GT - onDestroyStarted');
+
+          var endTime = Date.now();
+          var duration = (endTime - $scope.tourStartTime) / 1000; // in seconds
+          
+          // track in GA4
+          gtag("event", "guided_tour_exited", {
+            tour_label: $scope.tourLabel.replaceAll('<strong>','').replaceAll('</strong>',''),
+            tour_type: $scope.tourType,
+            tour_duration: duration,
+            steps_taken: $scope.stepsTaken,
+            step_title: step.popover.title,
+            step_index: options.state.activeIndex,
+            step_element: step.element,
+            page_location: window.location.href
+          });
+
+          // actually destroy the tour
+          $scope.driverObj.destroy();
+        }
       });
 
       // listen for the location change event
@@ -432,6 +477,36 @@
 
       // update the tour for the initial page content 
       $scope.updateTour();
+    }
+
+    $scope.startTour = function() {
+      // start the tour (removing any active ones)
+      if($scope.driverObj && $scope.tourSteps) {
+        //console.log('GT - START TOUR: '+$scope.tourLabel);
+        
+        // clear any existing tour
+        $scope.driverObj.destroy();
+        
+        // clear the record of steps taken
+        $scope.stepsTaken = '';
+
+        // set the type of tour (i.e. general or advanced search)
+        $scope.tourType = 'general';
+
+        // record the time the tour started
+        $scope.tourStartTime = Date.now();
+
+        // track in GA4
+        gtag("event", "guided_tour_started", {
+          tour_label: $scope.tourLabel.replaceAll('<strong>','').replaceAll('</strong>',''),
+          tour_type: $scope.tourType,
+          page_location: window.location.href
+        });
+
+        // start the tour
+        $scope.driverObj.setSteps($scope.tourSteps);
+        $scope.driverObj.drive();
+      }
     }
 
     $scope.updateTour = function(url) {
@@ -449,7 +524,7 @@
       var isMobileView = document.querySelector('primo-explore.__xs') != null;
 
       // time (in ms) to allow for the menu to open/close when navigating to next/prev step
-      var menuDelay = 100;
+      var menuDelay = 200;
       
       // check which page we're on
       if(/\/search\?/.test(url)) {
@@ -592,7 +667,7 @@
             },
             // FOLLOWING ELEMENT IS ON THE PAGE
             {
-              element: "#banner",
+              element: "#logoImage",
               popover: {
                 title: "Library website",
                 description: "To return to the library website, select the La Trobe University logo.",
@@ -634,15 +709,40 @@
               element: isMobileView ? "prm-topbar button.mobile-menu-button" : "#more-links-button",
               popover: {
                 title: "Check the menu",
-                description: "<p>Select the '3-dot' menu item to view the full main menu.</p><p>Note that when you're in 'mobile' view, some options that are usually on the page (e.g. the 'Advanced search') are instead within this menu.</p>",
+                description: "<p>The main menu lets you change the type of search you're performing (e.g. search all collections, databases, or newspaper articles) as well as allowing you to request items from another library.</p><p>Select the '3-dot' menu item to view the full main menu.</p><p>Note that when you're in 'mobile' view, some options that are usually on the page (e.g. the 'Advanced search') are within this menu instead.</p>",
                 side: "bottom",
-                align: "center"
+                align: "center",
+                popoverClass: 'ltu-tour ltu-tour-wide'
               }
             }, {
               element: ".search-elements-wrapper",
               popover: {
                 title: "Search form",
                 description: "<p>Enter the term that you want to search for. Use the drop-downs to apply filters to your search.</p><p>You can also 'Search by voice' in supported web browsers (Chrome or Edge are recommended).</p>",
+                side: "bottom",
+                align: "center"
+              }
+            }, {
+              element: "md-select[aria-label^='Select search scope']",
+              popover: {
+                title: "Online or physical?",
+                description: "<p>If you would like to restrict your search to only online resources or only physical ones, select the appropriate option in this drop-down.</p>",
+                side: "bottom",
+                align: "center"
+              }
+            }, {
+              element: "#select_21",
+              popover: {
+                title: "Resource type",
+                description: "<p>You can specify the type of resource you're searching for using this drop-down. You will also be able to apply additional filters after performing a search.</p>",
+                side: "bottom",
+                align: "center"
+              }
+            }, {
+              element: "#select_35",
+              popover: {
+                title: "Search field",
+                description: "<p>If you want to search only within a specific field, you can specify it in this drop-down. Leave it as 'anywhere in the record' to broaden your search.</p>",
                 side: "bottom",
                 align: "center",
                 onNextClick: function(element, step, options) {
@@ -807,7 +907,7 @@
             },
             // FOLLOWING ELEMENTS ARE ON THE PAGE
             {
-              element: "#banner",
+              element: "#logoImage",
               popover: {
                 title: "Library website",
                 description: "To return to the library website, select the La Trobe University logo.",
@@ -901,7 +1001,7 @@
                 align: "center"
               }
             }, {
-              element: ".databases-categories",
+              element: isMobileView ? "button:has([translate='nui.dbcategories.mobileCategories'])" : ".databases-categories",
               popover: {
                 title: "Database categories",
                 description: "You can browse categories to see a list of relevant databases. Select the arrow next to a category to see any sub-categories.",
@@ -914,24 +1014,92 @@
                 title: "Need help?",
                 description: "Use the chat feature to talk with a librarian, or use the 'Help' option in the main menu to access resources and information to help you with your library search.",
                 side: "bottom",
-                align: "center"
+                align: "center",
+                onNextClick: function(element, step, options) {
+                  if(isMobileView) {
+                    // we want to open the menu so we can highlight the next element
+                    var menuBtn = document.querySelector('prm-topbar button.mobile-menu-button');
+                    if(menuBtn) menuBtn.click();
+
+                    // allow time for the menu to show
+                    setTimeout(function() {
+                      // continue to the next step
+                      $scope.driverObj.moveNext();
+                    }, menuDelay); 
+                  } else {
+                    // continue to the next step
+                    $scope.driverObj.moveNext();
+                  }
+                }
               }
-            }, {
-              element: "#reportProblem",
+            },
+            // FOLLOWING ELEMENT IS EITHER IN MENU OR ON THE PAGE
+            {
+              element: isMobileView ? "prm-main-menu[menu-type='full'] button:has([translate='report.Title'])" : "#reportProblem",
               popover: {
                 title: "Ran into an issue?",
                 description: "If you have encountered a problem with a search, resource, or logging in, select 'Report a problem' to report it to the library. ",
                 side: "right",
-                align: "end"
+                align: "end",
+                onPrevClick: function(element, step, options) {
+                  if(isMobileView) {
+                    // we want to close the menu so we can highlight the previous element
+                    var closeBtn = document.querySelector('#mainMenuFullCloseButton');
+                    if(closeBtn) closeBtn.click();
+
+                    // allow time for the menu to hide
+                    setTimeout(function() {
+                      // go back to the previous step
+                      $scope.driverObj.movePrevious();
+                    }, menuDelay);
+                  } else {
+                    // go back to the previous step
+                    $scope.driverObj.movePrevious();
+                  }
+                },
+                onNextClick: function(element, step, options) {
+                  if(isMobileView) {
+                    // we want to close the menu so we can highlight the next element
+                    var closeBtn = document.querySelector('#mainMenuFullCloseButton');
+                    if(closeBtn) closeBtn.click();
+
+                    // allow time for the menu to hide
+                    setTimeout(function() {
+                      // continue to the next step
+                      $scope.driverObj.moveNext();
+                    }, menuDelay); 
+                  } else {
+                    // continue to the next step
+                    $scope.driverObj.moveNext();
+                  }
+                }
               }
-            }, {
-              element: "#banner",
+            },
+            // FOLLOWING ELEMENT IS ON THE PAGE
+            {
+              element: "#logoImage",
               popover: {
                 title: "Library website",
                 description: "To return to the library website, select the La Trobe University logo.",
                 side: "bottom",
                 align: "center",
-                popoverClass: 'ltu-tour ltu-end-tour'
+                popoverClass: 'ltu-tour ltu-end-tour',
+                onPrevClick: function(element, step, options) {
+                  if(isMobileView) {
+                    // we want to open the menu so we can highlight the next element
+                    var menuBtn = document.querySelector('prm-topbar button.mobile-menu-button');
+                    if(menuBtn) menuBtn.click();
+
+                    // allow time for the menu to hide
+                    setTimeout(function() {
+                      // go back to the previous step
+                      $scope.driverObj.movePrevious();
+                    }, menuDelay);
+                  } else {
+                    // go back to the previous step
+                    $scope.driverObj.movePrevious();
+                  }
+                }
               }
             }]
         } else {
@@ -962,7 +1130,7 @@
               align: "center"
             }
           }, {
-            element: ".databases-categories",
+            element: isMobileView ? "button:has([translate='nui.dbcategories.mobileCategories'])" : ".databases-categories",
             popover: {
               title: "Database categories",
               description: "Browse by database category. Select the arrow next to a category to see any sub-categories.",
@@ -975,23 +1143,91 @@
               title: "Need help?",
               description: "Use the chat feature to talk with a librarian, or use the 'Help' option in the main menu to access resources and information to help you with your library search.",
               side: "bottom",
-              align: "center"
+              align: "center",
+              onNextClick: function(element, step, options) {
+                if(isMobileView) {
+                  // we want to open the menu so we can highlight the next element
+                  var menuBtn = document.querySelector('prm-topbar button.mobile-menu-button');
+                  if(menuBtn) menuBtn.click();
+
+                  // allow time for the menu to show
+                  setTimeout(function() {
+                    // continue to the next step
+                    $scope.driverObj.moveNext();
+                  }, menuDelay); 
+                } else {
+                  // continue to the next step
+                  $scope.driverObj.moveNext();
+                }
+              }
             }
-          }, {
-            element: "#reportProblem",
+          },
+          // FOLLOWING ELEMENT IS EITHER IN MENU OR ON THE PAGE
+          {
+            element: isMobileView ? "prm-main-menu[menu-type='full'] button:has([translate='report.Title'])" : "#reportProblem",
             popover: {
               title: "Ran into an issue?",
               description: "If you have encountered a problem with a search, resource, or logging in, select 'Report a problem' to report it to the library. ",
               side: "right",
-              align: "end"
+              align: "end",
+              onPrevClick: function(element, step, options) {
+                if(isMobileView) {
+                  // we want to close the menu so we can highlight the previous element
+                  var closeBtn = document.querySelector('#mainMenuFullCloseButton');
+                  if(closeBtn) closeBtn.click();
+
+                  // allow time for the menu to hide
+                  setTimeout(function() {
+                    // go back to the previous step
+                    $scope.driverObj.movePrevious();
+                  }, menuDelay);
+                } else {
+                  // go back to the previous step
+                  $scope.driverObj.movePrevious();
+                }
+              },
+              onNextClick: function(element, step, options) {
+                if(isMobileView) {
+                  // we want to close the menu so we can highlight the next element
+                  var closeBtn = document.querySelector('#mainMenuFullCloseButton');
+                  if(closeBtn) closeBtn.click();
+
+                  // allow time for the menu to hide
+                  setTimeout(function() {
+                    // continue to the next step
+                    $scope.driverObj.moveNext();
+                  }, menuDelay); 
+                } else {
+                  // continue to the next step
+                  $scope.driverObj.moveNext();
+                }
+              }
             }
-          }, {
-            element: "#banner",
+          },
+          // FOLLOWING ELEMENT IS ON THE PAGE
+          {
+            element: "#logoImage",
             popover: {
               title: "Library website",
               description: "To return to the library website, select the La Trobe University logo.",
               side: "bottom",
-              align: "center"
+              align: "center",
+              onPrevClick: function(element, step, options) {
+                if(isMobileView) {
+                  // we want to open the menu so we can highlight the next element
+                  var menuBtn = document.querySelector('prm-topbar button.mobile-menu-button');
+                  if(menuBtn) menuBtn.click();
+
+                  // allow time for the menu to hide
+                  setTimeout(function() {
+                    // go back to the previous step
+                    $scope.driverObj.movePrevious();
+                  }, menuDelay);
+                } else {
+                  // go back to the previous step
+                  $scope.driverObj.movePrevious();
+                }
+              }
             }
           }, {
             element: "#tour_button",
@@ -1037,7 +1273,7 @@
                 align: "center"
               }
             }, {
-              element: "prm-facet",
+              element: isMobileView ? "button[aria-label='Narrow my results']" : "prm-facet",
               popover: {
                 title: "Narrow your results",
                 description: "Apply filters (such as 'Date' and 'Subject') to narrow down your search.",
@@ -1066,24 +1302,92 @@
                 title: "Need help?",
                 description: "Use the chat feature to talk with a librarian, or use the 'Help' option in the main menu to access resources and information to help you with your library search.",
                 side: "bottom",
-                align: "center"
+                align: "center",
+                onNextClick: function(element, step, options) {
+                  if(isMobileView) {
+                    // we want to open the menu so we can highlight the next element
+                    var menuBtn = document.querySelector('prm-topbar button.mobile-menu-button');
+                    if(menuBtn) menuBtn.click();
+
+                    // allow time for the menu to show
+                    setTimeout(function() {
+                      // continue to the next step
+                      $scope.driverObj.moveNext();
+                    }, menuDelay); 
+                  } else {
+                    // continue to the next step
+                    $scope.driverObj.moveNext();
+                  }
+                }
               }
-            }, {
-              element: "#reportProblem",
+            },
+            // FOLLOWING ELEMENT IS EITHER IN MENU OR ON THE PAGE
+            {
+              element: isMobileView ? "prm-main-menu[menu-type='full'] button:has([translate='report.Title'])" : "#reportProblem",
               popover: {
                 title: "Ran into an issue?",
                 description: "If you have encountered a problem with a search, resource, or logging in, select 'Report a problem' to report it to the library. ",
                 side: "right",
-                align: "end"
+                align: "end",
+                onPrevClick: function(element, step, options) {
+                  if(isMobileView) {
+                    // we want to close the menu so we can highlight the previous element
+                    var closeBtn = document.querySelector('#mainMenuFullCloseButton');
+                    if(closeBtn) closeBtn.click();
+
+                    // allow time for the menu to hide
+                    setTimeout(function() {
+                      // go back to the previous step
+                      $scope.driverObj.movePrevious();
+                    }, menuDelay);
+                  } else {
+                    // go back to the previous step
+                    $scope.driverObj.movePrevious();
+                  }
+                },
+                onNextClick: function(element, step, options) {
+                  if(isMobileView) {
+                    // we want to close the menu so we can highlight the next element
+                    var closeBtn = document.querySelector('#mainMenuFullCloseButton');
+                    if(closeBtn) closeBtn.click();
+
+                    // allow time for the menu to hide
+                    setTimeout(function() {
+                      // continue to the next step
+                      $scope.driverObj.moveNext();
+                    }, menuDelay); 
+                  } else {
+                    // continue to the next step
+                    $scope.driverObj.moveNext();
+                  }
+                }
               }
-            }, {
-              element: "#banner",
+            },
+            // FOLLOWING ELEMENT IS ON THE PAGE
+            {
+              element: "#logoImage",
               popover: {
                 title: "Library website",
                 description: "To return to the library website, select the La Trobe University logo.",
                 side: "bottom",
                 align: "center",
-                popoverClass: 'ltu-tour ltu-end-tour'
+                popoverClass: 'ltu-tour ltu-end-tour',
+                onPrevClick: function(element, step, options) {
+                  if(isMobileView) {
+                    // we want to open the menu so we can highlight the next element
+                    var menuBtn = document.querySelector('prm-topbar button.mobile-menu-button');
+                    if(menuBtn) menuBtn.click();
+
+                    // allow time for the menu to hide
+                    setTimeout(function() {
+                      // go back to the previous step
+                      $scope.driverObj.movePrevious();
+                    }, menuDelay);
+                  } else {
+                    // go back to the previous step
+                    $scope.driverObj.movePrevious();
+                  }
+                }
               }
             }]
         } else {
@@ -1118,23 +1422,91 @@
               title: "Need help?",
               description: "Use the chat feature to talk with a librarian, or use the 'Help' option in the main menu to access resources and information to help you with your library search.",
               side: "bottom",
-              align: "center"
+              align: "center",
+              onNextClick: function(element, step, options) {
+                if(isMobileView) {
+                  // we want to open the menu so we can highlight the next element
+                  var menuBtn = document.querySelector('prm-topbar button.mobile-menu-button');
+                  if(menuBtn) menuBtn.click();
+
+                  // allow time for the menu to show
+                  setTimeout(function() {
+                    // continue to the next step
+                    $scope.driverObj.moveNext();
+                  }, menuDelay); 
+                } else {
+                  // continue to the next step
+                  $scope.driverObj.moveNext();
+                }
+              }
             }
-          }, {
-            element: "#reportProblem",
+          },
+          // FOLLOWING ELEMENT IS EITHER IN MENU OR ON THE PAGE
+          {
+            element: isMobileView ? "prm-main-menu[menu-type='full'] button:has([translate='report.Title'])" : "#reportProblem",
             popover: {
               title: "Ran into an issue?",
               description: "If you have encountered a problem with a search, resource, or logging in, select 'Report a problem' to report it to the library. ",
               side: "right",
-              align: "end"
+              align: "end",
+              onPrevClick: function(element, step, options) {
+                if(isMobileView) {
+                  // we want to close the menu so we can highlight the previous element
+                  var closeBtn = document.querySelector('#mainMenuFullCloseButton');
+                  if(closeBtn) closeBtn.click();
+
+                  // allow time for the menu to hide
+                  setTimeout(function() {
+                    // go back to the previous step
+                    $scope.driverObj.movePrevious();
+                  }, menuDelay);
+                } else {
+                  // go back to the previous step
+                  $scope.driverObj.movePrevious();
+                }
+              },
+              onNextClick: function(element, step, options) {
+                if(isMobileView) {
+                  // we want to close the menu so we can highlight the next element
+                  var closeBtn = document.querySelector('#mainMenuFullCloseButton');
+                  if(closeBtn) closeBtn.click();
+
+                  // allow time for the menu to hide
+                  setTimeout(function() {
+                    // continue to the next step
+                    $scope.driverObj.moveNext();
+                  }, menuDelay); 
+                } else {
+                  // continue to the next step
+                  $scope.driverObj.moveNext();
+                }
+              }
             }
-          }, {
-            element: "#banner",
+          },
+          // FOLLOWING ELEMENT IS ON THE PAGE
+          {
+            element: "#logoImage",
             popover: {
               title: "Library website",
               description: "To return to the library website, select the La Trobe University logo.",
               side: "bottom",
-              align: "center"
+              align: "center",
+              onPrevClick: function(element, step, options) {
+                if(isMobileView) {
+                  // we want to open the menu so we can highlight the next element
+                  var menuBtn = document.querySelector('prm-topbar button.mobile-menu-button');
+                  if(menuBtn) menuBtn.click();
+
+                  // allow time for the menu to hide
+                  setTimeout(function() {
+                    // go back to the previous step
+                    $scope.driverObj.movePrevious();
+                  }, menuDelay);
+                } else {
+                  // go back to the previous step
+                  $scope.driverObj.movePrevious();
+                }
+              }
             }
           }, {
             element: "#tour_button",
@@ -1211,7 +1583,7 @@
               align: "center"
             }
           }, {
-            element: "#banner",
+            element: "#logoImage",
             popover: {
               title: "Library website",
               description: "To return to the library website, select the La Trobe University logo.",
@@ -1259,8 +1631,100 @@
                 title: "Search field",
                 description: "If you didn't get the results that you were after, try a different search term.",
                 side: "bottom",
+                align: "center"
+              }
+            }, {
+              element: ".s-lch-widget-float-btn",
+              popover: {
+                title: "Need help?",
+                description: "Use the chat feature to talk with a librarian, or use the 'Help' option in the main menu to access resources and information to help you with your library search.",
+                side: "bottom",
                 align: "center",
-                popoverClass: 'ltu-tour ltu-end-tour'
+                onNextClick: function(element, step, options) {
+                  if(isMobileView) {
+                    // we want to open the menu so we can highlight the next element
+                    var menuBtn = document.querySelector('prm-topbar button.mobile-menu-button');
+                    if(menuBtn) menuBtn.click();
+
+                    // allow time for the menu to show
+                    setTimeout(function() {
+                      // continue to the next step
+                      $scope.driverObj.moveNext();
+                    }, menuDelay); 
+                  } else {
+                    // continue to the next step
+                    $scope.driverObj.moveNext();
+                  }
+                }
+              }
+            },
+            // FOLLOWING ELEMENT IS EITHER IN MENU OR ON THE PAGE
+            {
+              element: isMobileView ? "prm-main-menu[menu-type='full'] button:has([translate='report.Title'])" : "#reportProblem",
+              popover: {
+                title: "Ran into an issue?",
+                description: "If you have encountered a problem with a search, resource, or logging in, select 'Report a problem' to report it to the library. ",
+                side: "right",
+                align: "end",
+                onPrevClick: function(element, step, options) {
+                  if(isMobileView) {
+                    // we want to close the menu so we can highlight the previous element
+                    var closeBtn = document.querySelector('#mainMenuFullCloseButton');
+                    if(closeBtn) closeBtn.click();
+
+                    // allow time for the menu to hide
+                    setTimeout(function() {
+                      // go back to the previous step
+                      $scope.driverObj.movePrevious();
+                    }, menuDelay);
+                  } else {
+                    // go back to the previous step
+                    $scope.driverObj.movePrevious();
+                  }
+                },
+                onNextClick: function(element, step, options) {
+                  if(isMobileView) {
+                    // we want to close the menu so we can highlight the next element
+                    var closeBtn = document.querySelector('#mainMenuFullCloseButton');
+                    if(closeBtn) closeBtn.click();
+
+                    // allow time for the menu to hide
+                    setTimeout(function() {
+                      // continue to the next step
+                      $scope.driverObj.moveNext();
+                    }, menuDelay); 
+                  } else {
+                    // continue to the next step
+                    $scope.driverObj.moveNext();
+                  }
+                }
+              }
+            },
+            // FOLLOWING ELEMENT IS ON THE PAGE
+            {
+              element: "#logoImage",
+              popover: {
+                title: "Library website",
+                description: "To return to the library website, select the La Trobe University logo.",
+                side: "bottom",
+                align: "center",
+                popoverClass: 'ltu-tour ltu-end-tour',
+                onPrevClick: function(element, step, options) {
+                  if(isMobileView) {
+                    // we want to open the menu so we can highlight the next element
+                    var menuBtn = document.querySelector('prm-topbar button.mobile-menu-button');
+                    if(menuBtn) menuBtn.click();
+
+                    // allow time for the menu to hide
+                    setTimeout(function() {
+                      // go back to the previous step
+                      $scope.driverObj.movePrevious();
+                    }, menuDelay);
+                  } else {
+                    // go back to the previous step
+                    $scope.driverObj.movePrevious();
+                  }
+                }
               }
             }]
         } else {
@@ -1288,23 +1752,91 @@
               title: "Need help?",
               description: "Use the chat feature to talk with a librarian, or use the 'Help' option in the main menu to access resources and information to help you with your library search.",
               side: "bottom",
-              align: "center"
+              align: "center",
+              onNextClick: function(element, step, options) {
+                if(isMobileView) {
+                  // we want to open the menu so we can highlight the next element
+                  var menuBtn = document.querySelector('prm-topbar button.mobile-menu-button');
+                  if(menuBtn) menuBtn.click();
+
+                  // allow time for the menu to show
+                  setTimeout(function() {
+                    // continue to the next step
+                    $scope.driverObj.moveNext();
+                  }, menuDelay); 
+                } else {
+                  // continue to the next step
+                  $scope.driverObj.moveNext();
+                }
+              }
             }
-          }, {
-            element: "#reportProblem",
+          },
+          // FOLLOWING ELEMENT IS EITHER IN MENU OR ON THE PAGE
+          {
+            element: isMobileView ? "prm-main-menu[menu-type='full'] button:has([translate='report.Title'])" : "#reportProblem",
             popover: {
               title: "Ran into an issue?",
               description: "If you have encountered a problem with a search, resource, or logging in, select 'Report a problem' to report it to the library. ",
               side: "right",
-              align: "end"
+              align: "end",
+              onPrevClick: function(element, step, options) {
+                if(isMobileView) {
+                  // we want to close the menu so we can highlight the previous element
+                  var closeBtn = document.querySelector('#mainMenuFullCloseButton');
+                  if(closeBtn) closeBtn.click();
+
+                  // allow time for the menu to hide
+                  setTimeout(function() {
+                    // go back to the previous step
+                    $scope.driverObj.movePrevious();
+                  }, menuDelay);
+                } else {
+                  // go back to the previous step
+                  $scope.driverObj.movePrevious();
+                }
+              },
+              onNextClick: function(element, step, options) {
+                if(isMobileView) {
+                  // we want to close the menu so we can highlight the next element
+                  var closeBtn = document.querySelector('#mainMenuFullCloseButton');
+                  if(closeBtn) closeBtn.click();
+
+                  // allow time for the menu to hide
+                  setTimeout(function() {
+                    // continue to the next step
+                    $scope.driverObj.moveNext();
+                  }, menuDelay); 
+                } else {
+                  // continue to the next step
+                  $scope.driverObj.moveNext();
+                }
+              }
             }
-          }, {
-            element: "#banner",
+          },
+          // FOLLOWING ELEMENT IS ON THE PAGE
+          {
+            element: "#logoImage",
             popover: {
               title: "Library website",
               description: "To return to the library website, select the La Trobe University logo.",
               side: "bottom",
-              align: "center"
+              align: "center",
+              onPrevClick: function(element, step, options) {
+                if(isMobileView) {
+                  // we want to open the menu so we can highlight the next element
+                  var menuBtn = document.querySelector('prm-topbar button.mobile-menu-button');
+                  if(menuBtn) menuBtn.click();
+
+                  // allow time for the menu to hide
+                  setTimeout(function() {
+                    // go back to the previous step
+                    $scope.driverObj.movePrevious();
+                  }, menuDelay);
+                } else {
+                  // go back to the previous step
+                  $scope.driverObj.movePrevious();
+                }
+              }
             }
           }, {
             element: "#tour_button",
@@ -1317,226 +1849,297 @@
             }
           }]
         }
+      } else if(/\/fulldisplay\?/.test(url)) {
+        // item full display
+
+        $scope.tourLabel = 'Tour the <strong>Item details</strong> page';
+
+        var backToSearchBtn = document.querySelector(isMobileView ? "md-toolbar button[aria-label='Close Full Display']" : "md-dialog-container > div > button[aria-label='Close Full Display']");
+
+        $scope.tourSteps = [
+          {
+            element: "prm-full-view-service-container prm-save-to-favorites-button button",
+            popover: {
+              title: "Save to favourites",
+              description: "You can save this item to your favourites to make it easier to find again.",
+              showButtons: ["next", "close"],
+              side: "bottom",
+              align: "center"
+            }
+          }, {
+            element: "#action_list prm-full-view-service-container",
+            popover: {
+              title: "Export options",
+              description: "These options allow you to export or share the item details.",
+              side: "top",
+              align: "start"
+            }
+          }, {
+            element: "#PermalinkButtonFullView",
+            popover: {
+              title: "Get a link",
+              description: "If you need to provide a URL to this item, select the 'Permalink' option.",
+              side: "top",
+              align: "start"
+            }
+          }, {
+            element: "#CitationButtonFullView",
+            popover: {
+              title: "View citation formats",
+              description: "If you need to cite an item in your work, you can select its citation button to view its details in various standard reference formats.",
+              side: "top",
+              align: "start"
+            }
+          }, {
+            element: "#getit_link1_0 prm-full-view-service-container",
+            popover: {
+              title: "View the item",
+              description: "This section shows the options you have to view or request the item.",
+              side: "right",
+              align: "start"
+            }
+          }, {
+            element: "#details prm-full-view-service-container",
+            popover: {
+              title: "Item details",
+              description: "Find out more details about the item, such as its publish date and identifiers.",
+              side: "bottom",
+              align: "center"
+            }
+          }, {
+            element: "#tags prm-full-view-service-container",
+            popover: {
+              title: "Tags",
+              description: "You can add your own tags to an item, which can be used when searching by 'User tags' in the advanced search.",
+              side: "top",
+              align: "center",
+              popoverClass: 'ltu-tour'+(backToSearchBtn == null ? ' ltu-end-tour' : '')
+            }
+          }]
+
+          if(backToSearchBtn != null) {
+            // add an extra step to show how to exit the full-view details
+            $scope.tourSteps = $scope.tourSteps.concat([
+              {
+                element: isMobileView ? "md-toolbar button[aria-label='Close Full Display']" : "md-dialog-container > div > button[aria-label='Close Full Display']",
+                popover: {
+                  title: "Return to search",
+                  description: "Select this button to return to your search results.",
+                  side: "right",
+                  align: "center",
+                  popoverClass: 'ltu-tour ltu-end-tour'
+                }
+              }
+            ])
+          }
+
+          /*
+          // if the full details are displayed over the main content, move (& clone) the tour button
+          if(document.querySelector("prm-full-view-page") == null && document.querySelector("prm-full-view #tour_button") == null) {
+            var fullView = document.querySelector("prm-full-view");
+            var tourBtn = document.querySelector("#tour_button");
+            if(tourBtn) {
+              var clone = tourBtn.cloneNode(true);
+              //clone.addEventListener("click", $scope.startTour);
+              clone.classList.add('is-clone');
+              if(fullView) fullView.appendChild(clone);
+            }
+          }
+          */
       } else if(/\/account\?/.test(url)) {
         // my account
         
-        if(/section=loans/.test(url)) {
-          $scope.tourLabel = 'Tour the <strong>Loans</strong> tab';
+        $scope.tourLabel = 'Tour the <strong>My account</strong> page';
 
-          $scope.tourSteps = [
-            {
-              element: "md-tab-content.md-active",
-              popover: {
-                title: "Your loans",
-                description: "Any loans that you have are listed here. You can see their due dates and renew to extend the loan period.",
-                showButtons: ["next", "close"],
-                side: "top",
-                align: "start"
-              }
-            }, {
-              element: "#loans-focus",
-              popover: {
-                title: "View active or previous loans",
-                description: "Use this drop-down to view any previous loans you have made.",
-                side: "right",
-                align: "start"
-              }
-            }, {
-              element: "md-tabs-canvas",
-              popover: {
-                title: "Account sections",
-                description: "Use the tabs to view other aspects of your library account.",
-                side: "bottom",
-                align: "center",
-                popoverClass: 'ltu-tour ltu-end-tour'
-              }
-            }]
-        } else if(/section=requests/.test(url)) {
-          $scope.tourLabel = 'Tour the <strong>Requests</strong> tab';
+        $scope.tourSteps = [{ 
+          popover: { 
+              title: "Welcome to your account", 
+              description: "The 'My account' section is where you can view your current loans, pending requests for resources, pay any outstanding fines for lost items, and update your personal details.",
+              showButtons: ["next", "close"],
+              popoverClass: 'ltu-tour ltu-begin-tour'
+          }
+        }, {
+          element: "prm-account-overview md-tabs-wrapper",
+          popover: {
+            title: "Account sections",
+            description: "Use these tabs to move between the different section of your account.",
+            side: "bottom",
+            align: "center"
+          }
+        }, {
+          element: "#favorites-button",
+          popover: {
+            title: "View your favourites",
+            description: "If you have saved any items or searches to your favourites, you can view them via this button. This is available here and on any search page.",
+            side: "bottom",
+            align: "center",
+            onNextClick: function(element, step, options) {
+              // we want to open the menu so we can highlight the next element
+              var menuBtn = document.querySelector(isMobileView ? 'prm-topbar button.mobile-menu-button' : 'prm-user-area-expandable button:has(span[class="user-name"])');
+              if(menuBtn) menuBtn.click();
 
-          $scope.tourSteps = [
-            {
-              element: "md-tab-content.md-active",
-              popover: {
-                title: "Your requests",
-                description: "Any requests for library resources that you have made are listed here. You can also cancel any requests if you need to.",
-                showButtons: ["next", "close"],
-                side: "top",
-                align: "start"
-              }
-            }, {
-              element: "md-tabs-canvas",
-              popover: {
-                title: "Account sections",
-                description: "Use the tabs to view other aspects of your library account.",
-                side: "bottom",
-                align: "center",
-                popoverClass: 'ltu-tour ltu-end-tour'
-              }
-            }]
-        } else if(/section=fines/.test(url)) {
-          $scope.tourLabel = 'Tour the <strong>Fines</strong> tab';
+              // allow time for the menu to show
+              setTimeout(function() {
+                // continue to the next step
+                $scope.driverObj.moveNext();
+              }, menuDelay);
+            }
+          }
+        }, 
+        // FOLLOWING ELEMENT IS EITHER IN MAIN MENU OR IN THE ACCOUNT MENU
+        {
+          element: isMobileView ? "prm-authentication button[aria-label='Sign out']" : "#signOutButton",
+          popover: {
+            title: "Signing out",
+            description: "If you are on a library (or shared) computer, don't forget to sign out once you have finished your work. You can find the sign out button in either the user menu or via the '3-dot' main menu.",
+            side: "bottom",
+            align: "center",
+            onPrevClick: function(element, step, options) {
+              // we want to close the menu so we can highlight the previous element
+              var closeBtn = document.querySelector(isMobileView ? '#mainMenuFullCloseButton' : 'md-backdrop');
+              if(closeBtn) closeBtn.click();
+              
+              // allow time for the menu to hide
+              setTimeout(function() {
+                // go back to the previous step
+                $scope.driverObj.movePrevious();
+              }, menuDelay);
+            },
+            onNextClick: function(element, step, options) {
+              // we want to close the menu so we can highlight the previous element
+              var closeBtn = document.querySelector(isMobileView ? '#mainMenuFullCloseButton' : 'md-backdrop');
+              if(closeBtn) closeBtn.click();
 
-          $scope.tourSteps = [
-            {
-              element: "md-tab-content.md-active",
-              popover: {
-                title: "Your fines",
-                description: "Any fines that you are required to pay are listed here.",
-                showButtons: ["next", "close"],
-                side: "top",
-                align: "start"
-              }
-            }, {
-              element: "prm-fines a[ng-if='$ctrl.payFinesLink']",
-              popover: {
-                title: "Pay your fines",
-                description: "Follow this link to pay any fines you have.",
-                side: "right",
-                align: "start"
-              }
-            }, {
-              element: "md-tabs-canvas",
-              popover: {
-                title: "Account sections",
-                description: "Use the tabs to view other aspects of your library account.",
-                side: "bottom",
-                align: "center",
-                popoverClass: 'ltu-tour ltu-end-tour'
-              }
-            }]
-        } else if(/section=blocks_messages/.test(url)) {
-          $scope.tourLabel = 'Tour the <strong>Messages</strong> tab';
+              // allow time for the menu to hide
+              setTimeout(function() {
+                // continue to the next step
+                $scope.driverObj.moveNext();
+              }, menuDelay); 
+            }
+          }
+        }, 
+        // FOLLOWING ELEMENTS ARE ON THE PAGE
+        {
+          element: isMobileView ? "button.mobile-menu-button" : "#mainMenu",
+          popover: {
+            title: "Main menu",
+            description: "Use this menu to start a search for any library resources or view help documentation.",
+            side: "bottom",
+            align: "center",
+            onPrevClick: function(element, step, options) {
+              // we want to open the menu so we can highlight the next element
+              var menuBtn = document.querySelector(isMobileView ? 'prm-topbar button.mobile-menu-button' : 'prm-user-area-expandable button:has(span[class="user-name"])');
+              if(menuBtn) menuBtn.click();
 
-          $scope.tourSteps = [
-            {
-              element: "md-tab-content.md-active",
-              popover: {
-                title: "Your messages",
-                description: "Any messages regarding your loans or requests are listed here.",
-                showButtons: ["next", "close"],
-                side: "top",
-                align: "start"
-              }
-            }, {
-              element: "md-tabs-canvas",
-              popover: {
-                title: "Account sections",
-                description: "Use the tabs to view other aspects of your library account.",
-                side: "bottom",
-                align: "center",
-                popoverClass: 'ltu-tour ltu-end-tour'
-              }
-            }]
-        } else if(/section=personal_details/.test(url)) {
-          $scope.tourLabel = 'Tour the <strong>Personal details</strong> tab';
+              // allow time for the menu to show
+              setTimeout(function() {
+                // go back to the previous step
+                $scope.driverObj.movePrevious();
+              }, menuDelay);
+            }
+          }
+        }, {
+          element: ".s-lch-widget-float-btn",
+          popover: {
+            title: "Need help?",
+            description: "Use the chat feature to talk with a librarian, or use the 'Help' option in the main menu to access resources and information to help you with your library search.",
+            side: "bottom",
+            align: "center",
+            onNextClick: function(element, step, options) {
+              if(isMobileView) {
+                // we want to open the menu so we can highlight the next element
+                var menuBtn = document.querySelector('prm-topbar button.mobile-menu-button');
+                if(menuBtn) menuBtn.click();
 
-          $scope.tourSteps = [
-            {
-              element: "md-tab-content.md-active",
-              popover: {
-                title: "Your personal details",
-                description: "The personal details that the library stores for your account are displayed here.",
-                showButtons: ["next", "close"],
-                side: "top",
-                align: "center"
+                // allow time for the menu to show
+                setTimeout(function() {
+                  // continue to the next step
+                  $scope.driverObj.moveNext();
+                }, menuDelay); 
+              } else {
+                // continue to the next step
+                $scope.driverObj.moveNext();
               }
-            }, {
-              element: "#personal_settings-focus",
-              popover: {
-                title: "Edit details",
-                description: "You can edit the details and notification settings for your library account.",
-                side: "bottom",
-                align: "center",
-              }
-            }, {
-              element: "md-tabs-canvas",
-              popover: {
-                title: "Account sections",
-                description: "Use the tabs to view other aspects of your library account.",
-                side: "bottom",
-                align: "center",
-                popoverClass: 'ltu-tour ltu-end-tour'
-              }
-            }]
-        } else {
-          $scope.tourLabel = 'Tour the <strong>My account</strong> page';
+            }
+          }
+        },
+        // FOLLOWING ELEMENTS ARE EITHER IN MENU OR ON THE PAGE
+        {
+          element: isMobileView ? "prm-main-menu[menu-type='full'] button:has([translate='report.Title'])" : "#reportProblem",
+          popover: {
+            title: "Ran into an issue?",
+            description: "If you have encountered a problem with a search, resource, or logging in, select 'Report a problem' to report it to the library.",
+            side: "right",
+            align: "end",
+            onPrevClick: function(element, step, options) {
+              if(isMobileView) {
+                // we want to close the menu so we can highlight the previous element
+                var closeBtn = document.querySelector('#mainMenuFullCloseButton');
+                if(closeBtn) closeBtn.click();
 
-          $scope.tourSteps = [{ 
-            popover: { 
-                title: "Welcome to 'My account'", 
-                description: 'Take a quick tour to view some of the main features available in your account.',
-                //nextBtnText: "Let's begin!",
-                showButtons: ["next", "close"],
-                popoverClass: 'ltu-tour ltu-begin-tour'
+                // allow time for the menu to hide
+                setTimeout(function() {
+                  // go back to the previous step
+                  $scope.driverObj.movePrevious();
+                }, menuDelay);
+              } else {
+                // go back to the previous step
+                $scope.driverObj.movePrevious();
+              }
+            },
+            onNextClick: function(element, step, options) {
+              if(isMobileView) {
+                // we want to close the menu so we can highlight the next element
+                var closeBtn = document.querySelector('#mainMenuFullCloseButton');
+                if(closeBtn) closeBtn.click();
+
+                // allow time for the menu to hide
+                setTimeout(function() {
+                  // continue to the next step
+                  $scope.driverObj.moveNext();
+                }, menuDelay); 
+              } else {
+                // continue to the next step
+                $scope.driverObj.moveNext();
+              }
             }
-          }, {
-            element: "md-tab-item:has([translate='nui.loans.header'])",
-            popover: {
-              title: "Your loans",
-              description: "Select this tab to see a list of your current loans.",
-              side: "top",
-              align: "center"
+          }
+        },
+        // FOLLOWING ELEMENTS ARE ON THE PAGE
+        {
+          element: "#logoImage",
+          popover: {
+            title: "Library website",
+            description: "To return to the library website, select the La Trobe University logo.",
+            side: "bottom",
+            align: "center",
+            onPrevClick: function(element, step, options) {
+              if(isMobileView) {
+                // we want to open the menu so we can highlight the next element
+                var menuBtn = document.querySelector('prm-topbar button.mobile-menu-button');
+                if(menuBtn) menuBtn.click();
+
+                // allow time for the menu to hide
+                setTimeout(function() {
+                  // go back to the previous step
+                  $scope.driverObj.movePrevious();
+                }, menuDelay);
+              } else {
+                // go back to the previous step
+                $scope.driverObj.movePrevious();
+              }
             }
-          }, {
-            element: "md-tab-item:has([translate='nui.requests.header'])",
-            popover: {
-              title: "Your requests",
-              description: "Select this tab to see the status of any requests for library resources.",
-              side: "top",
-              align: "center"
-            }
-          }, {
-            element: "md-tab-item:has([translate='nui.fines.header'])",
-            popover: {
-              title: "Your fines",
-              description: "Select this tab to see if you have any outstanding fines for overdue or lost items.",
-              side: "top",
-              align: "center"
-            }
-          }, {
-            element: "md-tab-item:has([translate='nui.blocks.header'])",
-            popover: {
-              title: "Your messages",
-              description: "Select this tab to see any messages regarding your loans or requests.",
-              side: "top",
-              align: "center"
-            }
-          }, {
-            element: "md-tab-item:has([translate='nui.details.header'])",
-            popover: {
-              title: "Your personal details",
-              description: "Select this tab to view and modify your library account details.",
-              side: "top",
-              align: "center"
-            }
-          }, {
-            element: "#mainMenu",
-            popover: {
-              title: "Main menu",
-              description: "Use this menu to start a search for any library resources or view help documentation.",
-              side: "bottom",
-              align: "center"
-            }
-          }, {
-            element: "#banner",
-            popover: {
-              title: "Library website",
-              description: "To return to the library website, select the La Trobe University logo.",
-              side: "bottom",
-              align: "center"
-            }
-          }, {
-            element: "#tour_button",
-            popover: {
-              title: "That's all for now",
-              description: "Thanks for taking the tour. You can restart it at any time from here.",
-              side: "bottom",
-              align: "center",
-              popoverClass: 'ltu-tour ltu-end-tour'
-            }
-          }]
-        }
+          }
+        }, {
+          element: "#tour_button",
+          popover: {
+            title: "That's all for now",
+            description: "Thanks for taking the tour. You can restart it at any time from here.",
+            side: "bottom",
+            align: "center",
+            popoverClass: 'ltu-tour ltu-end-tour'
+          }
+        }]
       } else if(/\/favorites\?/.test(url)) {
         // My favourites
 
@@ -1657,7 +2260,7 @@
               }
             },
             {
-              element: "prm-favorites-labels .sidebar-inner-wrapper",
+              element: isMobileView ? "button[aria-label='Tweak my saved records']" : "prm-favorites-labels .sidebar-inner-wrapper",
               popover: {
                 title: "Filter by label",
                 description: "Select a label to only show saved items that have that label applied.",
@@ -1671,7 +2274,23 @@
                 title: "Your saved searches",
                 description: "If you're signed in, any queries that you have saved are listed under the 'Saved searches' tab.",
                 side: "top",
-                align: "center"
+                align: "center",
+                onNextClick: function(element, step, options) {
+                  if(isMobileView) {
+                    // we want to scroll the tabs to prevent an issue with the panel's positioning
+                    var scrollBtn = document.querySelector('prm-favorites md-next-button');
+                    if(scrollBtn) scrollBtn.click();
+
+                    // allow time for the tabs to scroll
+                    setTimeout(function() {
+                      // continue to the next step
+                      $scope.driverObj.moveNext();
+                    }, menuDelay); 
+                  } else {
+                    // continue to the next step
+                    $scope.driverObj.moveNext();
+                  }
+                }
               }
             },
             {
@@ -1694,7 +2313,7 @@
         // animate the button if the type of tour has changed
         $scope.animateButton = $rootScope.tourLabel != $scope.tourLabel;
         $rootScope.tourLabel = $scope.tourLabel;      
-        console.log('animate tour button: '+$scope.animateButton);
+        //console.log('animate tour button: '+$scope.animateButton);
 
         if($scope.animateButton) {
           // remove the 'animate' class after the animation would have finished
@@ -1739,7 +2358,6 @@
             popover: {
               title: "Set the scope",
               description: "If you want to limit your search to either physical or online resources, select that option here.",
-              showButtons: ["next", "close"],
               side: "bottom",
               align: "center"
             }
@@ -1803,7 +2421,28 @@
 
           // start the tour (removing any active ones)
           if($scope.driverObj && $scope.advSearchTourSteps) {
+            //console.log('GT - START ADV SEARCH TOUR');
+            
+            // clear any existing tour
             $scope.driverObj.destroy();
+            
+            // clear the record of steps taken
+            $scope.stepsTaken = '';
+
+            // set the type of tour (i.e. general or advanced search)
+            $scope.tourType = 'advanced search';
+
+            // record the time the tour started
+            $scope.tourStartTime = Date.now();
+
+            // track in GA4
+            gtag("event", "guided_tour_started", {
+              tour_label: "Tour the advanced search",
+              tour_type: $scope.tourType,
+              page_location: window.location.href
+            });
+
+            // start the tour
             $scope.driverObj.setSteps($scope.advSearchTourSteps);
             $scope.driverObj.drive();
           }
@@ -1813,7 +2452,7 @@
         setTimeout(function() {
           // add the button to the tab
           var tab = document.querySelector("prm-advanced-search md-tab-item");
-          console.log('Add adv tour - '+(tab != null))
+          //console.log('Add adv tour - '+(tab != null))
           
           if(tab) tab.appendChild(btn);
         }, 200);
@@ -1822,4 +2461,19 @@
   });
   // ------------------------------------------- end Guided tour integration
   
+
+
+  /*
+  // add a tour button for the full view dialog
+  app.component('prmFullViewAfter', {
+    bindings: { parentCtrl: '<' },
+    controller: 'GuidedTourController',
+    template: 
+      '<style>:not(body):has(> .driver-active-element) { overflow: inherit !important; }</style>'+
+      '<a id="detail_tour_button" href="" ng-show="tourLabel" ng-click="startTour()" ng-class="{\'animate\':animateButton, \'show\':tourLabel}">'+
+        '<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" style="margin: 0 5px 0 0;font-size: 1.1em;"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M224 32H64C46.3 32 32 46.3 32 64v64c0 17.7 14.3 32 32 32H441.4c4.2 0 8.3-1.7 11.3-4.7l48-48c6.2-6.2 6.2-16.4 0-22.6l-48-48c-3-3-7.1-4.7-11.3-4.7H288c0-17.7-14.3-32-32-32s-32 14.3-32 32zM480 256c0-17.7-14.3-32-32-32H288V192H224v32H70.6c-4.2 0-8.3 1.7-11.3 4.7l-48 48c-6.2 6.2-6.2 16.4 0 22.6l48 48c3 3 7.1 4.7 11.3 4.7H448c17.7 0 32-14.3 32-32V256zM288 480V384H224v96c0 17.7 14.3 32 32 32s32-14.3 32-32z"></path></svg>'+
+        '<span ng-bind-html="tourLabel"></span>'+
+      '</a>'
+  });
+  */
 })();
