@@ -1,48 +1,135 @@
-<!--CATONLYPC view custom html-->
-<!---Last edited David Witteveen, 13/12/2023, Replacing the 'Help with search' video--->
-<md-content layout-xs="column" layout="row">
-    <div flex="50" layout="column">
+<md-content id="mainContent" layout-xs="column" layout="row">
+    <div flex="50" flex-xs="100" layout="column">
         <md-card class="default-card">
             <md-card-title>
                 <md-card-title-text>
-                    <span class="md-headline">SEARCH FOR PHYSICAL RESOURCES</span>
-            </md-card-title-text>
+                    <span class="md-headline">Search for physical resources</span>
+                </md-card-title-text>
             </md-card-title>
-
             <md-card-content>
-			<!---<p><b>Please note:</b> Library Search is available, however some users may receive a security warning. The Library is working to resolve the issue.</a>
-			<p><b>Please note:</b> Due to state-wide lockdown restrictions in Victoria, all our Campus Libraries will be closed from 13-17 February.</a>--->
-			<!---<p>Access to La Trobe University libraries is currently only available to La Trobe staff and students, SuniTAFE staff and students (Mildura) and Wodonga TAFE staff and students (Wodonga). A current Staff or Student ID is required.</p>
-			<div id="libchat_9d9f80ae82d72d3bd3f374eaeb0688ce"></div>--->
-			<p>These computers will search only for physical resources</p>
-
-			<!---<p>You are required to <a href="https://www.latrobe.edu.au/mylatrobe/new-sign-in-process-for-students-attending-our-campuses/">sign in</a> on arrival for contact tracing purposes.</p>
-			<p>For more information on current hours and services visit <a href="https://www.latrobe.edu.au/library/covidsafe">COVIDSafe Library</a> or <a href="https://www.latrobe.edu.au/library/about/contact">Contact us for help</a>.</p>--->
-
-			</md-card-content>
-
-
-
-			<!---<md-card-content>
-			<p>For further information see <a href="https://www.latrobe.edu.au/library/covidsafe">COVIDSafe Library</a> or <a href="https://www.latrobe.edu.au/library/about/contact">Contact us for help</a>.</p>
-			</md-card-content>--->
-		</md-card>
-	</div>
-
-    <div flex-xs flex="50" layout="column">
-		<md-card class="default-card">
-			<md-card-title>
-				<md-card-title-text>
-					<span class="md-headline">Help with search</span>
-				</md-card-title-text>
-			</md-card-title>
-			<md-card-content>
-				<iframe src="https://doris.latrobe.edu.au/doris/video/view/89338" width="450" height="500" allowfullscreen="1" frameborder="0" scrolling="no"></iframe>
+                <p>
+                    These computers will only search for physical resources in the library.
+                </p>
+            </md-card-content>
+        </md-card>
+    </div>
+    <div flex-xs="100" flex="50" layout="column">
+        <md-card class="default-card">
+            <md-card-title>
+                <md-card-title-text>
+                    <span class="md-headline">How do I search?</span>
+                </md-card-title-text>
+            </md-card-title>
+            <md-card-content>
+                <p>Watch the following video to see how to use the search function.</p>
+				<iframe src="https://doris.latrobe.edu.au/doris/video/view/89338" width="640" height="620" allowfullscreen="1" frameborder="0" scrolling="no" data-aspect-ratio="1.778" data-aspect-ratio-offset="250"></iframe>
 				<br><br>
-				<p>For more information about Library Search visit <a href="https://www.latrobe.edu.au/library/assessment-thesis-support/find-information/help-with-search">Help with search</a>.
+				
 			</md-card-content>
-		</md-card>
-	</div>
-
-
+        </md-card>
+    </div>
 </md-content>
+
+<md-content id="helpContent" layout-xs="column" layout="row" style="display:none">
+    <div flex="100" flex-xs="100" layout="column">
+        <md-card class="default-card">
+            <md-card-title>
+                <md-card-title-text>
+                    <span class="md-headline">Help with searching</span>
+                </md-card-title-text>
+            </md-card-title>
+            <md-card-content>
+				<h3>Basic search</h3>
+			
+				<p>Find items for your assignment or research with our basic search.</p>				
+				<ol><li>Type your keywords in the search box and perform the search (i.e. press ENTER or select the 'Search' button).</li><li>Results may include:<ul><li>journal articles</li><li>books and eBooks</li><li>theses</li><li>audio-visual items.</li></ul></li><li>Click on an item to see its full details.</li><li>If it's a physical item, check the location and call number to find it on the shelves.</li><li>You can also use <strong>advanced keyword search</strong> or <strong>refine your search</strong> to reduce your list of results.</li></ol>
+				
+
+				<h3 style="margin-top: 2em;">Advanced keyword search</h3>
+
+				<p>If you don't know the exact title of an item, use a set of key words to search for your topic.</p>
+				<table class="table" summary="Advanced keyword searching table">
+					<thead>
+						<tr class="even over">
+							<th id="technique">Search technique</th>
+							<th id="comments">Comments</th>
+							<th id="examples">Examples</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="odd">
+							<td headers="technique">
+							Phrase 
+							</td>
+							<td headers="comments">
+							Type the exact phrase you need in quotation marks 
+							</td>
+							<td headers="examples">
+							"teacher education" 
+							</td>
+						</tr>
+						<tr class="even">
+							<td headers="technique">
+							Wildcard 
+							</td>
+							<td headers="comments">
+							Use the wildcards as follows:<strong><br> ?</strong> matches one character<br><strong>*</strong> matches zero or more characters within a word or at the end<br> Wildcards cannot be used as the first character of a word 
+							</td>
+							<td headers="examples"><br><strong>ols?n</strong> will find olsen and olson<br><strong>ch*ter</strong> will find charter, character and chapter <strong>temp*</strong> will find temptation, temple and temporary<br><strong>*pen</strong>&nbsp;would not find anything 
+							</td>
+						</tr>
+						<tr class="odd">
+							<td headers="technique">
+							Boolean operators 
+							</td>
+							<td headers="comments">
+							Use <strong>OR</strong> between the keywords to find more items.<br> Use <strong>NOT</strong> between the keywords to exclude items.<br> NB: must be written in CAPS 
+							</td>
+							<td headers="examples">
+							"teacher education"&nbsp;<strong>OR</strong>&nbsp;"educator training"<br> animal <strong>NOT</strong> dog&nbsp;– will exclude the term dog in your results 
+							</td>
+						</tr>
+					</tbody>
+				</table>
+
+
+				<h3>Refine your search results</h3>
+
+				<p>If too many items are showing in your search results, you can refine your search using the filters.</p>
+				<p>You can limit your search results by:</p>
+				<ul><li>full text online</li><li>peer-reviewed</li><li>physical items</li><li>resource type</li><li>publication date</li><li>campus library</li><li>subject terms.</li></ul>
+				<p>Remember to click '<strong>Show More'</strong> to see additional options.</p>
+				<p>You can also select '<strong>Sort by</strong> options' to order results&nbsp;by relevance, date, author or title.</p>
+
+
+				<h3>Email, print, or export results</h3>
+
+				<p>When you have completed your search, you can save the items and either email, print or export the results:</p>
+				<ol><li>When the results are listed, click on the pin icon to the right of the titles you want to save.</li><li>The pin will appear crossed when the item is saved, giving you the option to unpin.</li><li>When you have added all the results that you want to save, click on the pin in the top-right of the screen to go to 'My Favorites'.</li><li>If you want to email, print or export an item, click on the numbered box to the left of the item.</li><li>Select the 3-dot button next to the 'My favourites' heading.</li><li>Select the relevant icon to select one of the following options:<ul><li>EndNote</li><li>RefWorks</li><li>EndNote Web</li><li>EasyBib</li><li>print</li><li>email.</li></ul></li></ol>
+				<p>You may want to clear your saved items before doing another search. To do this, select the pin icon next to the 'My Favorites' heading to unpin items you've selected.</p>
+				<p>If you're not signed in, items will be temporarily saved for the duration of your session. If you're signed in, your items will be saved permanently.</p>
+			</md-card-content>
+        </md-card>
+    </div>
+</md-content>
+
+<script>
+	(function() {
+		setTimeout(function() {
+			var mainContent = document.querySelector("#mainContent");
+			var helpContent = document.querySelector("#helpContent");
+
+			var params = new URLSearchParams(document.location.search);
+			var showHelp = params.get("showHelp");
+			if(showHelp == '1') {
+				// show help content
+				helpContent.style.display = "flex";
+				mainContent.style.display = "none";
+			} else {
+				// show main content
+				helpContent.style.display = "none";
+				mainContent.style.display = "flex";
+			}
+		}, 500)		
+	})();
+</script>

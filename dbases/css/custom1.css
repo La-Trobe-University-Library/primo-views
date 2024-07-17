@@ -188,18 +188,22 @@ prm-logo .product-logo {
 #banner a.md-primoExplore-theme:empty {
   display: none;
 }
+#logoImage {
+  max-width: 240px;
+}
 #banner a.md-primoExplore-theme:has(img) {
   display: inline-block;
-  height: 80px;
+  height: 80px !important;
+  min-height: 80px;
   padding: 0;
-  margin-top: 30px;
+  margin-top: 30px !important;
 }
 primo-explore.__xs prm-topbar prm-logo {
   height: 80px;
   padding-left: 0;
 }
 primo-explore.__xs #banner a.md-primoExplore-theme:has(img) {
-  margin-top: 0;
+  margin-top: 0 !important;
 }
 #banner a.md-primoExplore-theme:hover, #banner a.md-primoExplore-theme:focus {
   box-shadow: none;
@@ -996,6 +1000,9 @@ div[aria-label="Chat Widget"] > button[aria-label="Offline"]:hover, div[aria-lab
 }
 div[aria-label="Chat Widget"] > button > svg {
   max-width: 32px;
+}
+.s-lch-widget-float-load.expanded {
+  max-height: 480px;
 }
 /* ----- END CHAT WIDGET ----- */
 
