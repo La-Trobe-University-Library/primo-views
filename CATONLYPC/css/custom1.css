@@ -1028,13 +1028,11 @@ div[aria-label="Chat Widget"] > button > svg {
   max-width: 32px;
 }
 
-.s-lch-widget-float-load {
+.s-lch-widget-float-load.expanded {
+  max-height: 540px;
   border-radius: 11px;
   border: none;
   box-shadow: 1px 1px 4px #333;
-}
-.s-lch-widget-float-load.expanded {
-  max-height: 535px;
 }
 /* ----- END CHAT WIDGET ----- */
 
@@ -1274,7 +1272,7 @@ md-dialog.login-dialog input {
 md-dialog-content md-input-container::after {
   background-color: #e2231b;
 }
-md-dialog.login-dialog #tab-content-53 md-content {
+md-dialog.login-dialog md-tab-content:has(prm-login-help) md-content {
   padding: 0 10px;
 }
 
