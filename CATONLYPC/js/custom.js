@@ -377,5 +377,72 @@
   // ------------------------------------------- end scaling iframes' height
 
 
+  /* -------------------------------------------
+  / Custom help info
+  ------------------------------------------- */
+  app.component('prmExploreMainAfter', {
+    bindings: { parentCtrl: '<' },
+    controller: 'HelpInfoController',
+    template: 
+      '<div class="help-info></div>'
+  });
+
+  app.controller('HelpInfoController', function($scope, $rootScope, $interval, angularLoad) {
+    $scope.helpInterval;
+
+    this.$onInit = function () {
+      // listen for the location change event
+      $scope.$on('$locationChangeStart', function(event, next, current) {
+        console.log('locationChangeStart - next: '+next);
+        
+        // check if the help content should be shown
+        $scope.checkForHelp(next);
+      });
+
+      // check if the help content should be shown for the initial page content 
+      $scope.checkForHelp();
+    };
+
+    $scope.checkForHelp = function(url) {
+      if(!url) url = window.location.href;
+      
+      // check which page we're on
+      if(/\/search\?/.test(url) && !/query/.test(url)) {
+        // on the search home page
+
+        console.log('Set up help interval...')
+        $interval.cancel($scope.helpInterval);
+        $scope.helpInterval = $interval(function() {
+          console.log('CHECK FOR MAIN CONTENT...');
+          var homeContent = document.querySelector("prm-static md-content");
+          if(homeContent != null) {
+            // check whether the help content should be shown
+            var mainContent = document.querySelector("#mainContent");
+            var helpContent = document.querySelector("#helpContent");
+            
+            if(helpContent) {
+              $interval.cancel($scope.helpInterval);
+
+              if(/showHelp=1/.test(url)) {
+                // show the help content
+                console.log('SHOW HELP CONTENT')
+                helpContent.style.display = "flex";
+                mainContent.style.display = "none";
+              } else {
+                // show main content
+                console.log('SHOW DEFAULT CONTENT')
+                helpContent.style.display = "none";
+                mainContent.style.display = "flex";
+              }
+            }
+          }
+        }, 100, 50);
+      } else {
+        $interval.cancel($scope.helpInterval);
+      }
+    }
+  });
+// ------------------------------------------- end custom help info
+
   
 })();

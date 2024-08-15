@@ -577,8 +577,8 @@
               popover: {
                 title: "Narrow your results",
                 description: "Apply filters (such as 'Peer-reviewed' and 'Resource type') to narrow down your search. You can also 'Search beyond our collection' to include results from other libraries.",
-                side: "right",
-                align: "center"
+                side: "top",
+                align: isMobileView ? "end" : "start"
               }
             }, 
             // FOLLOWING ELEMENTS ARE ON THE PAGE
@@ -672,7 +672,7 @@
                 title: "Library website",
                 description: "To return to the library website, select the La Trobe University logo.",
                 side: "bottom",
-                align: "center",
+                align: "start",
                 popoverClass: 'ltu-tour ltu-end-tour',
                 onPrevClick: function(element, step, options) {
                   if(isMobileView) {
@@ -711,7 +711,7 @@
                 title: "Check the menu",
                 description: "<p>The main menu lets you change the type of search you're performing (e.g. search all collections, databases, or newspaper articles) as well as allowing you to request items from another library.</p><p>Select the '3-dot' menu item to view the full main menu.</p><p>Note that when you're in 'mobile' view, some options that are usually on the page (e.g. the 'Advanced search') are within this menu instead.</p>",
                 side: "bottom",
-                align: "center",
+                align: "end",
                 popoverClass: 'ltu-tour ltu-tour-wide'
               }
             }, {
@@ -736,7 +736,7 @@
                 title: "Resource type",
                 description: "<p>You can specify the type of resource you're searching for using this drop-down. You will also be able to apply additional filters after performing a search.</p>",
                 side: "bottom",
-                align: "left"
+                align: "start"
               }
             }, {
               element: "prm-pre-filters > div > md-input-container:nth-child(2) md-select",
@@ -770,7 +770,7 @@
                 title: "Need more search fields?",
                 description: "Switch between a simple search and an advanced search that lets you specify more filters and criteria.",
                 side: "bottom",
-                align: "center",
+                align: isMobileView ? "start" : "end",
                 onPrevClick: function(element, step, options) {
                   if(isMobileView) {
                     // we want to close the menu so we can highlight the previous element
@@ -794,7 +794,7 @@
                 title: "Your library account",
                 description: "Sign in to access your library account, where you can view the status of any loans or requests for library resources.",
                 side: "bottom",
-                align: "center",
+                align: isMobileView ? "start" : "end",
                 onNextClick: function(element, step, options) {
                   if(isMobileView) {
                     // we want to close the menu so we can highlight the next element
@@ -820,7 +820,7 @@
                 title: "View your favourites",
                 description: "If you have saved any items or searches to your favourites, you can view them via this button.",
                 side: "bottom",
-                align: "center",
+                align: "end",
                 onPrevClick: function(element, step, options) {
                   if(isMobileView) {
                     // we want to open the menu so we can highlight the previous element
@@ -912,7 +912,7 @@
                 title: "Library website",
                 description: "To return to the library website, select the La Trobe University logo.",
                 side: "bottom",
-                align: "center",
+                align: "start",
                 onPrevClick: function(element, step, options) {
                   if(isMobileView) {
                     // we want to open the menu so we can highlight the next element
@@ -936,7 +936,7 @@
                 title: "That's all for now",
                 description: "Thanks for taking the tour. You can restart it at any time from here.",
                 side: "bottom",
-                align: "center",
+                align: "end",
                 popoverClass: 'ltu-tour ltu-end-tour'
               }
             }        
@@ -957,7 +957,7 @@
                 title: "Search results",
                 description: "The results of your search are listed on the page. Select an item from the results to see its details.",
                 showButtons: ["next", "close"],
-                side: "bottom",
+                side: "top",
                 align: "center"
               }
             }, {
@@ -1082,7 +1082,7 @@
                 title: "Library website",
                 description: "To return to the library website, select the La Trobe University logo.",
                 side: "bottom",
-                align: "center",
+                align: "start",
                 popoverClass: 'ltu-tour ltu-end-tour',
                 onPrevClick: function(element, step, options) {
                   if(isMobileView) {
@@ -1235,7 +1235,7 @@
               title: "That's all for now",
               description: "Thanks for taking the tour. You can restart it at any time from here.",
               side: "bottom",
-              align: "center",
+              align: "end",
               popoverClass: 'ltu-tour ltu-end-tour'
             }
           }]
@@ -1370,7 +1370,7 @@
                 title: "Library website",
                 description: "To return to the library website, select the La Trobe University logo.",
                 side: "bottom",
-                align: "center",
+                align: "start",
                 popoverClass: 'ltu-tour ltu-end-tour',
                 onPrevClick: function(element, step, options) {
                   if(isMobileView) {
@@ -1490,7 +1490,7 @@
               title: "Library website",
               description: "To return to the library website, select the La Trobe University logo.",
               side: "bottom",
-              align: "center",
+              align: "start",
               onPrevClick: function(element, step, options) {
                 if(isMobileView) {
                   // we want to open the menu so we can highlight the next element
@@ -1514,12 +1514,12 @@
               title: "That's all for now",
               description: "Thanks for taking the tour. You can restart it at any time from here.",
               side: "bottom",
-              align: "center",
+              align: "end",
               popoverClass: 'ltu-tour ltu-end-tour'
             }
           }]
         }
-      } else if(/\/jsearch\?/.test(url)) {
+      } else if(/\/jsearch_DISABLED\?/.test(url)) {
         // journal search
         
         var stdJSearchUrl = url.replace('/jsearch', '/search').replace('&tab=jsearch_slot','').replace('&startTour=1', '') + '&facet=rtype,include,journals';
@@ -1588,7 +1588,7 @@
               title: "Library website",
               description: "To return to the library website, select the La Trobe University logo.",
               side: "bottom",
-              align: "center"
+              align: "start"
             }
           }, {
             element: "#tour_button",
@@ -1596,7 +1596,7 @@
               title: "That's all for now",
               description: "Thanks for taking the tour. You can restart it at any time from here.",
               side: "bottom",
-              align: "center",
+              align: "end",
               popoverClass: 'ltu-tour ltu-end-tour'
             }
           }]
@@ -1623,7 +1623,7 @@
                 title: "There's more",
                 description: "Use the pagination buttons to move between pages of results.",
                 side: "left",
-                align: "center"
+                align: "end"
               }
             }, {
               element: ".search-elements-wrapper",
@@ -1707,7 +1707,7 @@
                 title: "Library website",
                 description: "To return to the library website, select the La Trobe University logo.",
                 side: "bottom",
-                align: "center",
+                align: "start",
                 popoverClass: 'ltu-tour ltu-end-tour',
                 onPrevClick: function(element, step, options) {
                   if(isMobileView) {
@@ -1820,7 +1820,7 @@
               title: "Library website",
               description: "To return to the library website, select the La Trobe University logo.",
               side: "bottom",
-              align: "center",
+              align: "start",
               onPrevClick: function(element, step, options) {
                 if(isMobileView) {
                   // we want to open the menu so we can highlight the next element
@@ -1844,7 +1844,7 @@
               title: "That's all for now",
               description: "Thanks for taking the tour. You can restart it at any time from here.",
               side: "bottom",
-              align: "center",
+              align: "end",
               popoverClass: 'ltu-tour ltu-end-tour'
             }
           }]
@@ -1864,7 +1864,7 @@
               description: "You can save this item to your favourites to make it easier to find again.",
               showButtons: ["next", "close"],
               side: "bottom",
-              align: "center"
+              align: "end"
             }
           }, {
             element: "#action_list prm-full-view-service-container",
@@ -1880,7 +1880,7 @@
               title: "Get a link",
               description: "If you need to provide a URL to this item, select the 'Permalink' option.",
               side: "top",
-              align: "start"
+              align: "end"
             }
           }, {
             element: "#CitationButtonFullView",
@@ -1888,14 +1888,14 @@
               title: "View citation formats",
               description: "If you need to cite an item in your work, you can select its citation button to view its details in various standard reference formats.",
               side: "top",
-              align: "start"
+              align: "end"
             }
           }, {
             element: "#getit_link1_0 prm-full-view-service-container",
             popover: {
               title: "View the item",
               description: "This section shows the options you have to view or request the item.",
-              side: "right",
+              side: "top",
               align: "start"
             }
           }, {
@@ -1903,7 +1903,7 @@
             popover: {
               title: "Item details",
               description: "Find out more details about the item, such as its publish date and identifiers.",
-              side: "bottom",
+              side: "top",
               align: "center"
             }
           }, {
@@ -1972,7 +1972,7 @@
             title: "View your favourites",
             description: "If you have saved any items or searches to your favourites, you can view them via this button. This is available here and on any search page.",
             side: "bottom",
-            align: "center",
+            align: "end",
             onNextClick: function(element, step, options) {
               // we want to open the menu so we can highlight the next element
               var menuBtn = document.querySelector(isMobileView ? 'prm-topbar button.mobile-menu-button' : 'prm-user-area-expandable button:has(span[class="user-name"])');
@@ -1993,7 +1993,7 @@
             title: "Signing out",
             description: "If you are on a library (or shared) computer, don't forget to sign out once you have finished your work. You can find the sign out button in either the user menu or via the '3-dot' main menu.",
             side: "bottom",
-            align: "center",
+            align: "end",
             onPrevClick: function(element, step, options) {
               // we want to close the menu so we can highlight the previous element
               var closeBtn = document.querySelector(isMobileView ? '#mainMenuFullCloseButton' : 'md-backdrop');
@@ -2112,7 +2112,7 @@
             title: "Library website",
             description: "To return to the library website, select the La Trobe University logo.",
             side: "bottom",
-            align: "center",
+            align: "start",
             onPrevClick: function(element, step, options) {
               if(isMobileView) {
                 // we want to open the menu so we can highlight the next element
@@ -2136,7 +2136,7 @@
             title: "That's all for now",
             description: "Thanks for taking the tour. You can restart it at any time from here.",
             side: "bottom",
-            align: "center",
+            align: "end",
             popoverClass: 'ltu-tour ltu-end-tour'
           }
         }]
@@ -2172,7 +2172,7 @@
                 title: "Set an alert",
                 description: "You can opt to receive email alerts when there is an update to a saved search query. Select the alert button again to remove that alert.",
                 side: "top",
-                align: "center"
+                align: "end"
               }
             },
             {
@@ -2181,7 +2181,7 @@
                 title: "Remove a saved search",
                 description: "You can 'unpin' a search to remove it from your saved searches.",
                 side: "top",
-                align: "center",
+                align: "end",
                 popoverClass: 'ltu-tour ltu-end-tour'
               }
             }];
@@ -2196,7 +2196,7 @@
                 description: "Any searches that you have performed are listed here. Select the search term to perform that search again.",
                 showButtons: ["next", "close"],
                 side: "top",
-                align: "start"
+                align: "center"
               }
             },
             {
@@ -2205,7 +2205,7 @@
                 title: "Add to saved searches",
                 description: "If you're signed in, you can add a search from your history to your saved searches.",
                 side: "left",
-                align: "start"
+                align: "end"
               }
             },            
             {
@@ -2214,7 +2214,7 @@
                 title: "Remove a saved search",
                 description: "You can remove searches from your search history.",
                 side: "top",
-                align: "center",
+                align: "end",
                 popoverClass: 'ltu-tour ltu-end-tour'
               }
             }];
@@ -2236,7 +2236,7 @@
               element: "md-tab-content.md-active prm-search-result-list .search-within",
               popover: {
                 title: "Search within your favourites",
-                description: "You can search to find an item within your favourites.",
+                description: "If you're signed in, you can search to find an item within your favourites.",
                 side: "right",
                 align: "start"
               }
@@ -2254,8 +2254,8 @@
               element: "md-tab-content.md-active prm-favorites-edit-labels-menu button",
               popover: {
                 title: "Label your favourites",
-                description: "You can add labels to your saved items to categorise them. It will make finding them again easier.",
-                side: "right",
+                description: "You can add labels to your saved items to categorise them. It will make finding them again easier. (Only available when signed in.)",
+                side: "top",
                 align: "start"
               }
             },
@@ -2263,7 +2263,7 @@
               element: isMobileView ? "button[aria-label='Tweak my saved records']" : "prm-favorites-labels .sidebar-inner-wrapper",
               popover: {
                 title: "Filter by label",
-                description: "Select a label to only show saved items that have that label applied.",
+                description: "Select a label to only show saved items that have that label applied. (Only available when signed in.)",
                 side: "left",
                 align: "start"
               }
