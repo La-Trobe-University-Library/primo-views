@@ -3,24 +3,21 @@
 ## Description 
 This repository holds the [Primo Customization Packages](https://knowledge.exlibrisgroup.com/Primo/Product_Documentation/Primo/Back_Office_Guide/090Primo_Utilities/The_UI_Customization_Package_Manager) for La Trobe University Library's Production and Sandbox systems.
 
-The repository contains two permanent branches:
-
-- **production** holds the current files for the Primo Production system
-- **sandbox** holds the current files for the Primo Sandbox system
-
-Both branches store the extracted files (rather than the zipped-up packages) so we can use version comparison tools on them.
+The repository contains one permanent branch, `production`, which holds the current files for the LTU production Primo interface. This repository stores the extracted files (rather than the zipped-up packages) so we can use version comparison tools.
 
 
 ## Updating Files
 
-All changes to Primo configuration filess need to be testing in the Primo Sandbox before they are deployed to Production.
+All changes to Primo configuration files need to be tested in the Primo Sandbox before they are deployed to Production.
 
-This means you need to 
-- make a fork of the **primo-views** repository, 
-- make and test all your changes in the *sandbox* branch, 
-- merge the changes from your fork into the upstream repository, 
-- deploy and test the changes to Primo Production
-- then make a pull request to copy the changes from the sandbox branch to the production branch 
+- make a fork of the **primo-views** repository, or check that your existing fork is up to date
+- create a new branch in your fork to work on your changes
+- make all your changes in the new local branch
+- test on the Primo sandbox server
+- gain approval
+- deploy the changes to Primo Production
+- create a PR to merge the changes from your branch into `production` on the upstream repository
+- a repository owner will pull your changes into `production` in this main repository: the code now once again matches what is deployed to our production server
 
 ### Detailed instructions
 1. Preparation
@@ -30,8 +27,7 @@ This means you need to
 2. Create your work-in-progress fork - a.k.a. [origin repository](https://git-for-librarians.netlify.app/forking#origin-and-upstream-repository):
     1. You need to be logged into your github account to create a fork
     2. Click on the fork button on on the main page of the repository
-    3. Leave name and description and untick 'Production' branch only
-    4. Click **Create fork**
+    3. Click **Create fork**
     
 3. Open your fork in GitHub Desktop
     1. Go to **File** > **Clone repository**
@@ -41,16 +37,16 @@ This means you need to
     5. Click **Fetch origin**
 
 4. Make your changes 
-    1. Set **Current branch** to **sandbox**
+    1. In **Current branch** create **new branch**
     2. Click **Show in Explorer** to see your files.
-    3. Edit your files. Zip them. Deploy to Primo. Test them. 
+    3. Edit your files. Zip them. Deploy to sandbox Primo. Test them. 
     4. When they work...
 
 5. Save your changes
     1. Save and commit any changes to your local fork: Changes side tab
 	2. Add description of changes
-	3. Commit to sandbox
-    4. Push commits to the origin remote: Click **Push origin**
+	3. Commit to your branch
+    4. Push commits to your fork's remote: Click **Push origin**
     
 6. Create a pull request to the upstream repository
     1. Go to the main page of your origin repository in GitHub website
@@ -62,14 +58,6 @@ This means you need to
 	7. Click **Create pull request** to send to upstream repository owner to authorise
 
 7. The La-Trobe-University-Library owner will then merge your pull request into the upstream repository
-
-8. Once you've deployed your changes to Primo Sandbox to Primo Production, create a pull request to merge the **La-Trobe-University-Library:sandbox** branch into the **La-Trobe-University-Library:production** branch
-	1. Go to https://github.com/La-Trobe-University-Library/primo-views
-	2. Click **Branches**
-	3. Under sandbox, click the three dots ... and choose **New pull request**
-	4. Add a title and description
-	5. Click **Create pull request**
-	6. The owner of this repository can then merge these changes
 
 ## Misc
 

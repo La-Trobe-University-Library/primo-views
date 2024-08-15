@@ -715,6 +715,9 @@ prm-newspapers-search-bar > .layout-row > .layout-column {
   /*background: #e2231baa;*/
   background: #666a;
 }
+div[aria-label="Chat Widget"] {
+  z-index: 70 !important;
+}
 
 .list-item-wrapper h3, #brief h3, prm-facet h3, .spotlight-element h3,
 prm-no-search-result h3, prm-saved-queries-list md-list-item h3,
