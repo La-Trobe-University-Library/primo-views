@@ -2,6 +2,13 @@
 * text eol=crlf
 
 # do not modify line endings on binary files
+
+# images
 *.jpg binary
 *.png binary
 *.ico binary
+
+# fonts
+*.otf
+*.woff
+*.woff2
