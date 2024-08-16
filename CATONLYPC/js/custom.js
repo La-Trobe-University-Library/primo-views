@@ -4,8 +4,8 @@
   
   var app = angular.module('viewCustom', ['angularLoad']);
   
-  console.log('LATROBE legacy view version 0.1.13.2');
-  //console.log('includes: LibChat, Browzine, Talis (v2)');
+  console.log('LATROBE view version 0.1.20');
+  //console.log('includes: LibChat, Browzine, Talis (v2), guided tours');
   
   /* -------------------------------------------
   / LibChat integration
@@ -321,13 +321,36 @@
 
 
   /* -------------------------------------------
+
+
+  / Google Analytics
+  ------------------------------------------- */
+  // add the GA4 script to the <head>
+  var ga4Script = document.createElement("script");
+  ga4Script.src = "https://www.googletagmanager.com/gtag/js?id=G-DZJSBPP4TG";
+  window.document.head.appendChild(ga4Script);
+
+  // add the GTAG function to the <body>
+  var gtagScript = document.createElement("script");
+  var scriptText = "window.dataLayer = window.dataLayer || []; "+
+    "function gtag(){dataLayer.push(arguments);}"+
+    "gtag('js', new Date());"+
+    "gtag('config', 'G-DZJSBPP4TG');";
+  gtagScript.innerHTML = scriptText;
+  window.document.body.insertBefore(gtagScript, window.document.body.firstChild);  
+  // ------------------------------------------- end Google Analytics
+
+
+  /* -------------------------------------------
+
   / Scaling iframes' height to match their responsive width
   /
   / If an iframe has the class 'maintain-aspect-ratio', the width & height attributes will determine its aspect ratio.
   / If an iframe has the attribute 'data-aspect-ratio', that aspect ratio is used.
   / If an iframe has the attribute 'data-aspect-ratio-offset', that value is added to the height calculated by the ratio.
   ------------------------------------------- */
-  function scaleIframes() {
+
+  window.onresize = function() {
     var iframes = angular.element(document).find('iframe');  
     angular.forEach(iframes, function(el){
         var iframe = angular.element(el);
@@ -354,9 +377,8 @@
         }
     });
   }
-  window.onresize = scaleIframes;
-  setTimeout(scaleIframes, 1000);
   // ------------------------------------------- end scaling iframes' height
+
   
   
   })();
