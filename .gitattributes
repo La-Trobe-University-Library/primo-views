@@ -2,6 +2,6 @@
 * text eol=crlf
 
 # do not modify line endings on binary files
-.jpg binary
-.png binary
-.ico binary
+*.jpg binary
+*.png binary
+*.ico binary
