@@ -8,7 +8,7 @@
 *.png binary
 *.ico binary
 
-# fonts
-*.otf
-*.woff
-*.woff2
+# fonts 
+*.otf binary
+*.woff binary
+*.woff2 binary
