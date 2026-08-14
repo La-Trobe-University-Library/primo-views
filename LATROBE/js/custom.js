@@ -4,7 +4,7 @@
   
   var app = angular.module('viewCustom', ['angularLoad']);
   
-  console.log('LATROBE view version 0.1.20');
+  console.log('LATROBE view version 0.1.22');
   //console.log('includes: LibChat, Browzine, Talis (v2), guided tours');
   
   /* -------------------------------------------
@@ -384,7 +384,8 @@
     bindings: { parentCtrl: '<' },
     controller: 'GuidedTourController',
     template: 
-      '<a id="tour_button" href="" ng-show="tourLabel" ng-click="startTour()" ng-class="{\'animate\':animateButton, \'show\':tourLabel}">'+
+    //  '<div class="header-alert"><p><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-info"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="8"></line></svg> Proquest platforms, including eBook Central, will be offline for maintenance from midday to 8 pm on Sunday 10 August.</p></div>'+
+      '<a id="tour_button" href="" ng-show="tourLabel" ng-click="startTour()" ng-class="[{\'animate\':animateButton, \'show\':tourLabel}, tourClass]">'+
         '<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor" style="margin: 0 5px 0 0;font-size: 1.1em;max-width: 18px;"><!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path d="M224 32H64C46.3 32 32 46.3 32 64v64c0 17.7 14.3 32 32 32H441.4c4.2 0 8.3-1.7 11.3-4.7l48-48c6.2-6.2 6.2-16.4 0-22.6l-48-48c-3-3-7.1-4.7-11.3-4.7H288c0-17.7-14.3-32-32-32s-32 14.3-32 32zM480 256c0-17.7-14.3-32-32-32H288V192H224v32H70.6c-4.2 0-8.3 1.7-11.3 4.7l-48 48c-6.2 6.2-6.2 16.4 0 22.6l48 48c3 3 7.1 4.7 11.3 4.7H448c17.7 0 32-14.3 32-32V256zM288 480V384H224v96c0 17.7 14.3 32 32 32s32-14.3 32-32z"></path></svg>'+
         '<span ng-bind-html="tourLabel"></span>'+
       '</a>'
@@ -394,6 +395,7 @@
     this.$onInit = function () {
       $scope.driverObj;
       $scope.tourLabel;
+      $scope.tourClass = '';
       $scope.tourType = '';
       $scope.stepsTaken = '';
       $scope.tourStartTime;
@@ -479,7 +481,7 @@
       $scope.updateTour();
     }
 
-    $scope.startTour = function() {
+    $scope.startTour = function(initialStep = 0) {
       // start the tour (removing any active ones)
       if($scope.driverObj && $scope.tourSteps) {
         //console.log('GT - START TOUR: '+$scope.tourLabel);
@@ -505,7 +507,7 @@
 
         // start the tour
         $scope.driverObj.setSteps($scope.tourSteps);
-        $scope.driverObj.drive();
+        $scope.driverObj.drive(initialStep);
       }
     }
 
@@ -520,8 +522,11 @@
       // flag whether the tour button should animate down into position
       $scope.animateButton = false;
 
+      $scope.tourClass = '';
+
       // check whether Primo is showing its 'mobile' (xs) view
       var isMobileView = document.querySelector('primo-explore.__xs') != null;
+      var isSmallView = document.querySelector('primo-explore.__sm') != null;
 
       // time (in ms) to allow for the menu to open/close when navigating to next/prev step
       var menuDelay = 200;
@@ -534,7 +539,7 @@
           // results view
           $scope.tourLabel = 'Tour the <strong>Library collections</strong> search results page';
 
-          var advSearchUrl = window.location.href.replace('&mode=simple', '').replace('&mode=advanced', '').replace('&startTour=1', '') + '&mode=advanced';
+          var advSearchUrl = url.replace('&mode=simple', '').replace('&mode=advanced', '').replace('&startTour=1', '') + '&mode=advanced';
 
           $scope.tourSteps = [
             {
@@ -565,7 +570,7 @@
                 align: "center"
               }
             }, {
-              element: isMobileView ? "#mobilePersonalization" : "#personalizationBtn",
+              element: isMobileView || isSmallView ? "#mobilePersonalization" : "#personalizationBtn",
               popover: {
                 title: "Personalise your results",
                 description: "You can specify your preferred disciplines to have relevant items listed higher in the search results.",
@@ -573,7 +578,7 @@
                 align: "center"
               }
             }, {
-              element: isMobileView ? "#sidebar-trigger" : "prm-facet:has(.sidebar-section)",
+              element: isMobileView || isSmallView ? "#sidebar-trigger" : "prm-facet:has(.sidebar-section)",
               popover: {
                 title: "Narrow your results",
                 description: "Apply filters (such as 'Peer-reviewed' and 'Resource type') to narrow down your search. You can also 'Search beyond our collection' to include results from other libraries.",
@@ -1001,7 +1006,7 @@
                 align: "center"
               }
             }, {
-              element: isMobileView ? "button:has([translate='nui.dbcategories.mobileCategories'])" : ".databases-categories",
+              element: isMobileView || isSmallView ? "button:has([translate='nui.dbcategories.mobileCategories'])" : ".databases-categories",
               popover: {
                 title: "Database categories",
                 description: "You can browse categories to see a list of relevant databases. Select the arrow next to a category to see any sub-categories.",
@@ -1273,7 +1278,7 @@
                 align: "center"
               }
             }, {
-              element: isMobileView ? "button[aria-label='Narrow my results']" : "prm-facet",
+              element: isMobileView || isSmallView ? "button[aria-label='Narrow my results']" : "prm-facet",
               popover: {
                 title: "Narrow your results",
                 description: "Apply filters (such as 'Date' and 'Subject') to narrow down your search.",
@@ -2211,7 +2216,7 @@
             {
               element: "md-tab-content.md-active button[aria-label='Remove this search']",
               popover: {
-                title: "Remove a saved search",
+                title: "Remove a search",
                 description: "You can remove searches from your search history.",
                 side: "top",
                 align: "end",
@@ -2260,7 +2265,7 @@
               }
             },
             {
-              element: isMobileView ? "button[aria-label='Tweak my saved records']" : "prm-favorites-labels .sidebar-inner-wrapper",
+              element: isMobileView || isSmallView ? "button[aria-label='Tweak my saved records']" : "prm-favorites-labels .sidebar-inner-wrapper",
               popover: {
                 title: "Filter by label",
                 description: "Select a label to only show saved items that have that label applied. (Only available when signed in.)",
@@ -2305,6 +2310,312 @@
             }
           ];
         }
+      } else if(/\/collectionDiscovery\?/.test(url)) {
+        // Featured collections
+
+        if(/query/.test(url) && /collectionId/.test(url)) {
+          $scope.tourLabel = 'Tour the <strong>Featured collection listing</strong> search results page';
+
+          $scope.tourSteps = [
+            {
+              element: "prm-collection-search .collection-sort-cont",
+              popover: {
+                title: "Sorting",
+                description: "Select how the search results should be sorted.",
+                showButtons: ["next", "close"],
+                side: "top",
+                align: "start"
+              }
+            },
+            {
+              element: "prm-collection-search .search-within",
+              popover: {
+                title: "New search",
+                description: "To do another search, clear the current search term (by selecting the 'X').",
+                side: "left",
+                align: "center"
+              }
+            }, {
+              element: "prm-gallery-items-list",
+              popover: {
+                title: "Search results",
+                description: "The results of your search are listed on the page. Select an item from the results to see its details.",
+                showButtons: ["next", "close"],
+                side: "top",
+                align: "center"
+              }
+            }, {
+              element: "prm-collection-gallery .collection-discovery-expand-search button",
+              popover: {
+                title: "Search all featured collections",
+                description: "You can select to search all featured collections if you would like to expand your search.",
+                showButtons: ["next", "close"],
+                side: "bottom",
+                align: "center"
+              }
+            }, {
+              element: "prm-gallery-item prm-save-to-favorites-button button",
+              popover: {
+                title: "Save to favourites",
+                description: "You can save an item to your favourites to make it easier to find again.",
+                side: "top",
+                align: "center"
+              }
+            },
+            {
+              element: "prm-gallery-items-list button[translate='nui.brief.items.loadMore']",
+              popover: {
+                title: "View more items",
+                description: "If there are more items than are currently displayed, select 'Load more items' to view more from the collection.",
+                side: "top",
+                align: "center"
+              }
+            }, {
+              element: "prm-collection-gallery-header prm-collection-navigation-breadcrumbs-item",
+              popover: {
+                title: "Go back",
+                description: "Select this link to view all the featured collections.",
+                side: "bottom",
+                align: "start",
+                popoverClass: 'ltu-tour ltu-end-tour'
+              }
+            }];
+        } else if(/query/.test(url)) {
+          $scope.tourLabel = 'Tour the <strong>Featured collections</strong> search results page';
+
+          $scope.tourSteps = [
+            {
+              element: "prm-collection-search .collection-sort-cont",
+              popover: {
+                title: "Sorting",
+                description: "Select how the search results should be sorted.",
+                showButtons: ["next", "close"],
+                side: "top",
+                align: "start"
+              }
+            },
+            {
+              element: "prm-collection-search .search-within",
+              popover: {
+                title: "New search",
+                description: "To do another search, clear the current search term (by selecting the 'X').",
+                side: "left",
+                align: "center"
+              }
+            }, {
+              element: "prm-gallery-items-list",
+              popover: {
+                title: "Search results",
+                description: "The results of your search are listed on the page. Select an item from the results to see its details.",
+                showButtons: ["next", "close"],
+                side: "top",
+                align: "center"
+              }
+            }, {
+              element: "prm-gallery-item prm-save-to-favorites-button button",
+              popover: {
+                title: "Save to favourites",
+                description: "You can save an item to your favourites to make it easier to find again.",
+                side: "top",
+                align: "center"
+              }
+            },
+            {
+              element: "prm-gallery-items-list button[translate='nui.brief.items.loadMore']",
+              popover: {
+                title: "View more items",
+                description: "If there are more items than are currently displayed, select 'Load more items' to view more from the collection.",
+                side: "top",
+                align: "center",
+                popoverClass: 'ltu-tour ltu-end-tour'
+              }
+            }];
+        } else if(/collectionId/.test(url)) {
+          $scope.tourLabel = 'Tour the <strong>Featured collection listing</strong> page';
+
+          $scope.tourSteps = [
+            {
+              element: "prm-collection-search .collection-sort-cont",
+              popover: {
+                title: "Sorting",
+                description: "Select how the items in this collection should be sorted.",
+                showButtons: ["next", "close"],
+                side: "top",
+                align: "start"
+              }
+            },
+            {
+              element: "prm-collection-search .search-within",
+              popover: {
+                title: "Search",
+                description: "Search within this collection.",
+                side: "left",
+                align: "center"
+              }
+            }, {
+              element: "prm-gallery-items-list",
+              popover: {
+                title: "Collection items",
+                description: "The items in the collection are listed on the page. Select an item to see its details.",
+                showButtons: ["next", "close"],
+                side: "top",
+                align: "center"
+              }
+            }, {
+              element: "prm-gallery-item prm-save-to-favorites-button button",
+              popover: {
+                title: "Save to favourites",
+                description: "You can save an item to your favourites to make it easier to find again.",
+                side: "top",
+                align: "center"
+              }
+            },
+            {
+              element: "prm-gallery-items-list button[translate='nui.brief.items.loadMore']",
+              popover: {
+                title: "View more items",
+                description: "If there are more items than are currently displayed, select 'Load more items' to view more from the collection.",
+                side: "top",
+                align: "center"
+              }
+            }, {
+              element: "prm-collection-gallery-header prm-collection-navigation-breadcrumbs-item",
+              popover: {
+                title: "Go back",
+                description: "Select this link to view all the featured collections.",
+                side: "bottom",
+                align: "start",
+                popoverClass: 'ltu-tour ltu-end-tour'
+              }
+            }];
+        } else {
+          $scope.tourLabel = 'Tour the <strong>Featured collections</strong> page';
+
+          $scope.tourClass = 'featured-collection';
+
+          $scope.tourSteps = [
+            {
+              element: "prm-collection-search .search-within",
+              popover: {
+                title: "Search",
+                description: "Search within all the featured collections.",
+                showButtons: ["next", "close"],
+                side: "top",
+                align: "start"
+              }
+            },
+            {
+              element: "prm-gallery-collections-list",
+              popover: {
+                title: "Collections",
+                description: "Select a collection to browse the items within it.",
+                side: "right",
+                align: "start"
+              }
+            }, {
+              element: ".s-lch-widget-float-btn",
+              popover: {
+                title: "Need help?",
+                description: "Use the chat feature to talk with a librarian, or use the 'Help' option in the main menu to access resources and information to help you with your library search.",
+                side: "bottom",
+                align: "center",
+                onNextClick: function(element, step, options) {
+                  if(isMobileView) {
+                    // we want to open the menu so we can highlight the next element
+                    var menuBtn = document.querySelector('prm-topbar button.mobile-menu-button');
+                    if(menuBtn) menuBtn.click();
+
+                    // allow time for the menu to show
+                    setTimeout(function() {
+                      // continue to the next step
+                      $scope.driverObj.moveNext();
+                    }, menuDelay); 
+                  } else {
+                    // continue to the next step
+                    $scope.driverObj.moveNext();
+                  }
+                }
+              }
+            },
+            // FOLLOWING ELEMENTS ARE EITHER IN MENU OR ON THE PAGE
+            {
+              element: isMobileView ? "prm-main-menu[menu-type='full'] button:has([translate='report.Title'])" : "#reportProblem",
+              popover: {
+                title: "Ran into an issue?",
+                description: "If you have encountered a problem with a search, resource, or logging in, select 'Report a problem' to report it to the library. ",
+                side: "right",
+                align: "end",
+                onPrevClick: function(element, step, options) {
+                  if(isMobileView) {
+                    // we want to close the menu so we can highlight the previous element
+                    var closeBtn = document.querySelector('#mainMenuFullCloseButton');
+                    if(closeBtn) closeBtn.click();
+
+                    // allow time for the menu to hide
+                    setTimeout(function() {
+                      // go back to the previous step
+                      $scope.driverObj.movePrevious();
+                    }, menuDelay);
+                  } else {
+                    // go back to the previous step
+                    $scope.driverObj.movePrevious();
+                  }
+                },
+                onNextClick: function(element, step, options) {
+                  if(isMobileView) {
+                    // we want to close the menu so we can highlight the next element
+                    var closeBtn = document.querySelector('#mainMenuFullCloseButton');
+                    if(closeBtn) closeBtn.click();
+
+                    // allow time for the menu to hide
+                    setTimeout(function() {
+                      // continue to the next step
+                      $scope.driverObj.moveNext();
+                    }, menuDelay); 
+                  } else {
+                    // continue to the next step
+                    $scope.driverObj.moveNext();
+                  }
+                }
+              }
+            },
+            // FOLLOWING ELEMENTS ARE ON THE PAGE
+            {
+              element: "#logoImage",
+              popover: {
+                title: "Library website",
+                description: "To return to the library website, select the La Trobe University logo.",
+                side: "bottom",
+                align: "start",
+                onPrevClick: function(element, step, options) {
+                  if(isMobileView) {
+                    // we want to open the menu so we can highlight the next element
+                    var menuBtn = document.querySelector('prm-topbar button.mobile-menu-button');
+                    if(menuBtn) menuBtn.click();
+
+                    // allow time for the menu to hide
+                    setTimeout(function() {
+                      // go back to the previous step
+                      $scope.driverObj.movePrevious();
+                    }, menuDelay);
+                  } else {
+                    // go back to the previous step
+                    $scope.driverObj.movePrevious();
+                  }
+                }
+              }
+            }, {
+              element: "#tour_button",
+              popover: {
+                title: "That's all for now",
+                description: "Thanks for taking the tour. You can restart it at any time from here.",
+                side: "bottom",
+                align: "end",
+                popoverClass: 'ltu-tour ltu-end-tour'
+              }
+            }
+          ];
+        }
       } else {
         $scope.tourLabel = null;
       }
@@ -2324,8 +2635,12 @@
 
           // check whether the tour should be launched automatically (via a URL param)
           if(/startTour=1/.test(url)) {
+            var urlParams = new URLSearchParams(url);
+            var initialStep = parseInt(urlParams.get('tourStep'));
+            if(isNaN(initialStep)) initialStep = 0;
+
             $timeout(function(e) {
-              $scope.startTour();
+              $scope.startTour(initialStep);
             }, 500);
           }
         }
@@ -2476,4 +2791,34 @@
       '</a>'
   });
   */
+
+
+  /* -------------------------------------------
+  / Gallery collection - Author & Date
+  ------------------------------------------- */
+  app.component('prmGalleryItemAfter', {
+      bindings: {
+        parentCtrl: '<'
+      },
+      controller: function () {
+        var $ctrl = this;
+        $ctrl.$onInit = function () {
+          try {
+            $ctrl.author = $ctrl.parentCtrl.item.pnx.addata.au[0];
+          } catch (e) {
+            $ctrl.author = '';
+          }
+          try {
+            $ctrl.date = $ctrl.parentCtrl.item.pnx.display.creationdate[0];
+          } catch (e) {
+            $ctrl.date ='';
+          }
+          $ctrl.hasDate = !!$ctrl.date;
+          $ctrl.hasAuthor = !!$ctrl.author;
+        };
+      },
+      template: '<div class="item-date" ng-if="$ctrl.hasDate">{{$ctrl.date}}</div>'+
+                '<div class="item-author" ng-if="$ctrl.hasAuthor">{{$ctrl.author}}</div>',
+      });
+  // ------------------------------------------- end Gallery collection - Author & Date
 })();
